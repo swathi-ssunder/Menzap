@@ -1,4 +1,4 @@
-package com.diynet.menzap.fragments;
+package diy.net.menzap.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.diynet.menzap.R;
+import diy.net.menzap.R;
 
 
 public class FriendsFragment extends Fragment{

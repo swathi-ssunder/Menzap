@@ -1,4 +1,4 @@
-package com.diynet.menzap.fragments;
+package diy.net.menzap.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.diynet.menzap.R;
+import diy.net.menzap.R;
 
 
-public class MenuFragment extends Fragment{
+public class EventsFragment extends Fragment{
 
-    public MenuFragment() {
+    public EventsFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class MenuFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_menu, container, false);
+        return inflater.inflate(R.layout.fragment_events, container, false);
     }
 
 }

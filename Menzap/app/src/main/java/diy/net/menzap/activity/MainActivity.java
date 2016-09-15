@@ -1,10 +1,10 @@
-package com.diynet.menzap.activity;
+package diy.net.menzap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.diynet.menzap.R;
+import diy.net.menzap.R;
 
 public class MainActivity extends AppCompatActivity {
 

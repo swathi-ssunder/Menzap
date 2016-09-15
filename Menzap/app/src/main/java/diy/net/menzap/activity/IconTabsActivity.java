@@ -1,4 +1,4 @@
-package com.diynet.menzap.activity;
+package diy.net.menzap.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,10 +12,10 @@ import android.support.v7.widget.Toolbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.diynet.menzap.R;
-import com.diynet.menzap.fragments.MenuFragment;
-import com.diynet.menzap.fragments.EventsFragment;
-import com.diynet.menzap.fragments.FriendsFragment;
+import diy.net.menzap.R;
+import diy.net.menzap.fragments.MenuFragment;
+import diy.net.menzap.fragments.EventsFragment;
+import diy.net.menzap.fragments.FriendsFragment;
 
 public class IconTabsActivity extends AppCompatActivity {
 
