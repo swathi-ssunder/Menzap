@@ -1,10 +1,10 @@
-package info.androidhive.materialtabs.activity;
+package com.diynet.menzap.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import info.androidhive.materialtabs.R;
+import com.diynet.menzap.R;
 
 public class MainActivity extends AppCompatActivity {
 
