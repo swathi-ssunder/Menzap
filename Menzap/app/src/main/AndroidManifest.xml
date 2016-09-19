@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.IconTabsActivity"
+            android:name=".activity.TabsActivity"
             android:label="@string/title_activity_icon_tabs"
             android:parentActivityName=".activity.MainActivity"/>
 
