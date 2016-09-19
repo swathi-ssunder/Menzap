@@ -26,7 +26,7 @@ import diy.net.menzap.fragments.FriendsFragment;
 import diy.net.menzap.helper.ReviewDBHelper;
 import diy.net.menzap.service.AppLibService;
 
-public class IconTabsActivity extends AppCompatActivity {
+public class TabsActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
 
@@ -65,9 +65,11 @@ public class IconTabsActivity extends AppCompatActivity {
                 R.drawable.ic_event_black_24dp
         };
 
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        for(int i = 0; i < tabIcons.length; i++) {
+            if(tabLayout.getTabAt(i) != null) {
+                tabLayout.getTabAt(i).setIcon(tabIcons[i]);
+            }
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -115,7 +117,7 @@ public class IconTabsActivity extends AppCompatActivity {
     // publish the new message.
     //==========================================================================//
     private ServiceConnection getServiceConnection() {
-        ServiceConnection sc = new ServiceConnection() {
+        return new ServiceConnection() {
             @Override
             public void onServiceConnected( ComponentName componentName,
                                             IBinder iBinder ) {
@@ -126,7 +128,7 @@ public class IconTabsActivity extends AppCompatActivity {
 
                 AppLibService.AppLibBinder binder =
                         ( AppLibService.AppLibBinder ) iBinder;
-                IconTabsActivity.this.appLibService = binder.getService();
+                TabsActivity.this.appLibService = binder.getService();
             }
 
             @Override
@@ -134,8 +136,6 @@ public class IconTabsActivity extends AppCompatActivity {
                 Log.d("on service disconnected", "here");
             }
         };
-
-        return sc;
     }
 
     private void doBindService() {
@@ -161,13 +161,9 @@ public class IconTabsActivity extends AppCompatActivity {
 
         // Send the message
         if (this.appLibService != null) {
-            boolean published = this.appLibService.publish("xx",reviewText ,
+            boolean published = this.appLibService.publish("TAG_REVIEW",reviewText ,
                     timestamp, uniqueid);
-            Log.d("CUSTOM INFO: REVIEWS",  Boolean.toString(published));
-
-            if (published) {
-                Log.d("CUSTOM INFO", "published");
-            }
+            Log.d("CUSTOM INFO: PUBLISHED", Boolean.toString(published));
         } else {
             Log.d("CUSTOM INFO: REVIEWS", "Couldn't send message, no AppLib instance.");
         }

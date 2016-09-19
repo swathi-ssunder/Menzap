@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -46,14 +45,12 @@ public class ReviewDBHelper extends SQLiteOpenHelper {
 
     public Cursor get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM REVIEW WHERE ID=" + id + "", null);
-        return res;
+        return db.rawQuery("SELECT * FROM REVIEW WHERE ID=" + id + "", null);
     }
 
     public int count() {
         SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, TABLE_NAME);
-        return numRows;
+        return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
     }
 
     public boolean update(Integer id, String name, Integer isLike) {
@@ -73,7 +70,7 @@ public class ReviewDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<String> getAll() {
-        ArrayList<String> array_list = new ArrayList<String>();
+        ArrayList<String> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM REVIEW", null);
@@ -84,6 +81,7 @@ public class ReviewDBHelper extends SQLiteOpenHelper {
             array_list.add(res.getString(res.getColumnIndex(COLUMN_IS_LIKE)));
             res.moveToNext();
         }
+        res.close();
 
         return array_list;
     }
