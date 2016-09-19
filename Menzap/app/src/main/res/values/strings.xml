@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Menzap</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="menu">MENU</string>
+    <string name="events">EVENTS</string>
+    <string name="friends">FRIENDS</string>
+    <string name="title_activity_icon_tabs">MenZap</string>
+
+</resources>
