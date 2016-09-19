@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import diy.net.menzap.R;
 import diy.net.menzap.activity.IconTabsActivity;
-import diy.net.menzap.activity.SampleActivity;
 
 
 public class MenuFragment extends Fragment{
