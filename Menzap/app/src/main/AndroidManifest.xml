@@ -23,7 +23,7 @@
             android:label="@string/title_activity_icon_tabs"
             android:parentActivityName=".activity.MainActivity"/>
 
-        <service android:name=".activity.AppLibService" />
+        <service android:name=".service.AppLibService" />
 
     </application>
 

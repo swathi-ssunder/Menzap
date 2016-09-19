@@ -24,6 +24,7 @@ import diy.net.menzap.fragments.MenuFragment;
 import diy.net.menzap.fragments.EventsFragment;
 import diy.net.menzap.fragments.FriendsFragment;
 import diy.net.menzap.helper.ReviewDBHelper;
+import diy.net.menzap.service.AppLibService;
 
 public class IconTabsActivity extends AppCompatActivity {
 
