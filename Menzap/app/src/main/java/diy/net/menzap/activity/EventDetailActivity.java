@@ -3,9 +3,8 @@ package diy.net.menzap.activity;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
-import android.content.Intent;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -13,7 +12,6 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import diy.net.menzap.R;
-import diy.net.menzap.fragments.EventsFragment;
 
 public class EventDetailActivity extends AppCompatActivity {
 
@@ -25,12 +23,20 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Toolbar toolbar;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
         String event = getIntent().getExtras().getString("eventName");
 
         TextView eventName = (TextView) findViewById(R.id.eventName);
@@ -41,7 +47,6 @@ public class EventDetailActivity extends AppCompatActivity {
         endTime.setText("Event ends at : 02:00 PM");
         TextView location = (TextView) findViewById(R.id.location);
         location.setText("Location : First Floor Mensa Garching");
-
     }
 
 
