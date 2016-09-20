@@ -3,17 +3,18 @@ package diy.net.menzap.activity;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
-import android.content.Intent;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.text.DateFormat;
+
 import diy.net.menzap.R;
-import diy.net.menzap.fragments.EventsFragment;
+import diy.net.menzap.model.Event;
 
 public class EventDetailActivity extends AppCompatActivity {
 
@@ -25,23 +26,30 @@ public class EventDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        Toolbar toolbar;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_detail);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-        String event = getIntent().getExtras().getString("eventName");
+
+        Event event = getIntent().getParcelableExtra("EVENT");
 
         TextView eventName = (TextView) findViewById(R.id.eventName);
-        eventName.setText(event);
-        TextView startTime = (TextView) findViewById(R.id.startTime);
-        startTime.setText("Event start time : 12:00 PM");
-        TextView endTime = (TextView) findViewById(R.id.endTime);
-        endTime.setText("Event ends at : 02:00 PM");
+        eventName.setText(event.getName());
+        TextView startTime = (TextView) findViewById(R.id.eventStart);
+        startTime.setText(DateFormat.getDateTimeInstance().format((event.getFromDate())));
+        TextView endTime = (TextView) findViewById(R.id.eventEnd);
+        endTime.setText(DateFormat.getDateTimeInstance().format(event.getToDate()));
         TextView location = (TextView) findViewById(R.id.location);
-        location.setText("Location : First Floor Mensa Garching");
-
+        location.setText(event.getLocation());
     }
 
 

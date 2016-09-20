@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/friends"
-        android:textSize="40dp"
+        android:textSize="40sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
