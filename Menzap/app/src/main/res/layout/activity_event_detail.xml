@@ -28,45 +28,43 @@
             android:id="@+id/eventName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="TextView"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/startTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/eventName"
             android:layout_marginTop="20dp"
-            android:text="TextView"
-            android:textSize="20dp" />
+            android:text="@string/eventStart"
+            android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/endTime"
+            android:id="@+id/eventStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/eventName"
-            android:layout_alignRight="@+id/startTime"
-            android:layout_below="@+id/startTime"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/eventEnd"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/eventEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="TextView"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/eventName"
-            android:layout_alignRight="@+id/endTime"
-            android:layout_below="@+id/endTime"
             android:layout_marginTop="50dp"
-            android:text="TextView"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
