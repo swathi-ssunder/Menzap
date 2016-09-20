@@ -11,7 +11,10 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.text.DateFormat;
+
 import diy.net.menzap.R;
+import diy.net.menzap.model.Event;
 
 public class EventDetailActivity extends AppCompatActivity {
 
@@ -37,16 +40,16 @@ public class EventDetailActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        String event = getIntent().getExtras().getString("eventName");
+        Event event = getIntent().getParcelableExtra("EVENT");
 
         TextView eventName = (TextView) findViewById(R.id.eventName);
-        eventName.setText(event);
-        TextView startTime = (TextView) findViewById(R.id.startTime);
-        startTime.setText("Event start time : 12:00 PM");
-        TextView endTime = (TextView) findViewById(R.id.endTime);
-        endTime.setText("Event ends at : 02:00 PM");
+        eventName.setText(event.getName());
+        TextView startTime = (TextView) findViewById(R.id.eventStart);
+        startTime.setText(DateFormat.getDateTimeInstance().format((event.getFromDate())));
+        TextView endTime = (TextView) findViewById(R.id.eventEnd);
+        endTime.setText(DateFormat.getDateTimeInstance().format(event.getToDate()));
         TextView location = (TextView) findViewById(R.id.location);
-        location.setText("Location : First Floor Mensa Garching");
+        location.setText(event.getLocation());
     }
 
 

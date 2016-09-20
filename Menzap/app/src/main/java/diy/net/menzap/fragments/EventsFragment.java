@@ -7,18 +7,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import java.util.Date;
 
 import diy.net.menzap.R;
 import diy.net.menzap.activity.EventDetailActivity;
+import diy.net.menzap.adapter.EventAdapter;
+import diy.net.menzap.model.Event;
 
 
 public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
-    String[] events =  new String[] {
-            "Hackathon Registration on 1st Floor",
-            "Free Deserts near Ausgabe 2",
-            "Mexican Food Festival starts tomorow"
+    Date startDate = new Date();
+    Date endDate = new Date(startDate.getTime() + (2*3600*1000));
+
+    Event[] events =  new Event[] {
+            new Event("Hackathon Registration on 1st Floor", "First Floor Mensa Garching", startDate, endDate),
+            new Event("Free Deserts near Ausgabe 2", "Ground Floor Mensa Garching", startDate, endDate),
+            new Event("Mexican Food Festival starts tomorow", "First Floor Mensa Garching", startDate, endDate)
     };
 
     public EventsFragment() {
@@ -42,7 +48,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, events);
+        EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, events);
 
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
@@ -52,10 +58,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-        intent.putExtra("eventName", events[position]);
-        intent.putExtra("startTime", "12:00 PM");
-        intent.putExtra("endTime", "02:00 PM");
-        intent.putExtra("location", "First Floor Mensa Garching");
+        intent.putExtra("EVENT", events[position]);
         startActivity(intent);
     }
 }
