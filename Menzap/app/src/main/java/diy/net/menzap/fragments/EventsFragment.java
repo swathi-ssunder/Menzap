@@ -2,7 +2,6 @@ package diy.net.menzap.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,12 @@ import diy.net.menzap.activity.EventDetailActivity;
 
 
 public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
-    String[] events =  new String[] { "Hackathon Registration on 1st Floor", "Free Deserts near Ausgabe 2", "Mexican Food Festival starts tomorow" };
+    String[] events =  new String[] {
+            "Hackathon Registration on 1st Floor",
+            "Free Deserts near Ausgabe 2",
+            "Mexican Food Festival starts tomorow"
+    };
+
     public EventsFragment() {
         // Required empty public constructor
     }
@@ -38,11 +42,10 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, events);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, events);
 
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
-
     }
 
     @Override
@@ -55,5 +58,4 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         intent.putExtra("location", "First Floor Mensa Garching");
         startActivity(intent);
     }
-
 }

@@ -7,5 +7,6 @@
     <string name="events">EVENTS</string>
     <string name="friends">FRIENDS</string>
     <string name="title_activity_icon_tabs">MenZap</string>
+    <string name="submit">Submit</string>
 
 </resources>
