@@ -1,0 +1,35 @@
+package diy.net.menzap.model.message;
+
+import java.util.concurrent.TimeUnit;
+
+import diy.net.menzap.service.AppLibService;
+import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
+
+/**
+ * Created by aditya on 21.09.16.
+ */
+
+public class EnterMessage extends Message {
+    public EnterMessage(String userId) {
+        super(userId);
+        this.setTtl(60); // Set this
+        this.setType("ENTER");
+    }
+
+    public EnterMessage(SCAMPIMessage message) {
+        super(message);
+    }
+
+    public SCAMPIMessage getScampiMsgObj() {
+        SCAMPIMessage msg = SCAMPIMessage.builder()
+                .lifetime(this.getTtl(), TimeUnit.MINUTES)
+                .build();
+
+        msg.putString("SENDER", this.getSender() );
+        msg.putString("TYPE", this.getType() );
+        msg.putInteger("TIMESTAMP", this.getTimestamp());
+        msg.putInteger("ID", this.getUniqueid());
+
+        return msg;
+    }
+}

@@ -73,23 +73,13 @@ public class AppLibService
      * Attempts to publish the message using the router. Returns <code>true</code>
      * if successful, <code>false</code> otherwise. Publishing may fail if there
      * is no current API connection to a router (e.g., the router is not currently
-     * running).
-     *
-     * @param tag
-     *     Tag for the message.
-     * @param message
-     *     Content of the message.
-     * @param timestamp
-     *     Creation timestamp for the message.
-     * @param unique
-     *     Unique ID for the message.
+     * running)
      *
      * @return <code>true</code> if successful, <code>false</code> otherwise.
      */
-    public boolean publish( String tag, String message, long timestamp,
-                            long unique ) {
-        SCAMPIMessage msg = this.getScampiMessage( tag, message, timestamp,
-                unique );
+    public boolean publish(SCAMPIMessage msg) {
+        // SCAMPIMessage msg = this.getScampiMessage( tag, message, timestamp, unique );
+
         if ( this.appLib != null ) {
             try {
                 this.appLib.publish( msg, MENZAP_TAG_SERVICE );
