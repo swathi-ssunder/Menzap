@@ -11,5 +11,10 @@
     <string name="eventStart">Event starts at :</string>
     <string name="eventEnd">Event ends at :</string>
     <string name="eventLocation">Event Location :</string>
+    <string name="hintDateFormat">dd/mm/yyyy</string>
+    <string name="btnCreate">Create</string>
+    <string name="hintLocation">Location</string>
+    <string name="hintDescription">Description</string>
+    <string name="hintEventName">Event Name</string>
 
 </resources>

@@ -161,8 +161,9 @@ public class TabsActivity extends AppCompatActivity {
 
         // Send the message
         if (this.appLibService != null) {
-            boolean published = this.appLibService.publish("TAG_REVIEW",reviewText ,
-                    timestamp, uniqueid);
+            //boolean published = this.appLibService.publish("TAG_REVIEW",reviewText ,
+            //        timestamp, uniqueid);
+            boolean published = true;
             Log.d("CUSTOM INFO: PUBLISHED", Boolean.toString(published));
         } else {
             Log.d("CUSTOM INFO: REVIEWS", "Couldn't send message, no AppLib instance.");

@@ -3,20 +3,21 @@ package diy.net.menzap.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 public class Event implements Parcelable {
 
     private String name;
+    private String description;
     private String location;
-    private Date fromDate;
-    private Date toDate;
+    private String fromDate;
+    private String toDate;
 
-    public Event(String name, String location, Date fromDate, Date toDate) {
-        this.name = name;
-        this.location = location;
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+    public Event(String name, String description, String location, String fromDate, String toDate) {
+
+        this.setName(name);
+        this.setDescription(description);
+        this.setLocation(location);
+        this.setFromDate(fromDate);
+        this.setToDate(toDate);
     }
 
     /**
@@ -25,10 +26,11 @@ public class Event implements Parcelable {
      * the object CREATOR
      **/
     private Event(Parcel in){
-        this.name = in.readString();
-        this.location = in.readString();
-        this.fromDate = new Date(in.readLong());
-        this.toDate = new Date(in.readLong());
+        this.setName(in.readString());
+        this.setDescription(in.readString());
+        this.setLocation(in.readString());
+        this.setFromDate(in.readString());
+        this.setToDate(in.readString());
     }
 
     public String getName() {
@@ -39,27 +41,35 @@ public class Event implements Parcelable {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    private void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    private void setLocation(String location) {
         this.location = location;
     }
 
-    public Date getFromDate() {
+    public String getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    private void setFromDate(String fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public String getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    private void setToDate(String toDate) {
         this.toDate = toDate;
     }
 
@@ -71,9 +81,10 @@ public class Event implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
+        dest.writeString(this.description);
         dest.writeString(this.location);
-        dest.writeLong(this.fromDate.getTime());
-        dest.writeLong(this.toDate.getTime());
+        dest.writeString(this.fromDate);
+        dest.writeString(this.toDate);
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {
