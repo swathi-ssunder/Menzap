@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_event_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/txtMenuName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:hint="@string/hintMenuName" />
+
+        <EditText
+            android:id="@+id/txtMenuDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:hint="@string/hintMenuDescription" />
+
+        <EditText
+            android:id="@+id/txtServedOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:hint="@string/hintDateFormat" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/Switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textOff=""
+            android:text="@string/vegetarian"
+            android:background="@android:color/transparent"
+            android:textOn=""
+            android:button="@null"
+            android:padding="20dp"/>
+
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="#fff"
+            android:text="@string/btnCreate" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

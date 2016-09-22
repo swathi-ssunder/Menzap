@@ -1,12 +1,15 @@
 package diy.net.menzap.middleware;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.io.IOException;
 
 import diy.net.menzap.helper.EventDBHelper;
+import diy.net.menzap.helper.MenuDBHelper;
 import diy.net.menzap.model.Event;
+import diy.net.menzap.model.Menu;
 import diy.net.menzap.model.message.Message;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
@@ -28,6 +31,11 @@ public class MessageHandler {
     public static final String MSG_LOCATION = "LOCATION";
     public static final String MSG_START_TIME = "START_TIME";
     public static final String MSG_END_TIME = "END_TIME";
+
+    public static final String MSG_MENU_NAME = "MENU_NAME";
+    public static final String MSG_MENU_DESCRIPTION = "MENU_DESCRIPTION";
+    public static final String MSG_CATEGORY = "CATEGORY";
+    public static final String MSG_SERVED_ON = "SERVED_ON";
     //==========================================================================//
 
     private Context context;
@@ -41,9 +49,7 @@ public class MessageHandler {
             throws IOException {
 
         // Database where incoming messages are to be stored
-        EventDBHelper db;
-
-        Log.d("event name", msg.getString( "EVENT_NAME" ));
+        SQLiteOpenHelper db;
 
         switch(Message.MessageType.valueOf(msg.getString( MSG_TYPE ))) {
             case ENTER:
@@ -51,6 +57,17 @@ public class MessageHandler {
             case EXIT:
                 break;
             case MENU:
+
+                Menu menu = new Menu(msg.getInteger(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
+                        msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON),
+                        msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
+
+                db = new MenuDBHelper(this.context);
+                // Insert into the database
+                if (((MenuDBHelper)db).insert(menu)) {
+                    Log.d("MENU added", ((MenuDBHelper)db).getAll().toString());
+                }
+                db.close();
                 break;
             case REVIEW:
                 break;
@@ -60,12 +77,12 @@ public class MessageHandler {
                         msg.getString(MSG_LOCATION), msg.getString(MSG_START_TIME), msg.getString(MSG_END_TIME),
                         msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
-                // Create database helper
                 db = new EventDBHelper(this.context);
                 // Insert into the database
-                if (db.insert(event)) {
-                    Log.d("EVENT added", db.getAll().toString());
+                if (((EventDBHelper)db).insert(event)) {
+                    Log.d("EVENT added", ((EventDBHelper)db).getAll().toString());
                 }
+                db.close();
                 break;
         }
     }
