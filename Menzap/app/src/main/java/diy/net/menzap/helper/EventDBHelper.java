@@ -16,11 +16,14 @@ public class EventDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MENZAP";
     private static final String TABLE_NAME = "EVENT";
     private static final String COLUMN_ID = "ID";
+    private static final String COLUMN_SENDER = "SENDER";
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_DESCRIPTION = "DESCRIPTION";
     private static final String COLUMN_LOCATION = "LOCATION";
     private static final String COLUMN_FROM_DATE = "FROM_DATE";
     private static final String COLUMN_TO_DATE = "TO_DATE";
+    private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
+    private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
 
     public EventDBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -29,7 +32,20 @@ public class EventDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-            "CREATE TABLE EVENT (ID INTEGER PRIMARY KEY, NAME TEXT, DESCRIPTION TEXT, LOCATION TEXT, FROM_DATE TEXT, TO_DATE TEXT)"
+            "CREATE TABLE " + TABLE_NAME + "(" +
+                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_SENDER + " INTEGER, " +
+                    COLUMN_NAME + " TEXT, " +
+                    COLUMN_DESCRIPTION + " TEXT, " +
+                    COLUMN_LOCATION + " TEXT, " +
+                    COLUMN_FROM_DATE + " TEXT, " +
+                    COLUMN_TO_DATE + " TEXT," +
+                    COLUMN_TIME_STAMP + " INTEGER, " +
+                    COLUMN_UNIQUE_ID + " INTEGER, " +
+                    "CONSTRAINT unq UNIQUE (" + COLUMN_TIME_STAMP + ", " +
+                    COLUMN_TIME_STAMP + ") " +
+                    "ON CONFLICT IGNORE" +
+                ");"
         );
     }
 
@@ -43,11 +59,14 @@ public class EventDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_SENDER, event.getSender());
         contentValues.put(COLUMN_NAME, event.getName());
         contentValues.put(COLUMN_DESCRIPTION, event.getDescription());
         contentValues.put(COLUMN_LOCATION, event.getLocation());
         contentValues.put(COLUMN_FROM_DATE, event.getFromDate());
         contentValues.put(COLUMN_TO_DATE, event.getToDate());
+        contentValues.put(COLUMN_TIME_STAMP, event.getTs());
+        contentValues.put(COLUMN_UNIQUE_ID, event.getUniqueId());
 
         db.insert("EVENT", null, contentValues);
 
@@ -64,15 +83,18 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
     }
 
-    public boolean update(int id, String eventName, String eventDesc, String location, String fromDate, String toDate) {
+    public boolean update(int id, Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_NAME, eventName);
-        contentValues.put(COLUMN_DESCRIPTION, eventDesc);
-        contentValues.put(COLUMN_LOCATION, location);
-        contentValues.put(COLUMN_FROM_DATE, fromDate);
-        contentValues.put(COLUMN_TO_DATE, toDate);
+        contentValues.put(COLUMN_SENDER, event.getSender());
+        contentValues.put(COLUMN_NAME, event.getName());
+        contentValues.put(COLUMN_DESCRIPTION, event.getDescription());
+        contentValues.put(COLUMN_LOCATION, event.getLocation());
+        contentValues.put(COLUMN_FROM_DATE, event.getFromDate());
+        contentValues.put(COLUMN_TO_DATE, event.getToDate());
+        contentValues.put(COLUMN_TIME_STAMP, event.getTs());
+        contentValues.put(COLUMN_UNIQUE_ID, event.getUniqueId());
 
         db.update("EVENT", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
 
@@ -86,19 +108,26 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 new String[]{Integer.toString(id)});
     }
 
-    public ArrayList<String> getAll() {
-        ArrayList<String> array_list = new ArrayList<>();
+    public ArrayList<Event> getAll() {
+        ArrayList<Event> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor res = db.rawQuery("SELECT * FROM EVENT", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_NAME)));
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)));
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_LOCATION)));
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_FROM_DATE)));
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_TO_DATE)));
+            Event event = new Event(
+                    res.getInt(res.getColumnIndex(COLUMN_SENDER)),
+                    res.getString(res.getColumnIndex(COLUMN_NAME)),
+                    res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
+                    res.getString(res.getColumnIndex(COLUMN_LOCATION)),
+                    res.getString(res.getColumnIndex(COLUMN_FROM_DATE)),
+                    res.getString(res.getColumnIndex(COLUMN_TO_DATE)),
+                    res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
+            );
+            array_list.add(event);
             res.moveToNext();
         }
         res.close();

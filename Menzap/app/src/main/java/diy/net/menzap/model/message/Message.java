@@ -1,6 +1,5 @@
 package diy.net.menzap.model.message;
 
-import diy.net.menzap.service.AppLibService;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
 import static fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage.RNG;
@@ -13,19 +12,20 @@ import static fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage.RNG;
 
 public abstract class Message {
     private String type;
-    private String sender;
+    private long sender;
     private long ttl;
     private long timestamp;
-    private long uniqueid;
+    private long uniqueId;
 
-    public long getUniqueid() {
-        return uniqueid;
+    public long getUniqueId() {
+        return uniqueId;
     }
 
+    public void setUniqueId(long uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 
-
-
-    public static enum MessageType {REVIEW, MENU, ENTER, EXIT, EVENT};
+    public enum MessageType {REVIEW, MENU, ENTER, EXIT, EVENT};
 
     public long getTimestamp() {
         return timestamp;
@@ -35,28 +35,27 @@ public abstract class Message {
         this.timestamp = timestamp;
     }
 
-    public Message(String userId) {
-        this.sender = userId;
+    public Message(long sender) {
+        this.sender = sender;
         this.timestamp = System.currentTimeMillis();
-        this.uniqueid = RNG.nextLong();
+        this.uniqueId = RNG.nextLong();
     }
 
-
     public Message(SCAMPIMessage message) {
-        this.sender = message.getString("SENDER");
+        this.sender = message.getInteger("SENDER");
         this.timestamp = message.getInteger("TIMESTAMP");
-        this.uniqueid = message.getInteger("ID");
+        this.uniqueId = message.getInteger("UNIQUE_ID");
         this.type = message.getString("TYPE");
         this.ttl = message.getLifetime();
     }
 
     public abstract SCAMPIMessage getScampiMsgObj();
 
-    public String getSender() {
+    public long getSender() {
         return sender;
     }
 
-    public void setSender(String sender) {
+    public void setSender(long sender) {
         this.sender = sender;
     }
 

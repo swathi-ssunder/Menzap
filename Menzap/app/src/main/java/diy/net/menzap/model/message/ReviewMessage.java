@@ -36,8 +36,8 @@ public class ReviewMessage extends Message{
         this.item = item;
     }
 
-    public ReviewMessage( String userId, String menuItemValue, ReviewVals review) {
-        super(userId);
+    public ReviewMessage(long sender, String menuItemValue, ReviewVals review) {
+        super(sender);
         this.setTtl(24*60);  // Decide on this
         this.setType("REVIEW");
         this.setItem(menuItemValue);
@@ -49,10 +49,10 @@ public class ReviewMessage extends Message{
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-        msg.putString("SENDER", this.getSender() );
-        msg.putString("TYPE", this.getType() );
+        msg.putInteger("SENDER", this.getSender());
+        msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
-        msg.putInteger("ID", this.getUniqueid());
+        msg.putInteger("UNIQUE_ID", this.getUniqueId());
         msg.putInteger("REVIEW", this.getReview().getVal());
         msg.putString("MENU_ITEM", this.getItem());
 

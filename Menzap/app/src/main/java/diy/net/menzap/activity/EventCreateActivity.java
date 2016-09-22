@@ -15,8 +15,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.Random;
 
 import diy.net.menzap.R;
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.model.Event;
+import diy.net.menzap.model.message.EventMessage;
 import diy.net.menzap.service.DateDialog;
 //import diy.net.menzap.service.TimeDialog;
 
@@ -104,17 +106,26 @@ public class EventCreateActivity extends AppCompatActivity {
         EditText text5 = (EditText) findViewById(R.id.txtTo);
         String toTime = text5.getText().toString();
 
-        Event event = new Event(eventName, eventDesc, location,fromTime, toTime);
+        //TODO Fetch sender from user profile
+        long sender = 101;
+        long timestamp = System.currentTimeMillis();
+        long uniqueId = RNG.nextLong();
+
+        Event event = new Event(sender, eventName, eventDesc, location,fromTime, toTime, timestamp, uniqueId);
 
         saveEventAndPublish(event);
     }
 
     public void saveEventAndPublish(Event event){
         // Update the database
-        EventDBHelper dbHelper = new EventDBHelper(this);
-        dbHelper.insert(event);
+        EventDBHelper eventDBHelper = new EventDBHelper(this);
+        if (eventDBHelper.insert(event)) {
+            Log.d("added", eventDBHelper.getAll().toString());
 
-        Log.d("added", dbHelper.getAll().toString());
+            EventMessage msg = new EventMessage(event.getSender(), event);
+            DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
+        }
+        setResult(1);
         finish();
     }
 

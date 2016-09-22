@@ -10,8 +10,8 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
  */
 
 public class EnterMessage extends Message {
-    public EnterMessage(String userId) {
-        super(userId);
+    public EnterMessage(long sender) {
+        super(sender);
         this.setTtl(60); // Set this
         this.setType("ENTER");
     }
@@ -25,10 +25,10 @@ public class EnterMessage extends Message {
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-        msg.putString("SENDER", this.getSender() );
-        msg.putString("TYPE", this.getType() );
+        msg.putInteger("SENDER", this.getSender());
+        msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
-        msg.putInteger("ID", this.getUniqueid());
+        msg.putInteger("UNIQUE_ID", this.getUniqueId());
 
         return msg;
     }
