@@ -6,8 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
-import diy.net.menzap.helper.ReviewDBHelper;
-import fi.tkk.netlab.dtn.scampi.applib.ApiException;
+import diy.net.menzap.middleware.MessageHandler;
 import fi.tkk.netlab.dtn.scampi.applib.AppLib;
 import fi.tkk.netlab.dtn.scampi.applib.AppLibLifecycleListener;
 import fi.tkk.netlab.dtn.scampi.applib.MessageReceivedCallback;
@@ -44,10 +43,10 @@ public class AppLibService
     //==========================================================================//
     // Definitions of the SCAMPIMessage fields
     //==========================================================================//
-    public static final String MSG_TAG_FIELD = "tag";
-    public static final String MSG_CONTENT_FIELD = "content";
-    public static final String MSG_TIMESTAMP_FIELD = "timestamp";
-    public static final String MSG_UNIQUE_ID_FIELD = "uniqueid";
+    public static final String MSG_TYPE_FIELD = "TYPE";
+    public static final String MSG_SENDER_FIELD = "SENDER";
+    public static final String MSG_TIMESTAMP_FIELD = "TIMESTAMP";
+    public static final String MSG_UNIQUE_ID_FIELD = "ID";
     //==========================================================================//
 
 
@@ -56,12 +55,12 @@ public class AppLibService
     //==========================================================================//
     // Binder for activities
     private final IBinder binder = new AppLibService.AppLibBinder();
-    // Database where incoming messages are to be stored
-    private volatile ReviewDBHelper db;
     // AppLib connection to the router
     private volatile AppLib appLib;
     // Task executor
     private ScheduledExecutorService scheduledExecutor;
+
+    private MessageHandler msgHandler;
     //==========================================================================//
 
 
@@ -78,7 +77,6 @@ public class AppLibService
      * @return <code>true</code> if successful, <code>false</code> otherwise.
      */
     public boolean publish(SCAMPIMessage msg) {
-        // SCAMPIMessage msg = this.getScampiMessage( tag, message, timestamp, unique );
 
         if ( this.appLib != null ) {
             try {
@@ -90,6 +88,7 @@ public class AppLibService
                 Log.d("CUSTOM IN PUBLISH --", "error in publishing");
                 return false;
             }
+            Log.d("CUSTOM IN PUBLISH --", "published successfully");
             return true;
         }
 
@@ -116,8 +115,8 @@ public class AppLibService
         // Create timer
         this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
 
-        // Create database helper
-        this.db = new ReviewDBHelper( this );
+        // Create message handler
+        this.msgHandler = new MessageHandler(this);
 
         // Create AppLib and try to connect.
         // - if connecting fails the lifecycle callback will schedule another try
@@ -168,49 +167,18 @@ public class AppLibService
         Log.d( TAG, "Handling incoming message." );
 
         // Precondition check
-        boolean hasTag = msg.hasString( MSG_TAG_FIELD );
-        boolean hasContent = msg.hasString( MSG_CONTENT_FIELD );
+        boolean hasType = msg.hasString( MSG_TYPE_FIELD );
+        boolean hasSender = msg.hasString( MSG_SENDER_FIELD );
         boolean hasTimestamp = msg.hasInteger( MSG_TIMESTAMP_FIELD );
         boolean hasId = msg.hasInteger( MSG_UNIQUE_ID_FIELD );
-        if ( !hasTag || !hasContent || !hasTimestamp || !hasId ) {
+        if ( !hasType || !hasSender || !hasTimestamp || !hasId ) {
             throw new IOException( "Invalid message, missing required field(s). ("
-                    + "tag: " + hasTag + ", content: " + hasContent
+                    + "type: " + hasType + ", sender: " + hasSender
                     + ", timestamp: " + hasTimestamp + ", id: " +
                     hasId + ")" );
         }
 
-        // Get the parts
-        String tag;
-        String message;
-        long timestamp;
-        long uniqueid;
-        try {
-            tag = msg.getString( MSG_TAG_FIELD );
-            message = msg.getString( MSG_CONTENT_FIELD );
-            timestamp = msg.getInteger( MSG_TIMESTAMP_FIELD );
-            uniqueid = msg.getInteger( MSG_UNIQUE_ID_FIELD );
-        } catch ( ApiException e ) {
-            Log.d( TAG, "API operation failed: " + e.getMessage() );
-            throw new IOException( e );
-        }
-
-        // Insert into the database
-        //Log.d( TAG, "Inserting message to #" + tag + ": " + message );
-        this.db.insert( message, 1);
-    }
-
-    private SCAMPIMessage getScampiMessage( String tag, String content,
-                                            long timestamp, long uniqueid ) {
-        SCAMPIMessage msg = SCAMPIMessage.builder()
-                .lifetime( MSG_LIFETIME )
-                .build();
-
-        msg.putString( MSG_TAG_FIELD, tag );
-        msg.putString( MSG_CONTENT_FIELD, content );
-        msg.putInteger( MSG_TIMESTAMP_FIELD, timestamp );
-        msg.putInteger( MSG_UNIQUE_ID_FIELD, uniqueid );
-
-        return msg;
+        this.msgHandler.handleIncomingMessage(msg);
     }
 
     //==========================================================================//
