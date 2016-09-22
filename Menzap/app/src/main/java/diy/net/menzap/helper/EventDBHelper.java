@@ -123,7 +123,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
                     res.getString(res.getColumnIndex(COLUMN_LOCATION)),
                     res.getString(res.getColumnIndex(COLUMN_FROM_DATE)),
-                    res.getString(res.getColumnIndex(COLUMN_TO_DATE))
+                    res.getString(res.getColumnIndex(COLUMN_TO_DATE)),
+                    res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
             array_list.add(event);
             res.moveToNext();
