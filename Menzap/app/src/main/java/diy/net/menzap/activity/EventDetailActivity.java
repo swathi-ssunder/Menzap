@@ -11,8 +11,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.text.DateFormat;
-
 import diy.net.menzap.R;
 import diy.net.menzap.model.Event;
 
@@ -44,10 +42,12 @@ public class EventDetailActivity extends AppCompatActivity {
 
         TextView eventName = (TextView) findViewById(R.id.eventName);
         eventName.setText(event.getName());
+        TextView eventDescription = (TextView) findViewById(R.id.eventDescription);
+        eventDescription.setText(event.getDescription());
         TextView startTime = (TextView) findViewById(R.id.eventStart);
-        startTime.setText(DateFormat.getDateTimeInstance().format((event.getFromDate())));
+        startTime.setText(event.getFromDate());
         TextView endTime = (TextView) findViewById(R.id.eventEnd);
-        endTime.setText(DateFormat.getDateTimeInstance().format(event.getToDate()));
+        endTime.setText(event.getToDate());
         TextView location = (TextView) findViewById(R.id.location);
         location.setText(event.getLocation());
     }
