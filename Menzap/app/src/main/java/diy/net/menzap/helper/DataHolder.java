@@ -17,6 +17,9 @@ public class DataHolder {
         this.helper.initService();
     }
 
+    public void destroyHelper() {
+        this.helper.destroy();
+    }
     private static final DataHolder holder = new DataHolder();
     public static DataHolder getInstance() {
         return holder;

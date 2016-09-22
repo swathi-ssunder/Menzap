@@ -29,6 +29,9 @@ public class AppLibHelper {
         this.doBindService();
     }
 
+    public void destroy() {
+        this.doUnbindService();
+    }
     //==========================================================================//
     // Service Handling
     //------------------------------------------------------------------------//

@@ -46,7 +46,7 @@ public class AppLibService
     public static final String MSG_TYPE_FIELD = "TYPE";
     public static final String MSG_SENDER_FIELD = "SENDER";
     public static final String MSG_TIMESTAMP_FIELD = "TIMESTAMP";
-    public static final String MSG_UNIQUE_ID_FIELD = "ID";
+    public static final String MSG_UNIQUE_ID_FIELD = "UNIQUE_ID";
     //==========================================================================//
 
 
@@ -168,7 +168,7 @@ public class AppLibService
 
         // Precondition check
         boolean hasType = msg.hasString( MSG_TYPE_FIELD );
-        boolean hasSender = msg.hasString( MSG_SENDER_FIELD );
+        boolean hasSender = msg.hasInteger( MSG_SENDER_FIELD );
         boolean hasTimestamp = msg.hasInteger( MSG_TIMESTAMP_FIELD );
         boolean hasId = msg.hasInteger( MSG_UNIQUE_ID_FIELD );
         if ( !hasType || !hasSender || !hasTimestamp || !hasId ) {

@@ -111,4 +111,10 @@ public class TabsActivity extends AppCompatActivity {
         ArrayList ar = review.getAll();
         Log.d("CUSTOM INFO: REVIEWS", ar.toString());
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DataHolder.getInstance().destroyHelper();
+    }
 }
