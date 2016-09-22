@@ -99,7 +99,7 @@ public class EventMessage extends Message{
         msg.putInteger("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
-        msg.putInteger("ID", this.getUniqueid());
+        msg.putInteger("UNIQUE_ID", this.getUniqueid());
         msg.putString("START_TIME", this.getStartTime());
         msg.putString("END_TIME", this.getEndTime());
         msg.putString("EVENT_NAME", this.getEventName());

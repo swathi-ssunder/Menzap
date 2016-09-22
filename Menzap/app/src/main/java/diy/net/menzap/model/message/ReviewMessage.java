@@ -52,7 +52,7 @@ public class ReviewMessage extends Message{
         msg.putInteger("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
-        msg.putInteger("ID", this.getUniqueid());
+        msg.putInteger("UNIQUE_ID", this.getUniqueid());
         msg.putInteger("REVIEW", this.getReview().getVal());
         msg.putString("MENU_ITEM", this.getItem());
 

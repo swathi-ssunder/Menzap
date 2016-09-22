@@ -40,7 +40,7 @@ public abstract class Message {
     public Message(SCAMPIMessage message) {
         this.sender = message.getInteger("SENDER");
         this.timestamp = message.getInteger("TIMESTAMP");
-        this.uniqueid = message.getInteger("ID");
+        this.uniqueid = message.getInteger("UNIQUE_ID");
         this.type = message.getString("TYPE");
         this.ttl = message.getLifetime();
     }
