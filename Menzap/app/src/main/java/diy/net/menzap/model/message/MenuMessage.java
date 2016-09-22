@@ -1,14 +1,8 @@
 package diy.net.menzap.model.message;
 
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Dictionary;
 import java.util.concurrent.TimeUnit;
 
-import diy.net.menzap.service.AppLibService;
+import diy.net.menzap.model.Menu;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
 /**
@@ -16,32 +10,78 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
  */
 
 public class MenuMessage extends Message{
-    private JSONObject menu;
+    private String menuName;
+    private String menuDescription;
+    private long category;
+    private String servedOn;
 
-    public JSONObject getMenu() {
-        return menu;
+    public String getMenuName() {
+        return menuName;
     }
 
-    public void setMenu(JSONObject menu) {
-        this.menu = menu;
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
     }
 
-    public MenuMessage(long sender, JSONObject menu) {
+    public String getMenuDescription() {
+        return menuDescription;
+    }
+
+    public void setMenuDescription(String menuDescription) {
+        this.menuDescription = menuDescription;
+    }
+
+    public long getCategory() {
+        return category;
+    }
+
+    public void setCategory(long category) {
+        this.category = category;
+    }
+
+    public String getServedOn() {
+        return servedOn;
+    }
+
+    public void setServedOn(String servedOn) {
+        this.servedOn = servedOn;
+    }
+
+
+
+    public MenuMessage(long sender, String menuName, String menuDescription, long category,
+                        String servedOn) {
         super(sender);
-        this.setMenu(menu);
-        this.setTtl(24*60);
         this.setType("MENU");
+        this.setTtl(24*60);
+
+        this.setMenuName(menuName);
+        this.setMenuDescription(menuDescription);
+        this.setCategory(category);
+        this.setServedOn(servedOn);
+
     }
 
     public MenuMessage(SCAMPIMessage message) {
         super(message);
-        try {
-            this.menu = new JSONObject(message.getString("MENU"));
-        } catch (JSONException e) {
-            Log.d("MenuMessage : ", "Error while handling JSON");
-        }
+        this.menuName = message.getString("MENU_NAME");
+        this.menuDescription = message.getString("MENU_DESCRIPTION");
+        this.category = message.getInteger("CATEGORY");
+        this.servedOn = message.getString("SERVED_ON");
+
     }
 
+    public MenuMessage(long sender, Menu menu) {
+        super(sender);
+        this.setType("MENU");
+        this.setTtl(24*60);
+        this.setMenuName(menu.getName());
+        this.setMenuDescription(menu.getDescription());
+        this.setCategory(menu.getCategory());
+        this.setServedOn(menu.getServedOn());
+        this.setTimestamp(menu.getTs());
+        this.setUniqueId(menu.getUniqueId());
+    }
 
     public SCAMPIMessage getScampiMsgObj() {
         SCAMPIMessage msg = SCAMPIMessage.builder()
@@ -52,7 +92,11 @@ public class MenuMessage extends Message{
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
         msg.putInteger("UNIQUE_ID", this.getUniqueId());
-        msg.putString("MENU", this.getMenu().toString());
+        msg.putString("MENU_NAME", this.getMenuName());
+        msg.putString("MENU_DESCRIPTION", this.getMenuDescription());
+        msg.putInteger("CATEGORY", this.getCategory());
+        msg.putString("SERVED_ON", this.getServedOn());
+
         return msg;
     }
 }

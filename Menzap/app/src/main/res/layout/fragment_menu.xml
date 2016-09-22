@@ -1,29 +1,27 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MenuFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <EditText
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/reviewText"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="75dp"
-        android:layout_marginLeft="75dp"
-        android:layout_margin="75dp"
-        android:layout_marginRight="75dp"
-        android:layout_marginBottom="75dp"
-        android:paddingLeft="75dp"
-        android:paddingRight="75dp" />
+        app:layout_anchorGravity="bottom|right|end"
+        android:id="@+id/add"
+        android:src="@drawable/ic_btn_add"
+        app:borderWidth="2dp"
+        app:fabSize="normal"
+        android:onClick="addMenu">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/submit"
-        android:id="@+id/submit"
-        android:layout_below="@+id/reviewText"
-        android:layout_centerHorizontal="true"/>
+    </android.support.design.widget.FloatingActionButton>
 
-</RelativeLayout>
+</LinearLayout>
