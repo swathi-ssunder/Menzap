@@ -89,6 +89,8 @@ public class EventMessage extends Message{
         this.setLocation(event.getLocation());
         this.setStartTime(event.getFromDate());
         this.setEndTime(event.getToDate());
+        this.setTimestamp(event.getTs());
+        this.setUniqueId(event.getUniqueId());
     }
 
     public SCAMPIMessage getScampiMsgObj() {
@@ -99,7 +101,7 @@ public class EventMessage extends Message{
         msg.putInteger("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
-        msg.putInteger("UNIQUE_ID", this.getUniqueid());
+        msg.putInteger("UNIQUE_ID", this.getUniqueId());
         msg.putString("START_TIME", this.getStartTime());
         msg.putString("END_TIME", this.getEndTime());
         msg.putString("EVENT_NAME", this.getEventName());

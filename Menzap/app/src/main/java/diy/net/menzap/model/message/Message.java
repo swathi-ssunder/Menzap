@@ -15,10 +15,14 @@ public abstract class Message {
     private long sender;
     private long ttl;
     private long timestamp;
-    private long uniqueid;
+    private long uniqueId;
 
-    public long getUniqueid() {
-        return uniqueid;
+    public long getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(long uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public enum MessageType {REVIEW, MENU, ENTER, EXIT, EVENT};
@@ -34,13 +38,13 @@ public abstract class Message {
     public Message(long sender) {
         this.sender = sender;
         this.timestamp = System.currentTimeMillis();
-        this.uniqueid = RNG.nextLong();
+        this.uniqueId = RNG.nextLong();
     }
 
     public Message(SCAMPIMessage message) {
         this.sender = message.getInteger("SENDER");
         this.timestamp = message.getInteger("TIMESTAMP");
-        this.uniqueid = message.getInteger("UNIQUE_ID");
+        this.uniqueId = message.getInteger("UNIQUE_ID");
         this.type = message.getString("TYPE");
         this.ttl = message.getLifetime();
     }

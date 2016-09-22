@@ -28,7 +28,7 @@ public class ExitMessage extends Message{
         msg.putInteger("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
-        msg.putInteger("UNIQUE_ID", this.getUniqueid());
+        msg.putInteger("UNIQUE_ID", this.getUniqueId());
 
         return msg;
     }
