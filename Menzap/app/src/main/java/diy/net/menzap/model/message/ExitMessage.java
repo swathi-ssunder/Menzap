@@ -10,8 +10,8 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
  */
 
 public class ExitMessage extends Message{
-    public ExitMessage(String userId) {
-        super(userId);
+    public ExitMessage(long sender) {
+        super(sender);
         this.setTtl(60); // Set this
         this.setType("EXIT");
     }
@@ -25,8 +25,8 @@ public class ExitMessage extends Message{
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-        msg.putString("SENDER", this.getSender() );
-        msg.putString("TYPE", this.getType() );
+        msg.putInteger("SENDER", this.getSender());
+        msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
         msg.putInteger("ID", this.getUniqueid());
 

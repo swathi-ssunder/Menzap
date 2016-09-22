@@ -1,33 +1,33 @@
 package diy.net.menzap.fragments;
 
+/**
+ * Created by swathissunder on 15/09/16.
+ */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 import diy.net.menzap.R;
 import diy.net.menzap.activity.EventCreateActivity;
 import diy.net.menzap.activity.EventDetailActivity;
 import diy.net.menzap.adapter.EventAdapter;
+import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.model.Event;
 
 
 public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
-    String startDate = "21/09/2016";
-    String endDate = "22/09/2016";
 
-    Event[] events =  new Event[] {
-            new Event("Hackathon Registration on 1st Floor", "Technical event", "First Floor Mensa Garching", startDate, endDate),
-            new Event("Free Deserts near Ausgabe 2", "Promotion", "Ground Floor Mensa Garching", startDate, endDate),
-            new Event("Mexican Food Festival starts tomorrow", "Experience the culture", "First Floor Mensa Garching", startDate, endDate)
-    };
+    ArrayList<Event> events;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -49,7 +49,14 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        this.refreshView();
+    }
 
+    private void refreshView() {
+        EventDBHelper eventDBHelper = new EventDBHelper(getActivity());
+        Log.d("allevents", eventDBHelper.getAll().toString());
+
+        this.events = eventDBHelper.getAll();
         EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, events);
 
         setListAdapter(adapter);
@@ -60,7 +67,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-        intent.putExtra("EVENT", events[position]);
+        intent.putExtra("EVENT", this.events.get(position));
         startActivity(intent);
     }
 
@@ -80,6 +87,14 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
 
     protected void addEvent() {
         Intent intent = new Intent(getActivity(), EventCreateActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 1) {
+            this.refreshView();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

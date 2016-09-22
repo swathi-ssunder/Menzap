@@ -1,9 +1,8 @@
 package diy.net.menzap.model.message;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import diy.net.menzap.service.AppLibService;
+import diy.net.menzap.model.Event;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
 /**
@@ -60,9 +59,9 @@ public class EventMessage extends Message{
     }
 
 
-    public EventMessage(String userId, String eventName, String eventDescription, String startTime,
+    public EventMessage(long sender, String eventName, String eventDescription, String startTime,
                         String endTime, String location) {
-        super(userId);
+        super(sender);
         this.setType("EVENT");
         this.setTtl(24*60);
         this.setEndTime(endTime);
@@ -81,24 +80,32 @@ public class EventMessage extends Message{
         this.location = message.getString("LOCATION");
     }
 
+    public EventMessage(long sender, Event event) {
+        super(sender);
+        this.setType("EVENT");
+        this.setTtl(24*60);
+        this.setEventName(event.getName());
+        this.setEventDescription(event.getDescription());
+        this.setLocation(event.getLocation());
+        this.setStartTime(event.getFromDate());
+        this.setEndTime(event.getToDate());
+    }
 
     public SCAMPIMessage getScampiMsgObj() {
         SCAMPIMessage msg = SCAMPIMessage.builder()
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-        msg.putString("SENDER", this.getSender() );
-        msg.putString("TYPE", this.getType() );
+        msg.putInteger("SENDER", this.getSender());
+        msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
         msg.putInteger("ID", this.getUniqueid());
         msg.putString("START_TIME", this.getStartTime());
         msg.putString("END_TIME", this.getEndTime());
         msg.putString("EVENT_NAME", this.getEventName());
         msg.putString("EVENT_DESCRIPTION", this.getEventDescription());
-        msg.putString("LOCATION", this.getLocation() );
+        msg.putString("LOCATION", this.getLocation());
 
         return msg;
     }
-
-
 }
