@@ -5,6 +5,7 @@ package diy.net.menzap.fragments;
  */
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
@@ -36,6 +37,10 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MenuDBHelper menuDBHelper = new MenuDBHelper(getActivity());
+        SQLiteDatabase db = menuDBHelper.getReadableDatabase();
+        menuDBHelper.onCreate(db);
     }
 
     @Override
@@ -54,7 +59,7 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
 
     private void refreshView() {
         MenuDBHelper menuDBHelper = new MenuDBHelper(getActivity());
-        Log.d("allevents", menuDBHelper.getAll().toString());
+        Log.d("allmenus", menuDBHelper.getAll().toString());
 
         this.menus = menuDBHelper.getAll();
         MenuAdapter adapter = new MenuAdapter(getActivity(), R.layout.menu, menus);

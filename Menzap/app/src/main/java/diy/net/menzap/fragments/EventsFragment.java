@@ -5,6 +5,7 @@ package diy.net.menzap.fragments;
  */
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
@@ -43,6 +44,11 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_events, container, false);
+
+        EventDBHelper eventDBHelper = new EventDBHelper(getActivity());
+        SQLiteDatabase db = eventDBHelper.getReadableDatabase();
+        eventDBHelper.onCreate(db);
+
         return view;
     }
 
