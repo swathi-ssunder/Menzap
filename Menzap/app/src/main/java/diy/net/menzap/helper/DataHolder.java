@@ -8,13 +8,19 @@ import android.content.Context;
 
 public class DataHolder {
     private AppLibHelper helper;
+    private NotificationHelper notificationHelper;
 
     public AppLibHelper getHelper() {
         return helper;
     }
+    public NotificationHelper getNotificationHelper() {
+        return notificationHelper;
+    }
     public void initHelper(Context context) {
         this.helper = new AppLibHelper(context);
         this.helper.initService();
+
+        this.notificationHelper = new NotificationHelper(context);
     }
 
     public void destroyHelper() {

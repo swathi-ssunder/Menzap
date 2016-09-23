@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.helper.MenuDBHelper;
 import diy.net.menzap.model.Event;
@@ -68,6 +69,10 @@ public class MessageHandler {
                     Log.d("MENU added", ((MenuDBHelper)db).getAll().toString());
                 }
                 db.close();
+                // notifying only when the difference of time with current time is 5 seconds
+                if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
+                    DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
+
                 break;
             case REVIEW:
                 break;
@@ -83,6 +88,10 @@ public class MessageHandler {
                     Log.d("EVENT added", ((EventDBHelper)db).getAll().toString());
                 }
                 db.close();
+                // notifying only when the difference of time with current time is 5 seconds
+                if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
+                    DataHolder.getInstance().getNotificationHelper().notifyForEvent(event);
+
                 break;
         }
     }
