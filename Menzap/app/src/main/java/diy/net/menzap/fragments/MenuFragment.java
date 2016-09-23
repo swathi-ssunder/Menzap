@@ -9,17 +9,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
-import diy.net.menzap.activity.EventDetailActivity;
 import diy.net.menzap.activity.MenuCreateActivity;
 import diy.net.menzap.adapter.MenuAdapter;
 import diy.net.menzap.helper.MenuDBHelper;
@@ -29,6 +28,8 @@ import diy.net.menzap.model.Menu;
 public class MenuFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     ArrayList<Menu> menus;
+    private SwipeRefreshLayout swipeLayout;
+
 
     public MenuFragment() {
         // Required empty public constructor
@@ -47,7 +48,17 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_events, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu, container, false);
+
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // onRefresh action here
+                MenuFragment.this.refreshView();
+            }
+        });
+
         return view;
     }
 
@@ -64,6 +75,9 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         this.menus = menuDBHelper.getAll();
         MenuAdapter adapter = new MenuAdapter(getActivity(), R.layout.menu, menus);
 
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeLayout.setRefreshing(false);
+
         setListAdapter(adapter);
         // TODO : Implement card for menus, no drill down
         //getListView().setOnItemClickListener(this);
@@ -71,10 +85,10 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), EventDetailActivity.class);
-        intent.putExtra("EVENT", this.menus.get(position));
-        startActivity(intent);
+//        Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(getActivity(), MenuDetailActivity.class);
+//        intent.putExtra("MENU", this.menus.get(position));
+//        startActivity(intent);
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import diy.net.menzap.model.Event;
 public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     ArrayList<Event> events;
+    private SwipeRefreshLayout swipeLayout;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -49,6 +51,15 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         SQLiteDatabase db = eventDBHelper.getReadableDatabase();
         eventDBHelper.onCreate(db);
 
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // onRefresh action here
+                EventsFragment.this.refreshView();
+            }
+        });
+
         return view;
     }
 
@@ -64,6 +75,9 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
 
         this.events = eventDBHelper.getAll();
         EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, events);
+
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeLayout.setRefreshing(false);
 
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
