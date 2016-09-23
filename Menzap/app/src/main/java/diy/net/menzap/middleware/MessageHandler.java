@@ -67,11 +67,12 @@ public class MessageHandler {
                 // Insert into the database
                 if (((MenuDBHelper)db).insert(menu)) {
                     Log.d("MENU added", ((MenuDBHelper)db).getAll().toString());
+
+                    // notifying only when the difference of time with current time is 5 seconds
+                    if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
+                        DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
                 }
                 db.close();
-                // notifying only when the difference of time with current time is 5 seconds
-                if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
-                    DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
 
                 break;
             case REVIEW:
@@ -86,12 +87,13 @@ public class MessageHandler {
                 // Insert into the database
                 if (((EventDBHelper)db).insert(event)) {
                     Log.d("EVENT added", ((EventDBHelper)db).getAll().toString());
+
+
+                    // notifying only when the difference of time with current time is 5 seconds
+                    if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
+                        DataHolder.getInstance().getNotificationHelper().notifyForEvent(event);
                 }
                 db.close();
-                // notifying only when the difference of time with current time is 5 seconds
-                if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
-                    DataHolder.getInstance().getNotificationHelper().notifyForEvent(event);
-
                 break;
         }
     }

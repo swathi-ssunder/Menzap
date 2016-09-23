@@ -68,7 +68,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TIME_STAMP, event.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, event.getUniqueId());
 
-        return (db.insert("EVENT", null, contentValues) != -1);
+        long result = db.insert("EVENT", null, contentValues);
+        db.close();
+        return (result != -1);
     }
 
     public Cursor get(int id) {

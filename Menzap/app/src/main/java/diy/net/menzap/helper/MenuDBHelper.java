@@ -69,7 +69,9 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
-        return (db.insert("MENU", null, contentValues) != -1);
+        long result = db.insert("MENU", null, contentValues);
+        db.close();
+        return (result != -1);
     }
 
     public Cursor get(int id) {

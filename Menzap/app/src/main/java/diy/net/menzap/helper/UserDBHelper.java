@@ -62,10 +62,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_IS_FRIEND, user.getIsFriend());
         contentValues.put(COLUMN_TIME_STAMP, user.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
-        db.insert("USER", null, contentValues);
+        long result = db.insert("USER", null, contentValues);
         db.close();
 
-        return true;
+        return (result != -1);
     }
 
     public Cursor get(int id) {
