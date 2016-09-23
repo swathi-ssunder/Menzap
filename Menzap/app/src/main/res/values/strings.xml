@@ -19,5 +19,7 @@
     <string name="hintMenuName">Menu Name</string>
     <string name="hintMenuDescription">Description</string>
     <string name="vegetarian">Vegetarian</string>
+    <string name="email_id">Email Id</string>
+    <string name="btnRegister">Register</string>
 
 </resources>

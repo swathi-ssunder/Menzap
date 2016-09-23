@@ -59,7 +59,7 @@ public class MessageHandler {
                 break;
             case MENU:
 
-                Menu menu = new Menu(msg.getInteger(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
+                Menu menu = new Menu(msg.getString(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
                         msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON),
                         msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
@@ -67,18 +67,19 @@ public class MessageHandler {
                 // Insert into the database
                 if (((MenuDBHelper)db).insert(menu)) {
                     Log.d("MENU added", ((MenuDBHelper)db).getAll().toString());
+
+                    // notifying only when the difference of time with current time is 5 seconds
+                    if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
+                        DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
                 }
                 db.close();
-                // notifying only when the difference of time with current time is 5 seconds
-                if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
-                    DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
 
                 break;
             case REVIEW:
                 break;
             case EVENT:
 
-                Event event = new Event(msg.getInteger(MSG_SENDER), msg.getString(MSG_EVENT_NAME), msg.getString(MSG_EVENT_DESCRIPTION),
+                Event event = new Event(msg.getString(MSG_SENDER), msg.getString(MSG_EVENT_NAME), msg.getString(MSG_EVENT_DESCRIPTION),
                         msg.getString(MSG_LOCATION), msg.getString(MSG_START_TIME), msg.getString(MSG_END_TIME),
                         msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
@@ -86,12 +87,13 @@ public class MessageHandler {
                 // Insert into the database
                 if (((EventDBHelper)db).insert(event)) {
                     Log.d("EVENT added", ((EventDBHelper)db).getAll().toString());
+
+
+                    // notifying only when the difference of time with current time is 5 seconds
+                    if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
+                        DataHolder.getInstance().getNotificationHelper().notifyForEvent(event);
                 }
                 db.close();
-                // notifying only when the difference of time with current time is 5 seconds
-                if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
-                    DataHolder.getInstance().getNotificationHelper().notifyForEvent(event);
-
                 break;
         }
     }

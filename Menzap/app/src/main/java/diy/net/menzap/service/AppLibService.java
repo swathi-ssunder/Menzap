@@ -168,7 +168,7 @@ public class AppLibService
 
         // Precondition check
         boolean hasType = msg.hasString( MSG_TYPE_FIELD );
-        boolean hasSender = msg.hasInteger( MSG_SENDER_FIELD );
+        boolean hasSender = msg.hasString( MSG_SENDER_FIELD );
         boolean hasTimestamp = msg.hasInteger( MSG_TIMESTAMP_FIELD );
         boolean hasId = msg.hasInteger( MSG_UNIQUE_ID_FIELD );
         if ( !hasType || !hasSender || !hasTimestamp || !hasId ) {

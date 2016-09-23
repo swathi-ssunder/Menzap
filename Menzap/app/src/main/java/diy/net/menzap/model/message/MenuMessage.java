@@ -49,7 +49,7 @@ public class MenuMessage extends Message{
 
 
 
-    public MenuMessage(long sender, String menuName, String menuDescription, long category,
+    public MenuMessage(String sender, String menuName, String menuDescription, long category,
                         String servedOn) {
         super(sender);
         this.setType("MENU");
@@ -71,7 +71,7 @@ public class MenuMessage extends Message{
 
     }
 
-    public MenuMessage(long sender, Menu menu) {
+    public MenuMessage(String sender, Menu menu) {
         super(sender);
         this.setType("MENU");
         this.setTtl(24*60);
@@ -88,7 +88,7 @@ public class MenuMessage extends Message{
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-        msg.putInteger("SENDER", this.getSender());
+        msg.putString("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
         msg.putInteger("UNIQUE_ID", this.getUniqueId());

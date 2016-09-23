@@ -40,8 +40,10 @@
         <activity
             android:name=".activity.EventCreateActivity"
             android:parentActivityName=".activity.TabsActivity" />
-        <activity android:name=".activity.MenuCreateActivity"
-            android:parentActivityName=".activity.TabsActivity" ></activity>
+        <activity
+            android:name=".activity.MenuCreateActivity"
+            android:parentActivityName=".activity.TabsActivity" />
+        <activity android:name=".activity.LoginActivity"></activity>
     </application>
 
 </manifest>
