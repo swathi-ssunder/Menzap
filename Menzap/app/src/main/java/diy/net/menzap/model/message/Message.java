@@ -12,7 +12,7 @@ import static fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage.RNG;
 
 public abstract class Message {
     private String type;
-    private long sender;
+    private String sender;
     private long ttl;
     private long timestamp;
     private long uniqueId;
@@ -35,14 +35,14 @@ public abstract class Message {
         this.timestamp = timestamp;
     }
 
-    public Message(long sender) {
+    public Message(String sender) {
         this.sender = sender;
         this.timestamp = System.currentTimeMillis();
         this.uniqueId = RNG.nextLong();
     }
 
     public Message(SCAMPIMessage message) {
-        this.sender = message.getInteger("SENDER");
+        this.sender = message.getString("SENDER");
         this.timestamp = message.getInteger("TIMESTAMP");
         this.uniqueId = message.getInteger("UNIQUE_ID");
         this.type = message.getString("TYPE");
@@ -51,11 +51,11 @@ public abstract class Message {
 
     public abstract SCAMPIMessage getScampiMsgObj();
 
-    public long getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(long sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 

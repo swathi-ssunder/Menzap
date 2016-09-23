@@ -29,7 +29,7 @@ public class UserMessage extends Message{
     }
 
 
-    public UserMessage(long sender, String emailId, int isFriend) {
+    public UserMessage(String sender, String emailId, int isFriend) {
         super(sender);
         this.setType("USER");
         this.setTtl(24*60);
@@ -45,7 +45,7 @@ public class UserMessage extends Message{
         this.isFriend = message.getInteger("IS_FRIEND");
     }
 
-    public UserMessage(long sender, User user) {
+    public UserMessage(String sender, User user) {
         super(sender);
         this.setType("USER");
         this.setTtl(24*60);
@@ -58,7 +58,7 @@ public class UserMessage extends Message{
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-       // msg.putInteger("SENDER", this.getSender());
+        msg.putString("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putString("EMAIL_ID", this.getEmailId());
         msg.putInteger("IS_FRIEND", this.getIsFriend());

@@ -9,24 +9,25 @@ import android.os.Parcelable;
 public class User implements Parcelable {
 
     private int id;
+    private String sender;
     private String emailId;
     private int isFriend;
+    private long ts;
+    private long uniqueId;
 
 
-    public User(String emailId,  int is_friend) {
+    public User(String emailId,  int isFriend) {
         this.setEmailId(emailId);
-        this.setIsFriend(is_friend);
+        this.setIsFriend(isFriend);
     }
 
-    /*public User(long sender, String name, String description, long category, String servedOn, long ts, long uniqueId) {
+    public User(String sender, String emailId, int isFriend, long ts, long uniqueId) {
         this.setSender(sender);
-        this.setName(name);
-        this.setDescription(description);
-        this.setCategory(category);
-        this.setServedOn(servedOn);
+        this.setEmailId(emailId);
+        this.setIsFriend(isFriend);
         this.setTs(ts);
         this.setUniqueId(uniqueId);
-    }*/
+    }
 
     /**
      * Retrieving User data from Parcel object
@@ -40,6 +41,14 @@ public class User implements Parcelable {
 
     public int getId() {
         return id;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public void setId(int id) {
@@ -60,6 +69,22 @@ public class User implements Parcelable {
 
     public void setIsFriend(int isFriend) {
         this.isFriend = isFriend;
+    }
+
+    public long getTs() {
+        return ts;
+    }
+
+    public void setTs(long ts) {
+        this.ts = ts;
+    }
+
+    public long getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(long uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
 

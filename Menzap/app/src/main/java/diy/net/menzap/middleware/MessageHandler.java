@@ -59,7 +59,7 @@ public class MessageHandler {
                 break;
             case MENU:
 
-                Menu menu = new Menu(msg.getInteger(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
+                Menu menu = new Menu(msg.getString(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
                         msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON),
                         msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
@@ -78,7 +78,7 @@ public class MessageHandler {
                 break;
             case EVENT:
 
-                Event event = new Event(msg.getInteger(MSG_SENDER), msg.getString(MSG_EVENT_NAME), msg.getString(MSG_EVENT_DESCRIPTION),
+                Event event = new Event(msg.getString(MSG_SENDER), msg.getString(MSG_EVENT_NAME), msg.getString(MSG_EVENT_DESCRIPTION),
                         msg.getString(MSG_LOCATION), msg.getString(MSG_START_TIME), msg.getString(MSG_END_TIME),
                         msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 

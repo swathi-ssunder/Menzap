@@ -59,7 +59,7 @@ public class EventMessage extends Message{
     }
 
 
-    public EventMessage(long sender, String eventName, String eventDescription, String startTime,
+    public EventMessage(String sender, String eventName, String eventDescription, String startTime,
                         String endTime, String location) {
         super(sender);
         this.setType("EVENT");
@@ -80,7 +80,7 @@ public class EventMessage extends Message{
         this.location = message.getString("LOCATION");
     }
 
-    public EventMessage(long sender, Event event) {
+    public EventMessage(String sender, Event event) {
         super(sender);
         this.setType("EVENT");
         this.setTtl(24*60);
@@ -98,7 +98,7 @@ public class EventMessage extends Message{
                 .lifetime(this.getTtl(), TimeUnit.MINUTES)
                 .build();
 
-        msg.putInteger("SENDER", this.getSender());
+        msg.putString("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putInteger("TIMESTAMP", this.getTimestamp());
         msg.putInteger("UNIQUE_ID", this.getUniqueId());

@@ -1,6 +1,8 @@
 package diy.net.menzap.activity;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -106,8 +108,12 @@ public class EventCreateActivity extends AppCompatActivity {
         EditText text5 = (EditText) findViewById(R.id.txtTo);
         String toTime = text5.getText().toString();
 
-        //TODO Fetch sender from user profile
-        long sender = 101;
+        //Fetching sender details from preferences
+        SharedPreferences pref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        String emailId = pref.getString("emailId", "");
+        String sender = emailId;
+
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();
 

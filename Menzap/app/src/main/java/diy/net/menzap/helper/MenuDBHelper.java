@@ -69,9 +69,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
-        db.insert("MENU", null, contentValues);
-
-        return true;
+        return (db.insert("MENU", null, contentValues) != -1);
     }
 
     public Cursor get(int id) {
@@ -117,7 +115,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
 
         while (!res.isAfterLast()) {
             Menu menu = new Menu(
-                    res.getInt(res.getColumnIndex(COLUMN_SENDER)),
+                    res.getString(res.getColumnIndex(COLUMN_SENDER)),
                     res.getString(res.getColumnIndex(COLUMN_NAME)),
                     res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
                     res.getInt(res.getColumnIndex(COLUMN_CATEGORY)),

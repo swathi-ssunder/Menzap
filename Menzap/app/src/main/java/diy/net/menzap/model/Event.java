@@ -10,7 +10,7 @@ import android.os.Parcelable;
 public class Event implements Parcelable {
 
     private int id;
-    private long sender;
+    private String sender;
     private String name;
     private String description;
     private String location;
@@ -20,7 +20,7 @@ public class Event implements Parcelable {
     private long uniqueId;
 
 
-    public Event(long sender, String name, String description, String location, String fromDate, String toDate) {
+    public Event(String sender, String name, String description, String location, String fromDate, String toDate) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
@@ -29,7 +29,7 @@ public class Event implements Parcelable {
         this.setToDate(toDate);
     }
 
-    public Event(long sender, String name, String description, String location, String fromDate, String toDate, long ts, long uniqueId) {
+    public Event(String sender, String name, String description, String location, String fromDate, String toDate, long ts, long uniqueId) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
@@ -61,11 +61,11 @@ public class Event implements Parcelable {
         this.id = id;
     }
 
-    public long getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(long sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 

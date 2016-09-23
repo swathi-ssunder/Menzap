@@ -20,8 +20,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MENZAP";
     private static final String TABLE_NAME = "USER";
     private static final String COLUMN_ID = "ID";
+    private static final String COLUMN_SENDER = "SENDER";
     private static final String COLUMN_EMAIL_ID = "EMAIL_ID";
     private static final String COLUMN_IS_FRIEND = "IS_FRIEND";
+    private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
+    private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
 
     public UserDBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -32,8 +35,15 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_SENDER + " INTEGER, " +
                         COLUMN_EMAIL_ID + " TEXT, " +
-                        COLUMN_IS_FRIEND + " INTEGER);"
+                        COLUMN_IS_FRIEND + " INTEGER, " +
+                        COLUMN_TIME_STAMP + " INTEGER, " +
+                        COLUMN_UNIQUE_ID + " INTEGER, " +
+                        "CONSTRAINT unq UNIQUE (" + COLUMN_TIME_STAMP + ", " +
+                        COLUMN_TIME_STAMP + ") " +
+                        "ON CONFLICT IGNORE" +
+                        ");"
         );
     }
 
@@ -43,13 +53,17 @@ public class UserDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insert(String emailId, int isFriend) {
+    public boolean insert(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_EMAIL_ID, emailId);
-        contentValues.put(COLUMN_IS_FRIEND, isFriend);
+        contentValues.put(COLUMN_SENDER, user.getSender());
+        contentValues.put(COLUMN_EMAIL_ID, user.getEmailId());
+        contentValues.put(COLUMN_IS_FRIEND, user.getIsFriend());
+        contentValues.put(COLUMN_TIME_STAMP, user.getTs());
+        contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
         db.insert("USER", null, contentValues);
+        db.close();
 
         return true;
     }
@@ -62,6 +76,22 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public int count() {
         SQLiteDatabase db = this.getReadableDatabase();
         return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
+    }
+
+    public boolean update(int id, User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_SENDER, user.getSender());
+        contentValues.put(COLUMN_EMAIL_ID, user.getEmailId());
+        contentValues.put(COLUMN_IS_FRIEND, user.getIsFriend());
+        contentValues.put(COLUMN_TIME_STAMP, user.getTs());
+        contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
+
+        db.update("USER", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        db.close();
+
+        return true;
     }
 
 
@@ -81,8 +111,11 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
         while (!res.isAfterLast()) {
             User user = new User(
+                    res.getString(res.getColumnIndex(COLUMN_SENDER)),
                     res.getString(res.getColumnIndex(COLUMN_EMAIL_ID)),
-                    res.getInt(res.getColumnIndex(COLUMN_IS_FRIEND))
+                    res.getInt(res.getColumnIndex(COLUMN_IS_FRIEND)),
+                    res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
             array_list.add(user);
             res.moveToNext();
