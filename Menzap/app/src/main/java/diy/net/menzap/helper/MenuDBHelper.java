@@ -13,7 +13,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
-import diy.net.menzap.model.Event;
 import diy.net.menzap.model.Menu;
 
 public class MenuDBHelper extends SQLiteOpenHelper {

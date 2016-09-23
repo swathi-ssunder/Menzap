@@ -42,8 +42,8 @@ public class MenuAdapter extends ArrayAdapter {
             LayoutInflater inflater = ((Activity)this.context).getLayoutInflater();
             row = inflater.inflate(this.resource, parent, false);
         }
-        TextView eventName = (TextView)row.findViewById(R.id.menuName);
-        eventName.setText(this.menus.get(position).getName());
+        TextView menuName = (TextView)row.findViewById(R.id.menuName);
+        menuName.setText(this.menus.get(position).getName());
 
         return row;
     }
