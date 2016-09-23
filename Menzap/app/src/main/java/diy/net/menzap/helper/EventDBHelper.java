@@ -32,7 +32,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
-            "CREATE TABLE " + TABLE_NAME + "(" +
+            "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COLUMN_SENDER + " INTEGER, " +
                     COLUMN_NAME + " TEXT, " +
