@@ -49,13 +49,27 @@ public class TabsActivity extends AppCompatActivity {
         setupTabIcons();
 
         DataHolder.getInstance().initHelper(this);
+
+        /*When the activity is opened from Notification*/
+        if(getIntent().getAction() != null) {
+            switch(getIntent().getAction()) {
+                case "TAB_EVENT":
+                    /*Set the Events tab as active*/
+                    tabLayout.getTabAt(2).select();
+                    break;
+                case "TAB_MENU":
+                    /*Set the Events tab as active*/
+                    tabLayout.getTabAt(0).select();
+                    break;
+            }
+        }
     }
 
     private void setupTabIcons() {
         int[] tabIcons = {
-                R.drawable.ic_tab_favourite,
+                R.drawable.ic_tab_menu,
                 R.drawable.ic_tab_contacts,
-                R.drawable.ic_event_black_24dp
+                R.drawable.ic_tab_events
         };
 
         for(int i = 0; i < tabIcons.length; i++) {
