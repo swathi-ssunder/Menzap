@@ -45,12 +45,17 @@ public class NotificationHelper {
     }
 
     public void notifyForMenu(Menu menu) {
+        Intent intent = new Intent(context, TabsActivity.class);
+        intent.setAction("TAB_MENU");
+        PendingIntent pIntent = PendingIntent.getActivity(context, (int)System.currentTimeMillis(), intent, 0);
+
         // Build notification
         // Actions are just fake
         Notification noti = new Notification.Builder(this.context)
-                .setContentTitle(menu.getName())
-                .setContentText("New Dish on the Menu")
-                .setSmallIcon(R.drawable.ic_tab_call)
+                .setContentTitle("Menzap")
+                .setContentText("New Dish on the Menu-" + menu.getName())
+                .setSmallIcon(R.drawable.ic_tab_menu)
+                .setContentIntent(pIntent)
                 .build();
 
         android.app.NotificationManager notificationManager = (NotificationManager) (context.getSystemService(context.NOTIFICATION_SERVICE));
