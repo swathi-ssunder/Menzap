@@ -49,6 +49,14 @@ public class TabsActivity extends AppCompatActivity {
         setupTabIcons();
 
         DataHolder.getInstance().initHelper(this);
+
+        /*When the activity is opened from Notification*/
+        if(getIntent().getAction() != null) {
+            if(getIntent().getAction().equals("TAB_EVENT")) {
+                /*Set the Events tab as active*/
+                tabLayout.getTabAt(2).select();
+            }
+        }
     }
 
     private void setupTabIcons() {
