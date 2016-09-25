@@ -10,6 +10,7 @@ import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
  */
 public class UserMessage extends Message{
     private String emailId;
+    private String name;
     private long isFriend;
 
     public String getEmailId() {
@@ -18,6 +19,14 @@ public class UserMessage extends Message{
 
     public void setEmailId(String emailId) {
         this.emailId = emailId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getIsFriend() {
@@ -29,12 +38,13 @@ public class UserMessage extends Message{
     }
 
 
-    public UserMessage(String sender, String emailId, int isFriend) {
+    public UserMessage(String sender, String emailId, String name, int isFriend) {
         super(sender);
         this.setType("USER");
         this.setTtl(24*60);
 
         this.setEmailId(emailId);
+        this.setName(name);
         this.setIsFriend(isFriend);
 
     }
@@ -42,6 +52,7 @@ public class UserMessage extends Message{
     public UserMessage(SCAMPIMessage message) {
         super(message);
         this.emailId = message.getString("EMAIL_ID");
+        this.name = message.getString("USER_NAME");
         this.isFriend = message.getInteger("IS_FRIEND");
     }
 
@@ -50,6 +61,7 @@ public class UserMessage extends Message{
         this.setType("USER");
         this.setTtl(24*60);
         this.setEmailId(user.getEmailId());
+        this.setName(user.getName());
         this.setIsFriend(user.getIsFriend());
     }
 
@@ -61,6 +73,7 @@ public class UserMessage extends Message{
         msg.putString("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
         msg.putString("EMAIL_ID", this.getEmailId());
+        msg.putString("USER_NAME", this.getName());
         msg.putInteger("IS_FRIEND", this.getIsFriend());
 
         return msg;
