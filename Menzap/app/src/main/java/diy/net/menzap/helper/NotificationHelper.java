@@ -23,16 +23,17 @@ public class NotificationHelper {
         this.context = context;
     }
 
-    public void notifyForEvent(Event event) {
+    public void notifyForEvent(Event event, boolean isToday) {
         Intent intent = new Intent(context, TabsActivity.class);
         intent.setAction("TAB_EVENT");
         PendingIntent pIntent = PendingIntent.getActivity(context, (int)System.currentTimeMillis(), intent, 0);
+        String contentText = isToday ? ("Don't miss " + event.getName() + " today!") :
+                ("Upcoming Event-" + event.getName());
 
         // Build notification
-        // Actions are just fake
         Notification noti = new Notification.Builder(this.context)
                 .setContentTitle("Menzap")
-                .setContentText("Upcoming Event-" + event.getName())
+                .setContentText(contentText)
                 .setSmallIcon(R.drawable.ic_tab_events)
                 .setContentIntent(pIntent)
                 .build();
@@ -50,10 +51,30 @@ public class NotificationHelper {
         PendingIntent pIntent = PendingIntent.getActivity(context, (int)System.currentTimeMillis(), intent, 0);
 
         // Build notification
-        // Actions are just fake
         Notification noti = new Notification.Builder(this.context)
                 .setContentTitle("Menzap")
                 .setContentText("New Dish on the Menu-" + menu.getName())
+                .setSmallIcon(R.drawable.ic_tab_menu)
+                .setContentIntent(pIntent)
+                .build();
+
+        android.app.NotificationManager notificationManager = (NotificationManager) (context.getSystemService(context.NOTIFICATION_SERVICE));
+        // hide the notification after its selected
+        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationManager.notify(0, noti);
+    }
+
+    public void notifyForWAP(int isConnected) {
+        Intent intent = new Intent(context, TabsActivity.class);
+        intent.setAction("TAB_MENU");
+        PendingIntent pIntent = PendingIntent.getActivity(context, (int)System.currentTimeMillis(), intent, 0);
+
+        String contentText = (isConnected == 1) ? "Welcome to Mensa" : "Hope you had a good meal. See you again!";
+        // Build notification
+        Notification noti = new Notification.Builder(this.context)
+                .setContentTitle("Menzap")
+                .setContentText(contentText)
                 .setSmallIcon(R.drawable.ic_tab_menu)
                 .setContentIntent(pIntent)
                 .build();

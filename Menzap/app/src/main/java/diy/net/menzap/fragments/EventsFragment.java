@@ -17,12 +17,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import diy.net.menzap.R;
 import diy.net.menzap.activity.EventCreateActivity;
 import diy.net.menzap.activity.EventDetailActivity;
 import diy.net.menzap.adapter.EventAdapter;
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.model.Event;
 
@@ -76,6 +80,8 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         this.events = eventDBHelper.getAll();
         EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, events);
 
+        this.handleNotification(this.events);
+
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeLayout.setRefreshing(false);
 
@@ -116,5 +122,16 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
             this.refreshView();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleNotification(ArrayList<Event> events) {
+        DateFormat dateFormat = new SimpleDateFormat("d-M-yyyy");
+        Date dateObj = new Date();
+        String today = dateFormat.format(dateObj);
+        for(Event event: events) {
+            if(today.equals(event.getFromDate()) || today.equals(event.getToDate())) {
+                DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, true);
+            }
+        }
     }
 }
