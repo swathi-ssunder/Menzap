@@ -23,15 +23,17 @@ public class NotificationHelper {
         this.context = context;
     }
 
-    public void notifyForEvent(Event event) {
+    public void notifyForEvent(Event event, boolean isToday) {
         Intent intent = new Intent(context, TabsActivity.class);
         intent.setAction("TAB_EVENT");
         PendingIntent pIntent = PendingIntent.getActivity(context, (int)System.currentTimeMillis(), intent, 0);
+        String contentText = isToday ? ("Don't miss " + event.getName() + " today!") :
+                ("Upcoming Event-" + event.getName());
 
         // Build notification
         Notification noti = new Notification.Builder(this.context)
                 .setContentTitle("Menzap")
-                .setContentText("Upcoming Event-" + event.getName())
+                .setContentText(contentText)
                 .setSmallIcon(R.drawable.ic_tab_events)
                 .setContentIntent(pIntent)
                 .build();

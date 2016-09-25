@@ -49,23 +49,23 @@ public class EventCreateActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        EditText txtFrom=(EditText)findViewById(R.id.txtFrom);
+        EditText txtFrom = (EditText)findViewById(R.id.txtFrom);
         txtFrom.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-            public void onFocusChange(View view, boolean hasfocus){
-                if(hasfocus){
-                    DateDialog dialog=new DateDialog(view);
-                    FragmentTransaction ft =getFragmentManager().beginTransaction();
+            public void onFocusChange(View view, boolean hasFocus){
+                if(hasFocus) {
+                    DateDialog dialog = new DateDialog(view);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
                     dialog.show(ft, "DatePicker");
                 }
             }
         });
 
-        EditText txtTo=(EditText)findViewById(R.id.txtTo);
+        EditText txtTo = (EditText)findViewById(R.id.txtTo);
         txtTo.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-            public void onFocusChange(View view, boolean hasfocus){
-                if(hasfocus){
-                    DateDialog dialog=new DateDialog(view);
-                    FragmentTransaction ft =getFragmentManager().beginTransaction();
+            public void onFocusChange(View view, boolean hasFocus){
+                if(hasFocus) {
+                    DateDialog dialog = new DateDialog(view);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
                     dialog.show(ft, "DatePicker");
                 }
             }
