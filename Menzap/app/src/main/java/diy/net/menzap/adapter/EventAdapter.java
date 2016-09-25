@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.like.LikeButton;
+
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
@@ -44,6 +46,9 @@ public class EventAdapter extends ArrayAdapter {
         }
         TextView eventName = (TextView)row.findViewById(R.id.eventName);
         eventName.setText(this.events.get(position).getName());
+
+        LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
+        btnLike.setTag(position);
 
         return row;
     }

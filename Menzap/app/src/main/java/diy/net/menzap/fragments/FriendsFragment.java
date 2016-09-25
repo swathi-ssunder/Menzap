@@ -100,4 +100,8 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
+
+    public void onSelected() {
+
+    }
 }

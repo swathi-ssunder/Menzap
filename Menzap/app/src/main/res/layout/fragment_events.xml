@@ -20,7 +20,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
-            android:onClick="addEvent"
             android:src="@drawable/ic_btn_add"
             app:fabSize="normal" />
 

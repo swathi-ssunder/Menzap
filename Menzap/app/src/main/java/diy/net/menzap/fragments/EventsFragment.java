@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.model.Event;
 
 
-public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener, OnLikeListener {
 
     ArrayList<Event> events;
     private SwipeRefreshLayout swipeLayout;
@@ -87,6 +90,8 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
 
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
+
+        this.onSelected();
     }
 
     @Override
@@ -131,6 +136,33 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         for(Event event: events) {
             if(today.equals(event.getFromDate()) || today.equals(event.getToDate())) {
                 DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, true);
+            }
+        }
+    }
+
+    @Override
+    public void liked(LikeButton likeButton) {
+        int position = (int)likeButton.getTag();
+        String name = this.events.get(position).getName();
+        Toast.makeText(getActivity(), name + "Liked!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton) {
+        int position = (int)likeButton.getTag();
+        String name = this.events.get(position).getName();
+        Toast.makeText(getActivity(), name + "Disliked!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onSelected() {
+        if(this.events.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < this.events.size(); i++) {
+            LikeButton likeButton = (LikeButton) getView().findViewWithTag(i);
+            if (likeButton != null) {
+                likeButton.setOnLikeListener(this);
             }
         }
     }
