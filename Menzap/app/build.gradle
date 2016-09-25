@@ -27,4 +27,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.0.+'
     compile files('libs/AppLib-1.0.jar')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.github.jd-alexander:LikeButton:0.2.0'
 }

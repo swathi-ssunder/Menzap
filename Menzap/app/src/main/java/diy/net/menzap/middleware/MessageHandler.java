@@ -91,7 +91,7 @@ public class MessageHandler {
 
                     // notifying only when the difference of time with current time is 5 seconds
                     if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
-                        DataHolder.getInstance().getNotificationHelper().notifyForEvent(event);
+                        DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, false);
                 }
                 db.close();
                 break;
