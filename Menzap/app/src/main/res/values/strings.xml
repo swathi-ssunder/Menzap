@@ -21,5 +21,6 @@
     <string name="vegetarian">Vegetarian</string>
     <string name="email_id">Email Id</string>
     <string name="btnRegister">Register</string>
+    <string name="name">Name</string>
 
 </resources>

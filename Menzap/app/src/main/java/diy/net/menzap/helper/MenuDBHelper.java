@@ -37,7 +37,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_SENDER + " INTEGER, " +
+                        COLUMN_SENDER + " TEXT, " +
                         COLUMN_NAME + " TEXT, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_CATEGORY + " TEXT, " +

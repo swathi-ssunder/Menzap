@@ -9,6 +9,7 @@ import android.os.Parcelable;
 public class User implements Parcelable {
 
     private int id;
+    private String name;
     private String sender;
     private String emailId;
     private int isFriend;
@@ -21,9 +22,10 @@ public class User implements Parcelable {
         this.setIsFriend(isFriend);
     }
 
-    public User(String sender, String emailId, int isFriend, long ts, long uniqueId) {
+    public User(String sender, String emailId, String name, int isFriend, long ts, long uniqueId) {
         this.setSender(sender);
         this.setEmailId(emailId);
+        this.setName(name);
         this.setIsFriend(isFriend);
         this.setTs(ts);
         this.setUniqueId(uniqueId);
@@ -41,6 +43,14 @@ public class User implements Parcelable {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSender() {

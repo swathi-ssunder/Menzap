@@ -52,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         EditText text1 = (EditText) findViewById(R.id.txtEmailId);
         String emailId = text1.getText().toString();
 
+        EditText text2 = (EditText) findViewById(R.id.txtName);
+        String name = text1.getText().toString();
+
         if (!isValidEmail(emailId)) {
             text1.setError("Invalid Email");
             return;
@@ -59,10 +62,10 @@ public class LoginActivity extends AppCompatActivity {
 
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();
-        int isFriend = 0; // since self
+        int isFriend = -1; // since self
         String sender = emailId;
 
-        User user = new User(sender, emailId, isFriend, timestamp, uniqueId);
+        User user = new User(sender, emailId, name, isFriend, timestamp, uniqueId);
 
 
         UserDBHelper userDbHelper = new UserDBHelper(this);

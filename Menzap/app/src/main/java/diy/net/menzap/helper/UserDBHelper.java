@@ -22,6 +22,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_SENDER = "SENDER";
     private static final String COLUMN_EMAIL_ID = "EMAIL_ID";
+    private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_IS_FRIEND = "IS_FRIEND";
     private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
     private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
@@ -35,8 +36,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
                         COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_SENDER + " INTEGER, " +
+                        COLUMN_SENDER + " TEXT, " +
                         COLUMN_EMAIL_ID + " TEXT, " +
+                        COLUMN_NAME+ " TEXT, " +
                         COLUMN_IS_FRIEND + " INTEGER, " +
                         COLUMN_TIME_STAMP + " INTEGER, " +
                         COLUMN_UNIQUE_ID + " INTEGER, " +
@@ -59,6 +61,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_SENDER, user.getSender());
         contentValues.put(COLUMN_EMAIL_ID, user.getEmailId());
+        contentValues.put(COLUMN_NAME, user.getName());
         contentValues.put(COLUMN_IS_FRIEND, user.getIsFriend());
         contentValues.put(COLUMN_TIME_STAMP, user.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
@@ -84,6 +87,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_SENDER, user.getSender());
         contentValues.put(COLUMN_EMAIL_ID, user.getEmailId());
+        contentValues.put(COLUMN_NAME, user.getName());
         contentValues.put(COLUMN_IS_FRIEND, user.getIsFriend());
         contentValues.put(COLUMN_TIME_STAMP, user.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
@@ -106,13 +110,14 @@ public class UserDBHelper extends SQLiteOpenHelper {
         ArrayList<User> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM USER", null);
+        Cursor res = db.rawQuery("SELECT * FROM USER WHERE IS_FRIEND IN (0,1)", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
             User user = new User(
                     res.getString(res.getColumnIndex(COLUMN_SENDER)),
                     res.getString(res.getColumnIndex(COLUMN_EMAIL_ID)),
+                    res.getString(res.getColumnIndex(COLUMN_NAME)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_FRIEND)),
                     res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
                     res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
@@ -128,7 +133,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
     public int isRegistered() {
         int count = 0;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT COUNT(*) AS REC_COUNT FROM USER WHERE IS_FRIEND=0;", null);
+        Cursor res = db.rawQuery("SELECT COUNT(*) AS REC_COUNT FROM USER WHERE IS_FRIEND=-1;", null);
         res.moveToFirst();
 
         count = res.getInt(0);
