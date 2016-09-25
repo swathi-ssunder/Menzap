@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import diy.net.menzap.R;
 import diy.net.menzap.helper.UserDBHelper;
@@ -35,9 +37,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // validating email id
+    private boolean isValidEmail(String email) {
+        String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+
     public void createUser(){
         EditText text1 = (EditText) findViewById(R.id.txtEmailId);
         String emailId = text1.getText().toString();
+
+        if (!isValidEmail(emailId)) {
+            text1.setError("Invalid Email");
+            return;
+        }
 
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();

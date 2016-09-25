@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:hint="@string/email_id" />
+            android:hint="@string/email_id"
+            android:inputType="textEmailAddress"/>
 
         <Button
             android:id="@+id/btnRegister"
