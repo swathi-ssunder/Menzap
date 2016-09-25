@@ -14,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +31,7 @@ import diy.net.menzap.helper.ReviewDBHelper;
 public class TabsActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
+    private ViewPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,38 +58,95 @@ public class TabsActivity extends AppCompatActivity {
         /*When the activity is opened from Notification*/
         if(getIntent().getAction() != null) {
             switch(getIntent().getAction()) {
+                case "TAB_MENU":
+                    /*Set the Menu tab as active*/
+                    tabLayout.getTabAt(0).select();
+                    break;
+                case "TAB_FRIEND":
+                    /*Set the Friend tab as active*/
+                    tabLayout.getTabAt(1).select();
+                    break;
                 case "TAB_EVENT":
                     /*Set the Events tab as active*/
                     tabLayout.getTabAt(2).select();
                     break;
-                case "TAB_MENU":
-                    /*Set the Events tab as active*/
-                    tabLayout.getTabAt(0).select();
-                    break;
             }
         }
+
+        /*Set the Menu tab as active*/
+        tabLayout.getTabAt(0).select();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+
+                switch(position) {
+                    case 0:
+                        /*Invoke onSelected on MenuFragment*/
+                        MenuFragment menuFragment = (MenuFragment)TabsActivity.this.adapter.getItem(position);
+                        menuFragment.onSelected();
+                        break;
+                    case 1:
+                        /*Invoke onSelected on FriendFragment*/
+                        FriendsFragment friendsFragment = (FriendsFragment)TabsActivity.this.adapter.getItem(position);
+                        friendsFragment.onSelected();
+                        break;
+                    case 2:
+                        /*Invoke onSelected on EventFragment*/
+                        EventsFragment eventsFragment = (EventsFragment) TabsActivity.this.adapter.getItem(position);
+                        eventsFragment.onSelected();
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
     }
 
     private void setupTabIcons() {
-        int[] tabIcons = {
-                R.drawable.ic_tab_menu,
-                R.drawable.ic_tab_contacts,
-                R.drawable.ic_tab_events
-        };
+        JSONArray tabs = new JSONArray();
 
-        for(int i = 0; i < tabIcons.length; i++) {
-            if(tabLayout.getTabAt(i) != null) {
-                tabLayout.getTabAt(i).setIcon(tabIcons[i]);
+        try {
+            JSONObject tabMenu = new JSONObject();
+            tabMenu.put("text", "MENU");
+            tabMenu.put("icon", R.drawable.ic_tab_menu);
+
+            JSONObject friendMenu = new JSONObject();
+            friendMenu.put("text", "FRIEND");
+            friendMenu.put("icon", R.drawable.ic_tab_contacts);
+
+            JSONObject eventMenu = new JSONObject();
+            eventMenu.put("text", "EVENT");
+            eventMenu.put("icon", R.drawable.ic_tab_events);
+
+            tabs.put(0, tabMenu);
+            tabs.put(1, friendMenu);
+            tabs.put(2, eventMenu);
+
+            for(int i = 0; i < tabs.length(); i++) {
+                if(tabLayout.getTabAt(i) != null) {
+                    tabLayout.getTabAt(i).setTag(tabs.getJSONObject(i).getString("text"));
+                    tabLayout.getTabAt(i).setIcon(tabs.getJSONObject(i).getInt("icon"));
+                }
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new MenuFragment(), "Menu Today");
-        adapter.addFrag(new FriendsFragment(), "Friends in Mensa");
-        adapter.addFrag(new EventsFragment(), "Upcoming Events");
-        viewPager.setAdapter(adapter);
+        this.adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        this.adapter.addFrag(new MenuFragment(), "Menu Today");
+        this.adapter.addFrag(new FriendsFragment(), "Friends in Mensa");
+        this.adapter.addFrag(new EventsFragment(), "Upcoming Events");
+        viewPager.setAdapter(this.adapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -117,4 +117,8 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public void onSelected() {
+
+    }
 }

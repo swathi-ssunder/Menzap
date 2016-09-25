@@ -17,7 +17,7 @@
         android:layout_alignParentStart="true" />
 
     <com.like.LikeButton
-        android:id="@+id/star_button"
+        android:id="@+id/btnLike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon_size="30dp"
