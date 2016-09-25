@@ -25,6 +25,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, TabsActivity.class));
         else
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
+        finish();
     }
 }
