@@ -16,26 +16,29 @@ public class Event implements Parcelable {
     private String location;
     private String fromDate;
     private String toDate;
+    private long isInterested;
     private long ts;
     private long uniqueId;
 
 
-    public Event(String sender, String name, String description, String location, String fromDate, String toDate) {
+    public Event(String sender, String name, String description, String location, String fromDate, String toDate, long isInterested) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
         this.setLocation(location);
         this.setFromDate(fromDate);
         this.setToDate(toDate);
+        this.setIsInterested(isInterested);
     }
 
-    public Event(String sender, String name, String description, String location, String fromDate, String toDate, long ts, long uniqueId) {
+    public Event(String sender, String name, String description, String location, String fromDate, String toDate, long isInterested, long ts, long uniqueId) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
         this.setLocation(location);
         this.setFromDate(fromDate);
         this.setToDate(toDate);
+        this.setIsInterested(isInterested);
         this.setTs(ts);
         this.setUniqueId(uniqueId);
     }
@@ -51,6 +54,7 @@ public class Event implements Parcelable {
         this.setLocation(in.readString());
         this.setFromDate(in.readString());
         this.setToDate(in.readString());
+        this.setIsInterested(in.readLong());
     }
 
     public int getId() {
@@ -109,6 +113,14 @@ public class Event implements Parcelable {
         this.toDate = toDate;
     }
 
+    public long getIsInterested() {
+        return isInterested;
+    }
+
+    private void setIsInterested(long isInterested) {
+        this.isInterested = isInterested;
+    }
+
     public long getTs() {
         return ts;
     }
@@ -137,6 +149,7 @@ public class Event implements Parcelable {
         dest.writeString(this.location);
         dest.writeString(this.fromDate);
         dest.writeString(this.toDate);
+        dest.writeLong(this.isInterested);
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {

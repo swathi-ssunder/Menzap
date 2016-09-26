@@ -81,7 +81,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         Log.d("allevents", eventDBHelper.getAll().toString());
 
         this.events = eventDBHelper.getAll();
-        EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, events);
+        EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, this.events);
 
         this.handleNotification(this.events);
 
@@ -143,19 +143,31 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public void liked(LikeButton likeButton) {
         int position = (int)likeButton.getTag();
-        String name = this.events.get(position).getName();
-        Toast.makeText(getActivity(), name + "Liked!", Toast.LENGTH_SHORT).show();
+        Event event = this.events.get(position);
+        long isInterested = 1;
+
+        EventDBHelper eventDBHelper = new EventDBHelper(getContext());
+        Event interested = new Event( event.getSender(), event.getName(), event.getDescription(), event.getLocation(),
+                                      event.getFromDate(), event.getToDate(), isInterested , event.getTs(), event.getUniqueId());
+        eventDBHelper.update(event.getId(), interested);
+
     }
 
     @Override
     public void unLiked(LikeButton likeButton) {
         int position = (int)likeButton.getTag();
-        String name = this.events.get(position).getName();
-        Toast.makeText(getActivity(), name + "Disliked!", Toast.LENGTH_SHORT).show();
+        Event event = this.events.get(position);
+        long isInterested = 0;
+
+
+        EventDBHelper eventDBHelper = new EventDBHelper(getContext());
+        Event interested = new Event( event.getSender(), event.getName(), event.getDescription(), event.getLocation(),
+                event.getFromDate(), event.getToDate(), isInterested , event.getTs(), event.getUniqueId());
+        eventDBHelper.update(event.getId(), interested);
     }
 
     public void onSelected() {
-        if(this.events.isEmpty()) {
+        if(this.events == null || this.events.isEmpty()) {
             return;
         }
 
