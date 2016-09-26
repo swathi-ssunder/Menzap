@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         if( userDbHelper.insert(user)) {
             Log.d("added", userDbHelper.getAll().toString());
 
+            user.setIsFriend(0);
             UserMessage registerMessage = new UserMessage("REGISTER", emailId, user);
             DataHolder.getInstance().getHelper().saveAndPublish(registerMessage.getScampiMsgObj());
 
