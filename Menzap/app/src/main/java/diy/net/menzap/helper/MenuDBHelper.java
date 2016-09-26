@@ -45,7 +45,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         COLUMN_TIME_STAMP + " INTEGER, " +
                         COLUMN_UNIQUE_ID + " INTEGER, " +
                         "CONSTRAINT unq UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
-                        COLUMN_TIME_STAMP + ") " +
+                        COLUMN_TIME_STAMP + ", " + COLUMN_SENDER + ") " +
                         "ON CONFLICT IGNORE" +
                         ");"
         );
