@@ -1,6 +1,7 @@
 package diy.net.menzap.middleware;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -59,6 +60,15 @@ public class MessageHandler {
         // Database where incoming messages are to be stored
         SQLiteOpenHelper db;
         User person;
+
+        /*Fetching user details from preferences*/
+        SharedPreferences pref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String emailId = pref.getString("emailId", "");
+
+        /*Return if the user is not registered.*/
+        if(emailId.isEmpty()) {
+            return;
+        }
 
         switch(Message.MessageType.valueOf(msg.getString( MSG_TYPE ))) {
             case ENTER:

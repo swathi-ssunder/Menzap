@@ -17,9 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.like.LikeButton;
-import com.like.OnLikeListener;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,10 +31,12 @@ import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.model.Event;
 
 
-public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener, OnLikeListener {
+public class EventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     ArrayList<Event> events;
     private SwipeRefreshLayout swipeLayout;
+    private EventAdapter eventAdapter;
+    private EventDBHelper eventDBHelper;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -54,9 +53,9 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_events, container, false);
 
-        EventDBHelper eventDBHelper = new EventDBHelper(getActivity());
-        SQLiteDatabase db = eventDBHelper.getReadableDatabase();
-        eventDBHelper.onCreate(db);
+        this.eventDBHelper = new EventDBHelper(getActivity());
+        SQLiteDatabase db = this.eventDBHelper.getReadableDatabase();
+        this.eventDBHelper.onCreate(db);
 
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener( new SwipeRefreshLayout.OnRefreshListener() {
@@ -76,22 +75,19 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         this.refreshView();
     }
 
-    private void refreshView() {
-        EventDBHelper eventDBHelper = new EventDBHelper(getActivity());
-        Log.d("allevents", eventDBHelper.getAll().toString());
+    public void refreshView() {
+        Log.d("allevents", this.eventDBHelper.getAll().toString());
 
-        this.events = eventDBHelper.getAll();
-        EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, this.events);
+        this.events = this.eventDBHelper.getAll();
+        this.eventAdapter = new EventAdapter(getActivity(), R.layout.event, this.events);
 
         this.handleNotification(this.events);
 
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeLayout.setRefreshing(false);
 
-        setListAdapter(adapter);
+        setListAdapter(this.eventAdapter);
         getListView().setOnItemClickListener(this);
-
-        this.onSelected();
     }
 
     @Override
@@ -136,42 +132,6 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         for(Event event: events) {
             if((event.getIsInterested() == 1) && (today.equals(event.getFromDate()) || today.equals(event.getToDate()))) {
                 DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, true);
-            }
-        }
-    }
-
-    @Override
-    public void liked(LikeButton likeButton) {
-        int position = (int)likeButton.getTag();
-        Event event = this.events.get(position);
-
-        EventDBHelper eventDBHelper = new EventDBHelper(getContext());
-        event.setIsInterested(1);
-        eventDBHelper.update(event);
-    }
-
-    @Override
-    public void unLiked(LikeButton likeButton) {
-        int position = (int)likeButton.getTag();
-        Event event = this.events.get(position);
-
-        EventDBHelper eventDBHelper = new EventDBHelper(getContext());
-        event.setIsInterested(0);
-        eventDBHelper.update(event);
-    }
-
-    public void onSelected() {
-        if(this.events == null || this.events.isEmpty()) {
-            return;
-        }
-
-        for (int i = 0; i < this.events.size(); i++) {
-            LikeButton likeButton = (LikeButton) getView().findViewWithTag(i);
-            if(this.events.get(i).getIsInterested() == 1) {
-                likeButton.setLiked(true);
-            }
-            if (likeButton != null) {
-                likeButton.setOnLikeListener(this);
             }
         }
     }

@@ -88,10 +88,16 @@ public class NotificationHelper {
 
         notificationManager.notify(0, noti);
 
-        //Fetching sender details from preferences
+        /*Fetching sender details from preferences*/
         SharedPreferences pref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         String emailId = pref.getString("emailId", "");
 
+        /*Return if the user is not registered.*/
+        if(emailId.isEmpty()) {
+            return;
+        }
+
+        /*If registered, publish entry/exit message*/
         UserDBHelper db = new UserDBHelper(this.context);
         User person = db.getByEmailId(emailId);
 
@@ -104,7 +110,6 @@ public class NotificationHelper {
             UserMessage exitMessage = new UserMessage("EXIT", emailId, person);
             DataHolder.getInstance().getHelper().saveAndPublish(exitMessage.getScampiMsgObj());
         }
-
     }
 
     public void notifyForFriend(User friend, boolean isEntry) {

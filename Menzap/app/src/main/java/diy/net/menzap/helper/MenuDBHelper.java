@@ -42,9 +42,9 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_CATEGORY + " TEXT, " +
                         COLUMN_SERVED_ON + " TEXT, " +
-                        COLUMN_TIME_STAMP + " INTEGER, " +
-                        COLUMN_UNIQUE_ID + " INTEGER, " +
-                        "CONSTRAINT unq UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
+                        COLUMN_TIME_STAMP + " TEXT, " +
+                        COLUMN_UNIQUE_ID + " TEXT, " +
+                        "UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
                         COLUMN_TIME_STAMP + ", " + COLUMN_SENDER + ") " +
                         "ON CONFLICT IGNORE" +
                         ");"
@@ -122,8 +122,8 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
                     res.getInt(res.getColumnIndex(COLUMN_CATEGORY)),
                     res.getString(res.getColumnIndex(COLUMN_SERVED_ON)),
-                    res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
-                    res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
+                    res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
             array_list.add(menu);
             res.moveToNext();
