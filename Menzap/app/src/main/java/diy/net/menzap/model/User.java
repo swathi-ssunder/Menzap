@@ -8,7 +8,7 @@ import android.os.Parcelable;
 
 public class User implements Parcelable {
 
-    private int id;
+    private long id;
     private String name;
     private String sender;
     private String emailId;
@@ -42,7 +42,7 @@ public class User implements Parcelable {
         this.setIsFriend(in.readInt());
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -62,7 +62,7 @@ public class User implements Parcelable {
         this.sender = sender;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

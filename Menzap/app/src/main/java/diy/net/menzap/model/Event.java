@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Event implements Parcelable {
 
-    private int id;
+    private long id;
     private String sender;
     private String name;
     private String description;
@@ -57,11 +57,11 @@ public class Event implements Parcelable {
         this.setIsInterested(in.readLong());
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
