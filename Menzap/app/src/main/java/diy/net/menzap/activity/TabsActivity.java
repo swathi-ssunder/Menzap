@@ -53,8 +53,6 @@ public class TabsActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        DataHolder.getInstance().initHelper(this);
-
         /*When the activity is opened from Notification*/
         if(getIntent().getAction() != null) {
             switch(getIntent().getAction()) {
@@ -191,6 +189,5 @@ public class TabsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataHolder.getInstance().destroyHelper();
     }
 }

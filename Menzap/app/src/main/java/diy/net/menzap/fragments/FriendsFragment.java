@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
@@ -24,7 +27,7 @@ import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.User;
 
 
-public class FriendsFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class FriendsFragment extends ListFragment implements AdapterView.OnItemClickListener, OnLikeListener {
 
     ArrayList<User> users;
     private SwipeRefreshLayout swipeLayout;
@@ -72,7 +75,7 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
         Log.d("allfriends", userDBHelper.getAll().toString());
 
         this.users = userDBHelper.getAll();
-        UserAdapter adapter = new UserAdapter(getActivity(), R.layout.user, users);
+        UserAdapter adapter = new UserAdapter(getActivity(), R.layout.friend, users);
 
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeLayout.setRefreshing(false);
@@ -101,7 +104,40 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
 
     }
 
-    public void onSelected() {
+    @Override
+    public void liked(LikeButton likeButton) {
+        int position = (int)likeButton.getTag();
+        User person = this.users.get(position);
+        long isFriend = 1;
 
+        UserDBHelper userDBHelper= new UserDBHelper(getContext());
+        User user = new User(person.getSender(), person.getEmailId(), person.getName(),
+                isFriend, person.getTs(), person.getUniqueId());
+        userDBHelper.update(person.getId(), user);
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton) {
+        int position = (int)likeButton.getTag();
+        User person = this.users.get(position);
+        long isFriend = 0;
+
+        UserDBHelper userDBHelper= new UserDBHelper(getContext());
+        User user = new User(person.getSender(), person.getEmailId(), person.getName(),
+                isFriend, person.getTs(), person.getUniqueId());
+        userDBHelper.update(person.getId(), user);
+    }
+
+    public void onSelected() {
+        if(this.users.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < this.users.size(); i++) {
+            LikeButton likeButton = (LikeButton) getView().findViewWithTag(i);
+            if (likeButton != null) {
+                likeButton.setOnLikeListener(this);
+            }
+        }
     }
 }

@@ -15,8 +15,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import diy.net.menzap.R;
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.User;
+import diy.net.menzap.model.message.UserMessage;
 
 public class LoginActivity extends AppCompatActivity {
     private static final Random RNG = new Random();
@@ -53,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         String emailId = text1.getText().toString();
 
         EditText text2 = (EditText) findViewById(R.id.txtName);
-        String name = text1.getText().toString();
+        String name = text2.getText().toString();
 
         if (!isValidEmail(emailId)) {
             text1.setError("Invalid Email");
@@ -62,29 +64,33 @@ public class LoginActivity extends AppCompatActivity {
 
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();
-        int isFriend = -1; // since self
+        long isFriend = -1; // since self
         String sender = emailId;
 
         User user = new User(sender, emailId, name, isFriend, timestamp, uniqueId);
 
-
         UserDBHelper userDbHelper = new UserDBHelper(this);
-        userDbHelper.insert(user);
+        if( userDbHelper.insert(user)) {
+            Log.d("added", userDbHelper.getAll().toString());
 
-        SharedPreferences pref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+            user.setIsFriend(0);
+            UserMessage registerMessage = new UserMessage("REGISTER", emailId, user);
+            DataHolder.getInstance().getHelper().saveAndPublish(registerMessage.getScampiMsgObj());
 
-        // We need an editor object to make changes
-        SharedPreferences.Editor edit = pref.edit();
+            SharedPreferences pref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-        // Set/Store data
-        edit.putString("emailId", emailId);
+            // We need an editor object to make changes
+            SharedPreferences.Editor editor = pref.edit();
 
-        // Commit the changes
-        edit.commit();
+            // Set/Store data
+            editor.putString("emailId", emailId);
 
-        Intent intent = new Intent(this, TabsActivity.class);
-        startActivity(intent);
-        finish();
+            // Commit the changes
+            editor.commit();
+
+            Intent intent = new Intent(this, TabsActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
-
 }

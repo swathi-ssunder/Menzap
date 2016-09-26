@@ -16,8 +16,6 @@ public class EventMessage extends Message{
     private String endTime;
     private String location;
 
-
-
     public String getEventName() {
         return eventName;
     }
