@@ -100,9 +100,10 @@ public class EventDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TIME_STAMP, event.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, event.getUniqueId());
 
-        db.update("EVENT", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        long result = db.update("EVENT", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        db.close();
 
-        return true;
+        return (result != -1);
     }
 
     public Integer delete(Integer id) {

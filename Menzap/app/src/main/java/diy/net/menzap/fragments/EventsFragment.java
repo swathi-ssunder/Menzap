@@ -134,7 +134,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         Date dateObj = new Date();
         String today = dateFormat.format(dateObj);
         for(Event event: events) {
-            if(today.equals(event.getFromDate()) || today.equals(event.getToDate())) {
+            if((event.getIsInterested() == 1) && (today.equals(event.getFromDate()) || today.equals(event.getToDate()))) {
                 DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, true);
             }
         }
@@ -150,7 +150,6 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         Event interested = new Event( event.getSender(), event.getName(), event.getDescription(), event.getLocation(),
                                       event.getFromDate(), event.getToDate(), isInterested , event.getTs(), event.getUniqueId());
         eventDBHelper.update(event.getId(), interested);
-
     }
 
     @Override
@@ -173,6 +172,9 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
 
         for (int i = 0; i < this.events.size(); i++) {
             LikeButton likeButton = (LikeButton) getView().findViewWithTag(i);
+            if(this.events.get(i).getIsInterested() == 1) {
+                likeButton.setLiked(true);
+            }
             if (likeButton != null) {
                 likeButton.setOnLikeListener(this);
             }
