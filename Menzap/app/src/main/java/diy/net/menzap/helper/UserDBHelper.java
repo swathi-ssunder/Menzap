@@ -42,7 +42,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
                         COLUMN_IS_FRIEND + " INTEGER, " +
                         COLUMN_TIME_STAMP + " INTEGER, " +
                         COLUMN_UNIQUE_ID + " INTEGER, " +
-                        "CONSTRAINT unq UNIQUE (" + COLUMN_TIME_STAMP + ", " +
+                        "CONSTRAINT unq UNIQUE (" + COLUMN_TIME_STAMP + ", " + COLUMN_EMAIL_ID + ", " +
                         COLUMN_TIME_STAMP + ") " +
                         "ON CONFLICT IGNORE" +
                         ");"
@@ -73,7 +73,27 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
     public Cursor get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM USER WHERE ID=" + id + "", null);
+        return db.rawQuery("SELECT * FROM USER WHERE ID = " + id + "", null);
+    }
+
+    public User getByEmailId(String emailId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM USER WHERE EMAIL_ID = " + emailId + "", null);
+
+        res.moveToFirst();
+
+        User user = new User(
+                res.getString(res.getColumnIndex(COLUMN_SENDER)),
+                res.getString(res.getColumnIndex(COLUMN_EMAIL_ID)),
+                res.getString(res.getColumnIndex(COLUMN_NAME)),
+                res.getInt(res.getColumnIndex(COLUMN_IS_FRIEND)),
+                res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
+        );
+        res.close();
+        db.close();
+
+        return user;
     }
 
     public int count() {
@@ -92,10 +112,10 @@ public class UserDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TIME_STAMP, user.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
 
-        db.update("USER", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        long result = db.update("USER", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
         db.close();
 
-        return true;
+        return (result != -1);
     }
 
 
@@ -126,20 +146,22 @@ public class UserDBHelper extends SQLiteOpenHelper {
             res.moveToNext();
         }
         res.close();
+        db.close();
 
         return array_list;
     }
 
-    public int isRegistered() {
-        int count = 0;
+    public boolean isRegistered() {
+        int count;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT COUNT(*) AS REC_COUNT FROM USER WHERE IS_FRIEND=-1;", null);
         res.moveToFirst();
 
         count = res.getInt(0);
         res.close();
+        db.close();
 
-        return count;
+        return (count > 0);
     }
 
 }

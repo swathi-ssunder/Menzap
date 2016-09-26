@@ -12,17 +12,17 @@ public class User implements Parcelable {
     private String name;
     private String sender;
     private String emailId;
-    private int isFriend;
+    private long isFriend;
     private long ts;
     private long uniqueId;
 
 
-    public User(String emailId,  int isFriend) {
+    public User(String emailId,  long isFriend) {
         this.setEmailId(emailId);
         this.setIsFriend(isFriend);
     }
 
-    public User(String sender, String emailId, String name, int isFriend, long ts, long uniqueId) {
+    public User(String sender, String emailId, String name, long isFriend, long ts, long uniqueId) {
         this.setSender(sender);
         this.setEmailId(emailId);
         this.setName(name);
@@ -38,6 +38,7 @@ public class User implements Parcelable {
      **/
     private User(Parcel in){
         this.setEmailId(in.readString());
+        this.setName(in.readString());
         this.setIsFriend(in.readInt());
     }
 
@@ -73,11 +74,11 @@ public class User implements Parcelable {
         this.emailId = emailId;
     }
 
-    public int getIsFriend() {
+    public long getIsFriend() {
         return isFriend;
     }
 
-    public void setIsFriend(int isFriend) {
+    public void setIsFriend(long isFriend) {
         this.isFriend = isFriend;
     }
 
@@ -97,7 +98,6 @@ public class User implements Parcelable {
         this.uniqueId = uniqueId;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -106,7 +106,8 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.emailId);
-        dest.writeInt(this.isFriend);
+        dest.writeString(this.name);
+        dest.writeLong(this.isFriend);
     }
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

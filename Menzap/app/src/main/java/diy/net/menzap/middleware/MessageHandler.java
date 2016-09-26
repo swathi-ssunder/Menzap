@@ -9,8 +9,10 @@ import java.io.IOException;
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.Event;
 import diy.net.menzap.model.Menu;
+import diy.net.menzap.model.User;
 import diy.net.menzap.model.message.Message;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
 
@@ -37,6 +39,10 @@ public class MessageHandler {
     public static final String MSG_MENU_DESCRIPTION = "MENU_DESCRIPTION";
     public static final String MSG_CATEGORY = "CATEGORY";
     public static final String MSG_SERVED_ON = "SERVED_ON";
+
+    public static final String MSG_EMAIL_ID = "EMAIL_ID";
+    public static final String MSG_USER_NAME = "NAME";
+    public static final String MSG_IS_FRIEND = "IS_FRIEND";
     //==========================================================================//
 
     private Context context;
@@ -51,11 +57,33 @@ public class MessageHandler {
 
         // Database where incoming messages are to be stored
         SQLiteOpenHelper db;
+        User person;
 
         switch(Message.MessageType.valueOf(msg.getString( MSG_TYPE ))) {
             case ENTER:
+
+                db = new UserDBHelper(this.context);
+                person = ((UserDBHelper)db).getByEmailId(msg.getString(MSG_EMAIL_ID));
+
+                if (person != null && person.getIsFriend() == 1) {
+
+                    User user = new User(person.getSender(), person.getEmailId(), person.getName(),
+                            person.getIsFriend(), person.getTs(), person.getUniqueId());
+
+                    DataHolder.getInstance().getNotificationHelper().notifyForFriend(user, true);
+                }
                 break;
             case EXIT:
+                db = new UserDBHelper(this.context);
+                person = ((UserDBHelper)db).getByEmailId(msg.getString(MSG_EMAIL_ID));
+
+                if (person != null && person.getIsFriend() == 1) {
+
+                    User user = new User(person.getSender(), person.getEmailId(), person.getName(),
+                            person.getIsFriend(), person.getTs(), person.getUniqueId());
+
+                    DataHolder.getInstance().getNotificationHelper().notifyForFriend(user, false);
+                }
                 break;
             case MENU:
 
@@ -88,11 +116,20 @@ public class MessageHandler {
                 if (((EventDBHelper)db).insert(event)) {
                     Log.d("EVENT added", ((EventDBHelper)db).getAll().toString());
 
-
                     // notifying only when the difference of time with current time is 5 seconds
                     if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
                         DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, false);
                 }
+                db.close();
+                break;
+            case REGISTER:
+
+                User user = new User(msg.getString(MSG_SENDER), msg.getString(MSG_EMAIL_ID), msg.getString(MSG_USER_NAME),
+                        msg.getInteger(MSG_IS_FRIEND), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
+
+                db = new UserDBHelper(this.context);
+                // Insert into the database
+                ((UserDBHelper)db).insert(user);
                 db.close();
                 break;
         }

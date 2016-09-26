@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.like.LikeButton;
+
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
@@ -44,6 +46,9 @@ public class UserAdapter extends ArrayAdapter {
         }
         TextView userName = (TextView)row.findViewById(R.id.userName);
         userName.setText(this.users.get(position).getName());
+
+        LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
+        btnLike.setTag(position);
 
         return row;
     }

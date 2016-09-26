@@ -38,9 +38,9 @@ public class UserMessage extends Message{
     }
 
 
-    public UserMessage(String sender, String emailId, String name, int isFriend) {
+    public UserMessage(String type, String sender, String emailId, String name, int isFriend) {
         super(sender);
-        this.setType("USER");
+        this.setType(type);
         this.setTtl(24*60);
 
         this.setEmailId(emailId);
@@ -52,17 +52,19 @@ public class UserMessage extends Message{
     public UserMessage(SCAMPIMessage message) {
         super(message);
         this.emailId = message.getString("EMAIL_ID");
-        this.name = message.getString("USER_NAME");
+        this.name = message.getString("NAME");
         this.isFriend = message.getInteger("IS_FRIEND");
     }
 
-    public UserMessage(String sender, User user) {
+    public UserMessage(String type, String sender, User user) {
         super(sender);
-        this.setType("USER");
+        this.setType(type);
         this.setTtl(24*60);
         this.setEmailId(user.getEmailId());
         this.setName(user.getName());
         this.setIsFriend(user.getIsFriend());
+        this.setTimestamp(user.getTs());
+        this.setUniqueId(user.getUniqueId());
     }
 
     public SCAMPIMessage getScampiMsgObj() {
@@ -72,8 +74,10 @@ public class UserMessage extends Message{
 
         msg.putString("SENDER", this.getSender());
         msg.putString("TYPE", this.getType());
+        msg.putInteger("TIMESTAMP", this.getTimestamp());
+        msg.putInteger("UNIQUE_ID", this.getUniqueId());
         msg.putString("EMAIL_ID", this.getEmailId());
-        msg.putString("USER_NAME", this.getName());
+        msg.putString("NAME", this.getName());
         msg.putInteger("IS_FRIEND", this.getIsFriend());
 
         return msg;
