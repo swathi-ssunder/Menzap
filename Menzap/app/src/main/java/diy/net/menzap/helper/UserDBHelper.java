@@ -42,7 +42,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
                         COLUMN_IS_FRIEND + " INTEGER, " +
                         COLUMN_TIME_STAMP + " INTEGER, " +
                         COLUMN_UNIQUE_ID + " INTEGER, " +
-                        "CONSTRAINT unq UNIQUE (" + COLUMN_TIME_STAMP + ", " + COLUMN_EMAIL_ID + ", " +
+                        "CONSTRAINT unq UNIQUE (" + COLUMN_UNIQUE_ID + ", " + COLUMN_EMAIL_ID + ", " +
                         COLUMN_TIME_STAMP + ") " +
                         "ON CONFLICT IGNORE" +
                         ");"
