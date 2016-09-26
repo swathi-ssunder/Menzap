@@ -14,17 +14,20 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
+import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.User;
 
-public class UserAdapter extends ArrayAdapter {
+public class UserAdapter extends ArrayAdapter implements OnLikeListener {
 
     private Context context;
     private ArrayList<User> users;
     private int resource;
+    private UserDBHelper userDBHelper;
 
     public UserAdapter(Context context, int resource, ArrayList<User> users) {
         super(context, resource, users);
@@ -32,6 +35,8 @@ public class UserAdapter extends ArrayAdapter {
         this.context = context;
         this.resource = resource;
         this.users = users;
+
+        this.userDBHelper = new UserDBHelper(this.context);
     }
 
     @NonNull
@@ -49,7 +54,30 @@ public class UserAdapter extends ArrayAdapter {
 
         LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
         btnLike.setTag(position);
+        btnLike.setOnLikeListener(this);
+
+        if(this.users.get(position).getIsFriend() == 1) {
+            btnLike.setLiked(true);
+        }
 
         return row;
+    }
+
+    @Override
+    public void liked(LikeButton likeButton) {
+        int position = (int)likeButton.getTag();
+        User user = this.users.get(position);
+
+        user.setIsFriend(1);
+        this.userDBHelper.update(user);
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton) {
+        int position = (int)likeButton.getTag();
+        User user = this.users.get(position);
+
+        user.setIsFriend(0);
+        this.userDBHelper.update(user);
     }
 }

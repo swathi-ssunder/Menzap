@@ -16,9 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
-import com.like.LikeButton;
-import com.like.OnLikeListener;
-
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
@@ -27,11 +24,12 @@ import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.User;
 
 
-public class FriendsFragment extends ListFragment implements AdapterView.OnItemClickListener, OnLikeListener {
+public class FriendsFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
     ArrayList<User> users;
     private SwipeRefreshLayout swipeLayout;
-
+    private UserAdapter userAdapter;
+    private UserDBHelper userDBHelper;
 
     public FriendsFragment() {
         // Required empty public constructor
@@ -41,9 +39,9 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UserDBHelper userDBHelper = new UserDBHelper(getActivity());
-        SQLiteDatabase db = userDBHelper.getReadableDatabase();
-        userDBHelper.onCreate(db);
+        this.userDBHelper = new UserDBHelper(getActivity());
+        SQLiteDatabase db = this.userDBHelper.getReadableDatabase();
+        this.userDBHelper.onCreate(db);
     }
 
     @Override
@@ -71,24 +69,21 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
     }
 
     private void refreshView() {
-        UserDBHelper userDBHelper = new UserDBHelper(getActivity());
-        Log.d("allfriends", userDBHelper.getAll().toString());
+        Log.d("allfriends", this.userDBHelper.getAll().toString());
 
-        this.users = userDBHelper.getAll();
-        UserAdapter adapter = new UserAdapter(getActivity(), R.layout.friend, users);
+        this.users = this.userDBHelper.getAll();
+        this.userAdapter = new UserAdapter(getActivity(), R.layout.friend, users);
 
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeLayout.setRefreshing(false);
 
-        setListAdapter(adapter);
-
+        setListAdapter(this.userAdapter);
     }
 
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -102,42 +97,5 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-    }
-
-    @Override
-    public void liked(LikeButton likeButton) {
-        int position = (int)likeButton.getTag();
-        User person = this.users.get(position);
-        long isFriend = 1;
-
-        UserDBHelper userDBHelper= new UserDBHelper(getContext());
-        User user = new User(person.getSender(), person.getEmailId(), person.getName(),
-                isFriend, person.getTs(), person.getUniqueId());
-        userDBHelper.update(person.getEmailId(), user);
-    }
-
-    @Override
-    public void unLiked(LikeButton likeButton) {
-        int position = (int)likeButton.getTag();
-        User person = this.users.get(position);
-        long isFriend = 0;
-
-        UserDBHelper userDBHelper= new UserDBHelper(getContext());
-        User user = new User(person.getSender(), person.getEmailId(), person.getName(),
-                isFriend, person.getTs(), person.getUniqueId());
-        userDBHelper.update(person.getEmailId(), user);
-    }
-
-    public void onSelected() {
-        if(this.users.isEmpty()) {
-            return;
-        }
-
-        for (int i = 0; i < this.users.size(); i++) {
-            LikeButton likeButton = (LikeButton) getView().findViewWithTag(i);
-            if (likeButton != null) {
-                likeButton.setOnLikeListener(this);
-            }
-        }
     }
 }
