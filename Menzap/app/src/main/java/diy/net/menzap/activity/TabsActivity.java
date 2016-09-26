@@ -25,7 +25,6 @@ import diy.net.menzap.R;
 import diy.net.menzap.fragments.MenuFragment;
 import diy.net.menzap.fragments.EventsFragment;
 import diy.net.menzap.fragments.FriendsFragment;
-import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.ReviewDBHelper;
 
 public class TabsActivity extends AppCompatActivity {
@@ -70,42 +69,6 @@ public class TabsActivity extends AppCompatActivity {
                     break;
             }
         }
-
-        /*Set the Menu tab as active*/
-        tabLayout.getTabAt(0).select();
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-
-                switch(position) {
-                    case 0:
-                        /*Invoke onSelected on MenuFragment*/
-                        MenuFragment menuFragment = (MenuFragment)TabsActivity.this.adapter.getItem(position);
-                        menuFragment.onSelected();
-                        break;
-                    case 1:
-                        /*Invoke onSelected on FriendFragment*/
-                        FriendsFragment friendsFragment = (FriendsFragment)TabsActivity.this.adapter.getItem(position);
-                        friendsFragment.onSelected();
-                        break;
-                    case 2:
-                        /*Invoke onSelected on EventFragment*/
-                        EventsFragment eventsFragment = (EventsFragment) TabsActivity.this.adapter.getItem(position);
-                        eventsFragment.onSelected();
-                        break;
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-            }
-        });
     }
 
     private void setupTabIcons() {
@@ -144,6 +107,7 @@ public class TabsActivity extends AppCompatActivity {
         this.adapter.addFrag(new MenuFragment(), "Menu Today");
         this.adapter.addFrag(new FriendsFragment(), "Friends in Mensa");
         this.adapter.addFrag(new EventsFragment(), "Upcoming Events");
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(this.adapter);
     }
 
