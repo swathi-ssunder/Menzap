@@ -40,9 +40,9 @@ public class UserDBHelper extends SQLiteOpenHelper {
                         COLUMN_EMAIL_ID + " TEXT, " +
                         COLUMN_NAME+ " TEXT, " +
                         COLUMN_IS_FRIEND + " INTEGER, " +
-                        COLUMN_TIME_STAMP + " INTEGER, " +
-                        COLUMN_UNIQUE_ID + " INTEGER, " +
-                        "CONSTRAINT unq UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
+                        COLUMN_TIME_STAMP + " TEXT, " +
+                        COLUMN_UNIQUE_ID + " TEXT, " +
+                        "UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
                         COLUMN_TIME_STAMP + ", " + COLUMN_SENDER + ") " +
                         "ON CONFLICT IGNORE" +
                         ");"
@@ -78,7 +78,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
 
     public User getByEmailId(String emailId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM USER WHERE EMAIL_ID = " + emailId + "", null);
+        Cursor res = db.rawQuery("SELECT * FROM USER WHERE EMAIL_ID = '" + emailId + "'", null);
 
         res.moveToFirst();
 
@@ -139,8 +139,8 @@ public class UserDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_EMAIL_ID)),
                     res.getString(res.getColumnIndex(COLUMN_NAME)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_FRIEND)),
-                    res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
-                    res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
+                    res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
             array_list.add(user);
             res.moveToNext();

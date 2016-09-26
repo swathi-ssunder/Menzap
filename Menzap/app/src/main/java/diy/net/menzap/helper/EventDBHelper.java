@@ -42,9 +42,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
                     COLUMN_FROM_DATE + " TEXT, " +
                     COLUMN_TO_DATE + " TEXT," +
                     COLUMN_IS_INTERESTED+ " INTEGER," +
-                    COLUMN_TIME_STAMP + " INTEGER, " +
-                    COLUMN_UNIQUE_ID + " INTEGER, " +
-                    "CONSTRAINT unq UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
+                    COLUMN_TIME_STAMP + " TEXT, " +
+                    COLUMN_UNIQUE_ID + " TEXT, " +
+                    "UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
                     COLUMN_TIME_STAMP + ", " + COLUMN_SENDER + ") " +
                     "ON CONFLICT IGNORE" +
                 ");"
@@ -104,7 +104,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 new String[]{event.getSender(), Long.toString(event.getUniqueId()), Long.toString(event.getTs())});
         db.close();
 
-        return (result != -1);
+        return (result > 0);
     }
 
     public Integer delete(Integer id) {
@@ -131,8 +131,8 @@ public class EventDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_FROM_DATE)),
                     res.getString(res.getColumnIndex(COLUMN_TO_DATE)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_INTERESTED)),
-                    res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
-                    res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
+                    res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
             array_list.add(event);
             res.moveToNext();
