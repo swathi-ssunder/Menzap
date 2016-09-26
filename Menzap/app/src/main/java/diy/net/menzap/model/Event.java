@@ -117,7 +117,7 @@ public class Event implements Parcelable {
         return isInterested;
     }
 
-    private void setIsInterested(long isInterested) {
+    public void setIsInterested(long isInterested) {
         this.isInterested = isInterested;
     }
 

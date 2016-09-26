@@ -101,7 +101,7 @@ public class UserDBHelper extends SQLiteOpenHelper {
         return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
     }
 
-    public boolean update(int id, User user) {
+    public boolean update(String emailId, User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -112,18 +112,18 @@ public class UserDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_TIME_STAMP, user.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, user.getUniqueId());
 
-        long result = db.update("USER", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        long result = db.update("USER", contentValues, "EMAIL_ID = ? ", new String[]{emailId});
         db.close();
 
         return (result != -1);
     }
 
 
-    public Integer delete(Integer id) {
+    public Integer delete(String emailId) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("USER",
-                "ID = ? ",
-                new String[]{Integer.toString(id)});
+                "EMAIL_ID = ? ",
+                new String[]{emailId});
     }
 
     public ArrayList<User> getAll() {

@@ -144,25 +144,20 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     public void liked(LikeButton likeButton) {
         int position = (int)likeButton.getTag();
         Event event = this.events.get(position);
-        long isInterested = 1;
 
         EventDBHelper eventDBHelper = new EventDBHelper(getContext());
-        Event interested = new Event( event.getSender(), event.getName(), event.getDescription(), event.getLocation(),
-                                      event.getFromDate(), event.getToDate(), isInterested , event.getTs(), event.getUniqueId());
-        eventDBHelper.update(event.getId(), interested);
+        event.setIsInterested(1);
+        eventDBHelper.update(event);
     }
 
     @Override
     public void unLiked(LikeButton likeButton) {
         int position = (int)likeButton.getTag();
         Event event = this.events.get(position);
-        long isInterested = 0;
-
 
         EventDBHelper eventDBHelper = new EventDBHelper(getContext());
-        Event interested = new Event( event.getSender(), event.getName(), event.getDescription(), event.getLocation(),
-                event.getFromDate(), event.getToDate(), isInterested , event.getTs(), event.getUniqueId());
-        eventDBHelper.update(event.getId(), interested);
+        event.setIsInterested(0);
+        eventDBHelper.update(event);
     }
 
     public void onSelected() {
