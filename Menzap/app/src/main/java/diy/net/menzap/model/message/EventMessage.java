@@ -15,6 +15,7 @@ public class EventMessage extends Message{
     private String startTime;
     private String endTime;
     private String location;
+    private long isInterested;
 
     public String getEventName() {
         return eventName;
@@ -56,9 +57,17 @@ public class EventMessage extends Message{
         this.location = location;
     }
 
+    public long getIsInterested() {
+        return isInterested;
+    }
+
+    public void setIsInterested(long isInterested) {
+        this.isInterested = isInterested;
+    }
+
 
     public EventMessage(String sender, String eventName, String eventDescription, String startTime,
-                        String endTime, String location) {
+                        String endTime, String location, long isInterested) {
         super(sender);
         this.setType("EVENT");
         this.setTtl(24*60);
@@ -67,6 +76,7 @@ public class EventMessage extends Message{
         this.setLocation(location);
         this.setStartTime(startTime);
         this.setEventDescription(eventDescription);
+        this.setIsInterested(isInterested);
     }
 
     public EventMessage(SCAMPIMessage message) {
@@ -76,6 +86,7 @@ public class EventMessage extends Message{
         this.eventName = message.getString("EVENT_NAME");
         this.eventDescription = message.getString("EVENT_DESCRIPTION");
         this.location = message.getString("LOCATION");
+        this.isInterested = message.getInteger("IS_INTERESTED");
     }
 
     public EventMessage(String sender, Event event) {
@@ -87,6 +98,7 @@ public class EventMessage extends Message{
         this.setLocation(event.getLocation());
         this.setStartTime(event.getFromDate());
         this.setEndTime(event.getToDate());
+        this.setIsInterested(event.getIsInterested());
         this.setTimestamp(event.getTs());
         this.setUniqueId(event.getUniqueId());
     }
@@ -105,6 +117,7 @@ public class EventMessage extends Message{
         msg.putString("EVENT_NAME", this.getEventName());
         msg.putString("EVENT_DESCRIPTION", this.getEventDescription());
         msg.putString("LOCATION", this.getLocation());
+        msg.putInteger("IS_INTERESTED", this.getIsInterested());
 
         return msg;
     }

@@ -81,7 +81,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         Log.d("allevents", eventDBHelper.getAll().toString());
 
         this.events = eventDBHelper.getAll();
-        EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, events);
+        EventAdapter adapter = new EventAdapter(getActivity(), R.layout.event, this.events);
 
         this.handleNotification(this.events);
 
@@ -134,7 +134,7 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         Date dateObj = new Date();
         String today = dateFormat.format(dateObj);
         for(Event event: events) {
-            if(today.equals(event.getFromDate()) || today.equals(event.getToDate())) {
+            if((event.getIsInterested() == 1) && (today.equals(event.getFromDate()) || today.equals(event.getToDate()))) {
                 DataHolder.getInstance().getNotificationHelper().notifyForEvent(event, true);
             }
         }
@@ -143,24 +143,33 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
     @Override
     public void liked(LikeButton likeButton) {
         int position = (int)likeButton.getTag();
-        String name = this.events.get(position).getName();
-        Toast.makeText(getActivity(), name + "Liked!", Toast.LENGTH_SHORT).show();
+        Event event = this.events.get(position);
+
+        EventDBHelper eventDBHelper = new EventDBHelper(getContext());
+        event.setIsInterested(1);
+        eventDBHelper.update(event);
     }
 
     @Override
     public void unLiked(LikeButton likeButton) {
         int position = (int)likeButton.getTag();
-        String name = this.events.get(position).getName();
-        Toast.makeText(getActivity(), name + "Disliked!", Toast.LENGTH_SHORT).show();
+        Event event = this.events.get(position);
+
+        EventDBHelper eventDBHelper = new EventDBHelper(getContext());
+        event.setIsInterested(0);
+        eventDBHelper.update(event);
     }
 
     public void onSelected() {
-        if(this.events.isEmpty()) {
+        if(this.events == null || this.events.isEmpty()) {
             return;
         }
 
         for (int i = 0; i < this.events.size(); i++) {
             LikeButton likeButton = (LikeButton) getView().findViewWithTag(i);
+            if(this.events.get(i).getIsInterested() == 1) {
+                likeButton.setLiked(true);
+            }
             if (likeButton != null) {
                 likeButton.setOnLikeListener(this);
             }

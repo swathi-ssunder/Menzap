@@ -22,6 +22,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_LOCATION = "LOCATION";
     private static final String COLUMN_FROM_DATE = "FROM_DATE";
     private static final String COLUMN_TO_DATE = "TO_DATE";
+    private static final String COLUMN_IS_INTERESTED = "IS_INTERESTED";
     private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
     private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
 
@@ -40,10 +41,11 @@ public class EventDBHelper extends SQLiteOpenHelper {
                     COLUMN_LOCATION + " TEXT, " +
                     COLUMN_FROM_DATE + " TEXT, " +
                     COLUMN_TO_DATE + " TEXT," +
+                    COLUMN_IS_INTERESTED+ " INTEGER," +
                     COLUMN_TIME_STAMP + " INTEGER, " +
                     COLUMN_UNIQUE_ID + " INTEGER, " +
-                    "CONSTRAINT unq UNIQUE (" + COLUMN_TIME_STAMP + ", " +
-                    COLUMN_TIME_STAMP + ") " +
+                    "CONSTRAINT unq UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
+                    COLUMN_TIME_STAMP + ", " + COLUMN_SENDER + ") " +
                     "ON CONFLICT IGNORE" +
                 ");"
         );
@@ -65,6 +67,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_LOCATION, event.getLocation());
         contentValues.put(COLUMN_FROM_DATE, event.getFromDate());
         contentValues.put(COLUMN_TO_DATE, event.getToDate());
+        contentValues.put(COLUMN_IS_INTERESTED, event.getIsInterested());
         contentValues.put(COLUMN_TIME_STAMP, event.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, event.getUniqueId());
 
@@ -83,7 +86,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
     }
 
-    public boolean update(int id, Event event) {
+    public boolean update(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -93,12 +96,15 @@ public class EventDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_LOCATION, event.getLocation());
         contentValues.put(COLUMN_FROM_DATE, event.getFromDate());
         contentValues.put(COLUMN_TO_DATE, event.getToDate());
+        contentValues.put(COLUMN_IS_INTERESTED, event.getIsInterested());
         contentValues.put(COLUMN_TIME_STAMP, event.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, event.getUniqueId());
 
-        db.update("EVENT", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        long result = db.update("EVENT", contentValues, "SENDER = ? AND UNIQUE_ID = ? AND TIMESTAMP = ?",
+                new String[]{event.getSender(), Long.toString(event.getUniqueId()), Long.toString(event.getTs())});
+        db.close();
 
-        return true;
+        return (result != -1);
     }
 
     public Integer delete(Integer id) {
@@ -124,6 +130,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_LOCATION)),
                     res.getString(res.getColumnIndex(COLUMN_FROM_DATE)),
                     res.getString(res.getColumnIndex(COLUMN_TO_DATE)),
+                    res.getInt(res.getColumnIndex(COLUMN_IS_INTERESTED)),
                     res.getInt(res.getColumnIndex(COLUMN_TIME_STAMP)),
                     res.getInt(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );

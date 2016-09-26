@@ -9,7 +9,7 @@ import android.os.Parcelable;
 
 public class Menu implements Parcelable {
 
-    private int id;
+    private long id;
     private String sender;
     private String name;
     private String description;
@@ -19,7 +19,7 @@ public class Menu implements Parcelable {
     private long uniqueId;
 
 
-    public Menu(String sender, String name, String description, int category, String servedOn) {
+    public Menu(String sender, String name, String description, long category, String servedOn) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
@@ -49,11 +49,11 @@ public class Menu implements Parcelable {
         this.setServedOn(in.readString());
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

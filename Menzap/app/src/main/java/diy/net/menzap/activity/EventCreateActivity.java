@@ -114,10 +114,11 @@ public class EventCreateActivity extends AppCompatActivity {
         String emailId = pref.getString("emailId", "");
         String sender = emailId;
 
+        long isInterested = 0;
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();
 
-        Event event = new Event(sender, eventName, eventDesc, location,fromTime, toTime, timestamp, uniqueId);
+        Event event = new Event(sender, eventName, eventDesc, location,fromTime, toTime, isInterested, timestamp, uniqueId);
 
         saveEventAndPublish(event);
     }

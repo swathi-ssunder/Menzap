@@ -113,7 +113,7 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
         UserDBHelper userDBHelper= new UserDBHelper(getContext());
         User user = new User(person.getSender(), person.getEmailId(), person.getName(),
                 isFriend, person.getTs(), person.getUniqueId());
-        userDBHelper.update(person.getId(), user);
+        userDBHelper.update(person.getEmailId(), user);
     }
 
     @Override
@@ -125,7 +125,7 @@ public class FriendsFragment extends ListFragment implements AdapterView.OnItemC
         UserDBHelper userDBHelper= new UserDBHelper(getContext());
         User user = new User(person.getSender(), person.getEmailId(), person.getName(),
                 isFriend, person.getTs(), person.getUniqueId());
-        userDBHelper.update(person.getId(), user);
+        userDBHelper.update(person.getEmailId(), user);
     }
 
     public void onSelected() {

@@ -34,6 +34,7 @@ public class MessageHandler {
     public static final String MSG_LOCATION = "LOCATION";
     public static final String MSG_START_TIME = "START_TIME";
     public static final String MSG_END_TIME = "END_TIME";
+    public static final String MSG_IS_INTERESTED = "IS_INTERESTED";
 
     public static final String MSG_MENU_NAME = "MENU_NAME";
     public static final String MSG_MENU_DESCRIPTION = "MENU_DESCRIPTION";
@@ -108,7 +109,7 @@ public class MessageHandler {
             case EVENT:
 
                 Event event = new Event(msg.getString(MSG_SENDER), msg.getString(MSG_EVENT_NAME), msg.getString(MSG_EVENT_DESCRIPTION),
-                        msg.getString(MSG_LOCATION), msg.getString(MSG_START_TIME), msg.getString(MSG_END_TIME),
+                        msg.getString(MSG_LOCATION), msg.getString(MSG_START_TIME), msg.getString(MSG_END_TIME),msg.getInteger(MSG_IS_INTERESTED),
                         msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
                 db = new EventDBHelper(this.context);
