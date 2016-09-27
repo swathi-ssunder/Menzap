@@ -34,4 +34,19 @@ public class NetworkHelper {
         }
         return -1;
     }
+
+    public static void onNetworkChange(Context context) {
+        switch(isConnected(context)) {
+            case 1:
+                DataHolder.getInstance().getNotificationHelper().notifyForWAP(1);
+                DataHolder.getInstance().getEddystoneHelper().startScan();
+                break;
+            case 0:
+                DataHolder.getInstance().getNotificationHelper().notifyForWAP(0);
+                DataHolder.getInstance().getEddystoneHelper().stopScan();
+                break;
+            default:
+                break;
+        }
+    }
 }
