@@ -15,9 +15,11 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 		switch(NetworkHelper.isConnected(context)) {
 			case 1:
 				DataHolder.getInstance().getNotificationHelper().notifyForWAP(1);
+				DataHolder.getInstance().getEddystoneHelper().startScan();
 				break;
 			case 0:
 				DataHolder.getInstance().getNotificationHelper().notifyForWAP(0);
+				DataHolder.getInstance().getEddystoneHelper().stopScan();
 				break;
 			default:
 				break;

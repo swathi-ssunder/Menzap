@@ -93,7 +93,7 @@ public class EddystoneHelper {
         }
     }
 
-    public void startScan(View v) {
+    public void startScan() {
 
         // this.getPermissions();
 
@@ -110,7 +110,7 @@ public class EddystoneHelper {
         }
     }
 
-    public void stopScan(View v) {
+    public void stopScan() {
         // Stop the scan
         if (this.eddystoneService != null) {
             this.eddystoneService.stopScan();
