@@ -88,7 +88,7 @@ public class AppLibService
                 Log.d("CUSTOM IN PUBLISH --", "error in publishing");
                 return false;
             }
-            Log.d("CUSTOM IN PUBLISH --", "published successfully");
+            Log.d("CUSTOM IN PUBLISH --", msg.getString( MSG_TYPE_FIELD ) + " published successfully");
             return true;
         }
 
