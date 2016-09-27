@@ -45,9 +45,10 @@ public class MessageHandler {
     public static final String MSG_SERVED_ON = "SERVED_ON";
 
     public static final String MSG_EMAIL_ID = "EMAIL_ID";
-    public static final String MSG_USER_NAME = "NAME";
+    public static final String MSG_NAME = "NAME";
     public static final String MSG_IS_FRIEND = "IS_FRIEND";
 
+    public static final String MSG_USER_NAME = "USER_NAME";
     public static final String MSG_URL = "URL";
     //==========================================================================//
 
@@ -144,7 +145,7 @@ public class MessageHandler {
 
             case REGISTER:
 
-                User user = new User(msg.getString(MSG_SENDER), msg.getString(MSG_EMAIL_ID), msg.getString(MSG_USER_NAME),
+                User user = new User(msg.getString(MSG_SENDER), msg.getString(MSG_EMAIL_ID), msg.getString(MSG_NAME),
                         msg.getInteger(MSG_IS_FRIEND), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
                 db = new UserDBHelper(this.context);
