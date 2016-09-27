@@ -4,7 +4,9 @@ package diy.net.menzap.fragments;
  * Created by swathissunder on 15/09/16.
  */
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -103,6 +105,14 @@ public class EventsFragment extends ListFragment implements AdapterView.OnItemCl
         super.onViewCreated(view, savedInstanceState);
 
         FloatingActionButton addButton = (FloatingActionButton) getView().findViewById(R.id.add);
+
+        //Fetch sender from user profile
+        SharedPreferences pref = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        int isAdmin = pref.getInt("isAdmin", 0);
+        if(isAdmin == 0) {
+            addButton.setVisibility(View.INVISIBLE);
+        }
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
