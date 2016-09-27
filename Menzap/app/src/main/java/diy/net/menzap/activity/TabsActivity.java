@@ -35,7 +35,6 @@ public class TabsActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
 
     @Override
@@ -59,7 +58,6 @@ public class TabsActivity extends AppCompatActivity {
         setupTabIcons();
 
         DataHolder.getInstance().initHelper(this);
-        this.getPermissions();
 
         /*When the activity is opened from Notification*/
         if(getIntent().getAction() != null) {
@@ -77,36 +75,6 @@ public class TabsActivity extends AppCompatActivity {
                     tabLayout.getTabAt(2).select();
                     break;
             }
-        }
-    }
-
-    private void getPermissions() {
-
-        int hasAccessLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (hasAccessLocationPermission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION},
-                    REQUEST_CODE_ASK_PERMISSIONS);
-            return;
-        }
-        DataHolder.getInstance().getEddystoneHelper().addUrlCallback();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-
-        switch (requestCode) {
-            case REQUEST_CODE_ASK_PERMISSIONS:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    DataHolder.getInstance().getEddystoneHelper().addUrlCallback();
-                } else {
-                    // Permission Denied
-                    Toast.makeText(this, "ACCESS_LOCATION Denied", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 

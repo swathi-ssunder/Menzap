@@ -10,9 +10,11 @@ import java.io.IOException;
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.helper.TrackingDBHelper;
 import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.Event;
 import diy.net.menzap.model.Menu;
+import diy.net.menzap.model.Tracking;
 import diy.net.menzap.model.User;
 import diy.net.menzap.model.message.Message;
 import fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage;
@@ -45,6 +47,8 @@ public class MessageHandler {
     public static final String MSG_EMAIL_ID = "EMAIL_ID";
     public static final String MSG_USER_NAME = "NAME";
     public static final String MSG_IS_FRIEND = "IS_FRIEND";
+
+    public static final String MSG_URL = "URL";
     //==========================================================================//
 
     private Context context;
@@ -84,6 +88,7 @@ public class MessageHandler {
                     DataHolder.getInstance().getNotificationHelper().notifyForFriend(user, true);
                 }
                 break;
+
             case EXIT:
                 db = new UserDBHelper(this.context);
                 person = ((UserDBHelper)db).getByEmailId(msg.getString(MSG_EMAIL_ID));
@@ -96,6 +101,7 @@ public class MessageHandler {
                     DataHolder.getInstance().getNotificationHelper().notifyForFriend(user, false);
                 }
                 break;
+
             case MENU:
 
                 Menu menu = new Menu(msg.getString(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
@@ -114,8 +120,10 @@ public class MessageHandler {
                 db.close();
 
                 break;
+
             case REVIEW:
                 break;
+
             case EVENT:
 
                 Event event = new Event(msg.getString(MSG_SENDER), msg.getString(MSG_EVENT_NAME), msg.getString(MSG_EVENT_DESCRIPTION),
@@ -133,6 +141,7 @@ public class MessageHandler {
                 }
                 db.close();
                 break;
+
             case REGISTER:
 
                 User user = new User(msg.getString(MSG_SENDER), msg.getString(MSG_EMAIL_ID), msg.getString(MSG_USER_NAME),
@@ -141,6 +150,16 @@ public class MessageHandler {
                 db = new UserDBHelper(this.context);
                 // Insert into the database
                 ((UserDBHelper)db).insert(user);
+                db.close();
+                break;
+
+            case TRACKING:
+                Tracking tracking = new Tracking(msg.getString(MSG_SENDER), msg.getString(MSG_USER_NAME), msg.getString(MSG_URL),
+                        msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
+
+                db = new TrackingDBHelper(this.context);
+                // Insert into the database
+                ((TrackingDBHelper)db).insert(tracking);
                 db.close();
                 break;
         }

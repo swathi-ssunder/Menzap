@@ -5,15 +5,19 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
 
 import de.tum.in.cm.android.eddystonelib.EddystoneService;
 import de.tum.in.cm.android.eddystonelib.frames.EddystoneUrlFrame;
+import diy.net.menzap.model.Tracking;
+import diy.net.menzap.model.message.TrackingMessage;
+
+import static fi.tkk.netlab.dtn.scampi.applib.SCAMPIMessage.RNG;
 
 /**
  * Created by swathissunder on 24/09/16.
@@ -85,6 +89,26 @@ public class EddystoneHelper {
                 Log.i("GOT URL => FRAME => ", urlFrame.toString());
                 Toast.makeText(EddystoneHelper.this.context, urlFrame.toString(), Toast.LENGTH_SHORT)
                         .show();
+
+                //Fetching sender details from preferences
+                SharedPreferences pref = EddystoneHelper.this.context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+                String sender = pref.getString("emailId", "");
+                String userName = pref.getString("userName", "");
+
+                long timestamp = System.currentTimeMillis();
+                long uniqueId = RNG.nextLong();
+
+                Tracking tracking = new Tracking(sender, userName, urlFrame.toString(), timestamp, uniqueId);
+
+                // Insert the tracking details into the database table
+                TrackingDBHelper trackingDBHelper = new TrackingDBHelper(EddystoneHelper.this.context);
+                if (trackingDBHelper.insert(tracking)) {
+                    Log.d("added", trackingDBHelper.getAll().toString());
+
+                    TrackingMessage msg = new TrackingMessage(tracking.getSender(), tracking);
+                    DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
+                }
             }
         };
 
