@@ -10,6 +10,7 @@ public class DataHolder {
     private AppLibHelper helper;
     private NotificationHelper notificationHelper;
     private EddystoneHelper eddystoneHelper;
+    private ConfigHelper configHelper;
 
     public AppLibHelper getHelper() {
         return helper;
@@ -23,6 +24,10 @@ public class DataHolder {
         return eddystoneHelper;
     }
 
+    public ConfigHelper getConfigHelper() {
+        return configHelper;
+    }
+
     public void initHelper(Context context) {
         /*Initialize the AppLibHelper, required for SCAMPI*/
         this.helper = new AppLibHelper(context);
@@ -34,6 +39,9 @@ public class DataHolder {
         /*Initialize the EddystoneHelper, required for Beacon detection*/
         this.eddystoneHelper = new EddystoneHelper(context);
         this.eddystoneHelper.initService();
+
+        /*Initialize the ConfigHelper, required for static configuration data*/
+        this.configHelper = new ConfigHelper();
     }
 
     public void destroyHelper() {
