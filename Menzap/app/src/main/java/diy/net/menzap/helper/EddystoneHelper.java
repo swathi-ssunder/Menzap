@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import de.tum.in.cm.android.eddystonelib.EddystoneService;
 import de.tum.in.cm.android.eddystonelib.frames.EddystoneUrlFrame;
+import diy.net.menzap.activity.PermissionActivity;
 import diy.net.menzap.model.Tracking;
 import diy.net.menzap.model.message.TrackingMessage;
 
@@ -99,7 +100,7 @@ public class EddystoneHelper {
                 long timestamp = System.currentTimeMillis();
                 long uniqueId = RNG.nextLong();
 
-                Tracking tracking = new Tracking(sender, userName, urlFrame.toString(), timestamp, uniqueId);
+                Tracking tracking = new Tracking(sender, userName, urlFrame.url.toString(), timestamp, uniqueId);
 
                 // Insert the tracking details into the database table
                 TrackingDBHelper trackingDBHelper = new TrackingDBHelper(EddystoneHelper.this.context);
@@ -119,7 +120,13 @@ public class EddystoneHelper {
 
     public void startScan() {
 
-        // this.getPermissions();
+        /*If the scan is already in progress, return*/
+        if (this.eddystoneService.getState().equals("SCANNING")) {
+            return;
+        }
+
+        Intent intent = new Intent(this.context, PermissionActivity.class);
+        this.context.startActivity(intent);
 
         // Start the scan
         if (this.eddystoneService != null) {
