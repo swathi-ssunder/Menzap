@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import diy.net.menzap.R;
+import diy.net.menzap.fragments.ImageFragment;
 import diy.net.menzap.fragments.MenuFragment;
 import diy.net.menzap.fragments.EventsFragment;
 import diy.net.menzap.fragments.FriendsFragment;
@@ -33,7 +34,6 @@ public class TabsActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +100,15 @@ public class TabsActivity extends AppCompatActivity {
             statsMenu.put("text", "STATS");
             statsMenu.put("icon", R.drawable.ic_tab_stats);
 
+            JSONObject imageMenu = new JSONObject();
+            imageMenu.put("text", "IMAGE");
+            imageMenu.put("icon", R.drawable.ic_tab_events);
+
             tabs.put(0, tabMenu);
             tabs.put(1, friendMenu);
             tabs.put(2, eventMenu);
             tabs.put(3, statsMenu);
+            tabs.put(4, imageMenu);
 
             for(int i = 0; i < tabs.length(); i++) {
                 if(tabLayout.getTabAt(i) != null) {
@@ -122,6 +127,7 @@ public class TabsActivity extends AppCompatActivity {
         this.adapter.addFrag(new FriendsFragment(), "Friends in Mensa");
         this.adapter.addFrag(new EventsFragment(), "Upcoming Events");
         this.adapter.addFrag(new StatsFragment(), "Statistics");
+        this.adapter.addFrag(new ImageFragment(), "Mensa Images");
         viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(this.adapter);
     }
