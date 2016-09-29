@@ -11,6 +11,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import diy.net.menzap.model.Tracking;
@@ -125,5 +128,44 @@ public class TrackingDBHelper extends SQLiteOpenHelper {
         db.close();
 
         return array_list;
+    }
+
+    public JSONObject getByLocation(long fromTs, long toTs) {
+        JSONObject dayData = new JSONObject();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery("SELECT" +
+                " COUNT(DISTINCT USER_NAME) AS USER_COUNT," +
+                " URL, " +
+                " strftime('%j', TIMESTAMP / 1000, 'unixepoch') AS DAY FROM TRACKING" +
+                " WHERE TIMESTAMP >= " + Long.toString(fromTs) + " AND TIMESTAMP <= " + Long.toString(toTs) +
+                " GROUP BY strftime('%j', TIMESTAMP / 1000, 'unixepoch'), URL ORDER BY URL" , null);
+
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            JSONObject result = new JSONObject();
+            try {
+                result.put("LOCATION", res.getString(res.getColumnIndex(COLUMN_URL)));
+                result.put("USER_COUNT", res.getInt(res.getColumnIndex("USER_COUNT")));
+
+                String day = res.getString(res.getColumnIndex("DAY"));
+                if(dayData.has(day)) {
+                    ((ArrayList)dayData.get(day)).add(result);
+                } else {
+                    ArrayList<JSONObject> arrayList = new ArrayList<>();
+                    arrayList.add(result);
+                    dayData.put(res.getString(res.getColumnIndex("DAY")), arrayList);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            res.moveToNext();
+        }
+        res.close();
+        db.close();
+
+        return dayData;
     }
 }
