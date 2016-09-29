@@ -1,6 +1,7 @@
 package diy.net.menzap.fragments;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,6 +37,7 @@ import diy.net.menzap.helper.TrackingDBHelper;
 
 public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
+    private TrackingDBHelper trackingDBHelper;
     private JSONObject locationData;
     private BarChart mChart;
     private SeekBar mSeekBarX, mSeekBarY;
@@ -56,6 +58,10 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
+
+        this.trackingDBHelper = new TrackingDBHelper(getActivity());
+        SQLiteDatabase db = this.trackingDBHelper.getReadableDatabase();
+        this.trackingDBHelper.onCreate(db);
 
         SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -132,13 +138,11 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     }
 
     private void refreshView() {
-        TrackingDBHelper trackingDBHelper = new TrackingDBHelper(getActivity());
-
         Date date = new Date();
         long toTs = date.getTime();
         long fromTs = toTs - 5 * 24 * 3600 * 1000;
 
-        this.locationData = trackingDBHelper.getByLocation(fromTs, toTs);
+        this.locationData = this.trackingDBHelper.getByLocation(fromTs, toTs);
     }
 
     @Override

@@ -122,7 +122,7 @@ public class TabsActivity extends AppCompatActivity {
         this.adapter.addFrag(new FriendsFragment(), "Friends in Mensa");
         this.adapter.addFrag(new EventsFragment(), "Upcoming Events");
         this.adapter.addFrag(new StatsFragment(), "Statistics");
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setAdapter(this.adapter);
     }
 
