@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.like.LikeButton;
@@ -54,6 +55,10 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         TextView menuName = (TextView)row.findViewById(R.id.menuName);
         menuName.setText(this.menus.get(position).getName());
 
+        EditText editText = (EditText) row.findViewById(R.id.count);
+        long count = this.menus.get(position).getLikeCount();
+        editText.setText(String.valueOf(count));
+
         LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
         LikeButton btnFavourite = (LikeButton)row.findViewById(R.id.btnFavourite);
         btnLike.setTag("like-"+position);
@@ -81,7 +86,10 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
         if(parts[0].equals("like")){
+            long likeCount = menu.getLikeCount();
             menu.setIsLiked(1);
+            likeCount ++;
+            menu.setLikeCount(likeCount);
         }
         else
             menu.setIsFavourite(1);
@@ -95,6 +103,11 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
         if(parts[0].equals("like")){
+            long likeCount = menu.getLikeCount();
+            if( likeCount > 0 ) {
+                likeCount --;
+                menu.setLikeCount(likeCount);
+            }
             menu.setIsLiked(0);
         }
         else

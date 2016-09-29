@@ -16,6 +16,7 @@ public class MenuMessage extends Message{
     private String servedOn;
     private long isLiked;
     private long isFavourite;
+    private long likeCount;
 
 
     public String getMenuName() {
@@ -66,8 +67,16 @@ public class MenuMessage extends Message{
         this.isFavourite = isFavourite;
     }
 
+    public long getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
+
     public MenuMessage(String sender, String menuName, String menuDescription, long category,
-                        String servedOn, long isLiked, long isDisliked, long isFavourite) {
+                        String servedOn, long isLiked, long isDisliked, long isFavourite, long likeCount) {
         super(sender);
         this.setType("MENU");
         this.setTtl(24*60);
@@ -79,6 +88,7 @@ public class MenuMessage extends Message{
         this.setServedOn(servedOn);
         this.setIsLiked(isLiked);
         this.setIsFavourite(isFavourite);
+        this.setLikeCount(likeCount);
 
     }
 
@@ -90,6 +100,7 @@ public class MenuMessage extends Message{
         this.servedOn = message.getString("SERVED_ON");
         this.isLiked = message.getInteger("IS_LIKED");
         this.isFavourite = message.getInteger("IS_FAVOURITE");
+        this.likeCount = message.getInteger("LIKE_COUNT");
 
     }
 
@@ -103,6 +114,7 @@ public class MenuMessage extends Message{
         this.setServedOn(menu.getServedOn());
         this.setIsLiked(menu.getIsLiked());
         this.setIsFavourite(menu.getIsFavourite());
+        this.setLikeCount(likeCount);
         this.setTimestamp(menu.getTs());
         this.setUniqueId(menu.getUniqueId());
     }
@@ -122,6 +134,7 @@ public class MenuMessage extends Message{
         msg.putString("SERVED_ON", this.getServedOn());
         msg.putInteger("IS_LIKED", this.getIsLiked());
         msg.putInteger("IS_FAVOURITE", this.getIsFavourite());
+        msg.putInteger("LIKE_COUNT", this.getLikeCount());
 
         return msg;
     }
