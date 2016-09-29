@@ -28,4 +28,16 @@
         app:icon_size="30dp"
         app:icon_type="thumb" />
 
+    <com.like.LikeButton
+        android:id="@+id/btnFavourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="80dp"
+        android:layout_marginRight="100dp"
+        app:icon_size="30dp"
+        app:icon_type="heart" />
+
 </RelativeLayout>

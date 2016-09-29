@@ -16,33 +16,28 @@ public class Menu implements Parcelable {
     private long category;
     private String servedOn;
     private long isLiked;
-    private long isDisliked;
     private long isFavourite;
     private long ts;
     private long uniqueId;
 
 
-    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked,
-                long isDisliked, long isFavourite) {
+    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked, long isFavourite) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
         this.setCategory(category);
         this.setServedOn(servedOn);
         this.setIsLiked(isLiked);
-        this.setIsDisliked(isDisliked);
         this.setIsFavourite(isFavourite);
     }
 
-    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked,
-                long isDisliked, long isFavourite, long ts, long uniqueId) {
+    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked, long isFavourite, long ts, long uniqueId) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
         this.setCategory(category);
         this.setServedOn(servedOn);
         this.setIsLiked(isLiked);
-        this.setIsDisliked(isDisliked);
         this.setIsFavourite(isFavourite);
         this.setTs(ts);
         this.setUniqueId(uniqueId);
@@ -59,7 +54,6 @@ public class Menu implements Parcelable {
         this.setCategory(in.readInt());
         this.setServedOn(in.readString());
         this.setIsLiked(in.readLong());
-        this.setIsDisliked(in.readLong());
         this.setIsFavourite(in.readLong());
     }
 
@@ -115,23 +109,15 @@ public class Menu implements Parcelable {
         return isLiked;
     }
 
-    private void setIsLiked(long isLiked) {
+    public void setIsLiked(long isLiked) {
         this.isLiked = isLiked;
-    }
-
-    public long getIsDisliked() {
-        return isDisliked;
-    }
-
-    private void setIsDisliked(long isDisliked) {
-        this.isDisliked = isDisliked;
     }
 
     public long getIsFavourite() {
         return isFavourite;
     }
 
-    private void setIsFavourite(long isFavourite) {
+    public void setIsFavourite(long isFavourite) {
         this.isFavourite = isFavourite;
     }
 
@@ -163,7 +149,6 @@ public class Menu implements Parcelable {
         dest.writeLong(this.category);
         dest.writeString(this.servedOn);
         dest.writeLong(this.isLiked);
-        dest.writeLong(this.isDisliked);
         dest.writeLong(this.isFavourite);
     }
 

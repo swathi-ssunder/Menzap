@@ -28,7 +28,6 @@ import diy.net.menzap.fragments.EventsFragment;
 import diy.net.menzap.fragments.FriendsFragment;
 import diy.net.menzap.fragments.StatsFragment;
 import diy.net.menzap.helper.DataHolder;
-import diy.net.menzap.helper.ReviewDBHelper;
 
 public class TabsActivity extends AppCompatActivity {
 
@@ -75,6 +74,10 @@ public class TabsActivity extends AppCompatActivity {
                 case "TAB_STATS":
                     /*Set the Statistics tab as active*/
                     tabLayout.getTabAt(3).select();
+                    break;
+                case "TAB_IMAGE":
+                    /*Set the Image tab as active*/
+                    tabLayout.getTabAt(4).select();
                     break;
             }
         }
