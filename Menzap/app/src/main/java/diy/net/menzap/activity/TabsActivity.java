@@ -4,8 +4,6 @@ package diy.net.menzap.activity;
  * Created by swathissunder on 15/09/16.
  */
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,8 +12,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +25,6 @@ import diy.net.menzap.fragments.MenuFragment;
 import diy.net.menzap.fragments.EventsFragment;
 import diy.net.menzap.fragments.FriendsFragment;
 import diy.net.menzap.helper.DataHolder;
-import diy.net.menzap.helper.ReviewDBHelper;
 
 public class TabsActivity extends AppCompatActivity {
 
@@ -147,14 +142,6 @@ public class TabsActivity extends AppCompatActivity {
             // return null to display only the icon
             return null;
         }
-    }
-
-    public void saveAndPublish(String reviewText) {
-        // Update the database
-        ReviewDBHelper review = new ReviewDBHelper(this);
-        review.insert(reviewText, 1);
-        ArrayList ar = review.getAll();
-        Log.d("CUSTOM INFO: REVIEWS", ar.toString());
     }
 
     @Override

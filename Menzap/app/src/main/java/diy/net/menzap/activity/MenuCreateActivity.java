@@ -96,11 +96,13 @@ public class MenuCreateActivity extends AppCompatActivity {
 
         String emailId = pref.getString("emailId", "");
         String sender = emailId;
+        int isLiked = 0;
+        int isFavourite = 0;
 
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();
 
-        Menu menu = new Menu(sender, menuName, menuDesc, category,servedOn, timestamp, uniqueId);
+        Menu menu = new Menu(sender, menuName, menuDesc, category,servedOn, isLiked, isFavourite, timestamp, uniqueId);
 
         saveMenuAndPublish(menu);
     }

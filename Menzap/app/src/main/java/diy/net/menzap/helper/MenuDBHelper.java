@@ -25,7 +25,6 @@ public class MenuDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DESCRIPTION = "DESCRIPTION";
     private static final String COLUMN_CATEGORY = "CATEGORY";
     private static final String COLUMN_IS_LIKED = "IS_LIKED";
-    private static final String COLUMN_IS_DISLIKED = "IS_DISLIKED";
     private static final String COLUMN_IS_FAVOURITE= "IS_FAVOURITE";
     private static final String COLUMN_SERVED_ON = "SERVED_ON";
     private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
@@ -46,8 +45,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         COLUMN_CATEGORY + " TEXT, " +
                         COLUMN_SERVED_ON + " TEXT, " +
                         COLUMN_IS_LIKED + " INTEGER, " +
-                        COLUMN_IS_DISLIKED + " INTEGER, " +
-                        COLUMN_IS_FAVOURITE + " TEXT, " +
+                        COLUMN_IS_FAVOURITE + " INTEGER, " +
                         COLUMN_TIME_STAMP + " TEXT, " +
                         COLUMN_UNIQUE_ID + " TEXT, " +
                         "UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
@@ -56,6 +54,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         ");"
         );
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -73,7 +72,6 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CATEGORY, menu.getCategory());
         contentValues.put(COLUMN_SERVED_ON, menu.getServedOn());
         contentValues.put(COLUMN_IS_LIKED, menu.getIsLiked());
-        contentValues.put(COLUMN_IS_DISLIKED, menu.getIsDisliked());
         contentValues.put(COLUMN_IS_FAVOURITE, menu.getIsFavourite());
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
@@ -93,7 +91,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
     }
 
-    public boolean update(int id, Menu menu) {
+    public boolean update(Menu menu) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -103,14 +101,16 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CATEGORY, menu.getCategory());
         contentValues.put(COLUMN_SERVED_ON, menu.getServedOn());
         contentValues.put(COLUMN_IS_LIKED, menu.getIsLiked());
-        contentValues.put(COLUMN_IS_DISLIKED, menu.getIsDisliked());
         contentValues.put(COLUMN_IS_FAVOURITE, menu.getIsFavourite());
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
-        db.update("MENU", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        long result = db.update("MENU", contentValues, "SENDER = ? AND UNIQUE_ID = ? AND TIMESTAMP = ?",
+                new String[]{menu.getSender(), Long.toString(menu.getUniqueId()), Long.toString(menu.getTs())});
+        db.close();
 
-        return true;
+        return (result > 0);
+
     }
 
     public Integer delete(Integer id) {
@@ -135,7 +135,6 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                     res.getInt(res.getColumnIndex(COLUMN_CATEGORY)),
                     res.getString(res.getColumnIndex(COLUMN_SERVED_ON)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_LIKED)),
-                    res.getInt(res.getColumnIndex(COLUMN_IS_DISLIKED)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_FAVOURITE)),
                     res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
                     res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
