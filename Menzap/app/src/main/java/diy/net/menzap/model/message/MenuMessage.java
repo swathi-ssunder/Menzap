@@ -75,10 +75,10 @@ public class MenuMessage extends Message{
         this.likeCount = likeCount;
     }
 
-    public MenuMessage(String sender, String menuName, String menuDescription, long category,
+    public MenuMessage(String type, String sender, String menuName, String menuDescription, long category,
                         String servedOn, long isLiked, long isDisliked, long isFavourite, long likeCount) {
         super(sender);
-        this.setType("MENU");
+        this.setType(type);
         this.setTtl(24*60);
 
         this.setMenuName(menuName);
@@ -104,9 +104,9 @@ public class MenuMessage extends Message{
 
     }
 
-    public MenuMessage(String sender, Menu menu) {
+    public MenuMessage(String type, String sender, Menu menu) {
         super(sender);
-        this.setType("MENU");
+        this.setType(type);
         this.setTtl(24*60);
         this.setMenuName(menu.getName());
         this.setMenuDescription(menu.getDescription());
@@ -114,7 +114,7 @@ public class MenuMessage extends Message{
         this.setServedOn(menu.getServedOn());
         this.setIsLiked(menu.getIsLiked());
         this.setIsFavourite(menu.getIsFavourite());
-        this.setLikeCount(likeCount);
+        this.setLikeCount(menu.getLikeCount());
         this.setTimestamp(menu.getTs());
         this.setUniqueId(menu.getUniqueId());
     }

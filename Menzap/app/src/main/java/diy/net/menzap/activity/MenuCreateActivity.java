@@ -114,7 +114,7 @@ public class MenuCreateActivity extends AppCompatActivity {
         if (menuDBHelper.insert(menu)) {
             Log.d("added", menuDBHelper.getAll().toString());
 
-            MenuMessage msg = new MenuMessage(menu.getSender(), menu);
+            MenuMessage msg = new MenuMessage("MENU", menu.getSender(), menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
         }
         setResult(1);

@@ -133,8 +133,57 @@ public class MessageHandler {
 
                 break;
 
-            case REVIEW:
-                break;
+            case LIKE:
+
+                Menu review = new Menu(msg.getString(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
+                        msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON), msg.getInteger(MSG_IS_LIKED), msg.getInteger(MSG_IS_FAVOURITE),
+                        msg.getInteger(MSG_LIKE_COUNT), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
+
+                db = new MenuDBHelper(this.context);
+                MenuDBHelper menuDBHelper = new MenuDBHelper(this.context);
+
+                int count =menuDBHelper.getCount(review);
+                if( count == -1) {
+                    db.close();
+                    break;
+                }
+                else{
+                    count++;
+                    review.setLikeCount(count);
+
+                    // update into the database
+                    if (menuDBHelper.update(review)) {
+                        Log.d("MENU review", ((MenuDBHelper)db).getAll().toString());
+                    }
+                    db.close();
+                    break;
+                }
+
+            case DISLIKE:
+
+                review = new Menu(msg.getString(MSG_SENDER), msg.getString(MSG_MENU_NAME), msg.getString(MSG_MENU_DESCRIPTION),
+                        msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON), msg.getInteger(MSG_IS_LIKED), msg.getInteger(MSG_IS_FAVOURITE),
+                        msg.getInteger(MSG_LIKE_COUNT), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
+
+                db = new MenuDBHelper(this.context);
+                menuDBHelper = new MenuDBHelper(this.context);
+
+                count =menuDBHelper.getCount(review);
+                if( count == -1) {
+                    db.close();
+                    break;
+                }
+                else{
+                    count--;
+                    review.setLikeCount(count);
+
+                    // update into the database
+                    if (menuDBHelper.update(review)) {
+                        Log.d("MENU review", ((MenuDBHelper)db).getAll().toString());
+                    }
+                    db.close();
+                    break;
+                }
 
             case EVENT:
 

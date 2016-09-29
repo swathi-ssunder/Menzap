@@ -49,6 +49,10 @@
         android:layout_alignBottom="@+id/btnLike"
         android:layout_alignParentEnd="true"
         android:textStyle="bold"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 </RelativeLayout>
