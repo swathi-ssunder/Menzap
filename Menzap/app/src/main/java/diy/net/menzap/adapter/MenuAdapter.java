@@ -20,8 +20,10 @@ import com.like.OnLikeListener;
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.MenuDBHelper;
 import diy.net.menzap.model.Menu;
+import diy.net.menzap.model.message.MenuMessage;
 
 public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
 
@@ -85,15 +87,21 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         String[] parts = tag.split("-");
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
+
         if(parts[0].equals("like")){
             long likeCount = menu.getLikeCount();
             menu.setIsLiked(1);
             likeCount ++;
             menu.setLikeCount(likeCount);
+            MenuMessage msg = new MenuMessage("LIKE",menu.getSender(), menu);
+            DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
+            this.menuDBHelper.update(menu);
+
         }
-        else
+        else{
             menu.setIsFavourite(1);
-        this.menuDBHelper.update(menu);
+            this.menuDBHelper.update(menu);
+        }
     }
 
     @Override
@@ -109,9 +117,14 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
                 menu.setLikeCount(likeCount);
             }
             menu.setIsLiked(0);
+            this.menuDBHelper.update(menu);
+            MenuMessage msg = new MenuMessage("DISLIKE", menu.getSender(), menu);
+            DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
         }
-        else
+        else{
             menu.setIsFavourite(0);
-        this.menuDBHelper.update(menu);
+            this.menuDBHelper.update(menu);
+        }
+
     }
 }

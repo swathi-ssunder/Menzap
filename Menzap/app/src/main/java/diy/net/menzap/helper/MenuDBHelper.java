@@ -151,4 +151,34 @@ public class MenuDBHelper extends SQLiteOpenHelper {
 
         return array_list;
     }
+
+    public int getCount(Menu review){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count =0;
+
+        Cursor res = db.rawQuery("SELECT COUNT(*) AS RECORDS FROM MENU WHERE NAME = '"+review.getName()+"'" +
+                " AND SENDER= '"+ review.getSender()
+                + "' AND TIMESTAMP=" + review.getTs() +" AND UNIQUE_ID=" +review.getUniqueId()+";", null);
+
+
+        res.moveToFirst();
+
+        count = res.getInt(0);
+        res.close();
+        if( count == 1 ){
+            db.close();
+            return -1;
+        }
+        else{
+           res = db.rawQuery("SELECT LIKE_COUNT AS RECORDS FROM MENU WHERE NAME = '"+review.getName()+"'" +
+                    " AND SENDER= '"+ review.getSender()
+                    + "' AND TIMESTAMP=" + review.getTs() +" AND UNIQUE_ID=" +review.getUniqueId()+";", null);
+            res.moveToFirst();
+
+            count = res.getInt(0);
+            res.close();
+            db.close();
+            return count;
+        }
+    }
 }
