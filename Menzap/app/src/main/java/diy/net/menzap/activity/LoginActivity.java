@@ -84,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Set/Store data
             editor.putString("emailId", emailId);
+            editor.putString("userName", name);
             editor.putInt("isAdmin", 0);
 
             // Commit the changes

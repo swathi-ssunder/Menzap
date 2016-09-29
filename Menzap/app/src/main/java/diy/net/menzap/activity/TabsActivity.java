@@ -25,12 +25,15 @@ import diy.net.menzap.R;
 import diy.net.menzap.fragments.MenuFragment;
 import diy.net.menzap.fragments.EventsFragment;
 import diy.net.menzap.fragments.FriendsFragment;
+import diy.net.menzap.fragments.StatsFragment;
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.ReviewDBHelper;
 
 public class TabsActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class TabsActivity extends AppCompatActivity {
         ViewPager viewPager;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_icon_tabs);
+        setContentView(R.layout.activity_tabs);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -51,6 +54,8 @@ public class TabsActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
+        DataHolder.getInstance().initHelper(this);
 
         /*When the activity is opened from Notification*/
         if(getIntent().getAction() != null) {
@@ -67,6 +72,10 @@ public class TabsActivity extends AppCompatActivity {
                     /*Set the Events tab as active*/
                     tabLayout.getTabAt(2).select();
                     break;
+                case "TAB_STATS":
+                    /*Set the Statistics tab as active*/
+                    tabLayout.getTabAt(3).select();
+                    break;
             }
         }
     }
@@ -81,15 +90,20 @@ public class TabsActivity extends AppCompatActivity {
 
             JSONObject friendMenu = new JSONObject();
             friendMenu.put("text", "FRIEND");
-            friendMenu.put("icon", R.drawable.ic_tab_contacts);
+            friendMenu.put("icon", R.drawable.ic_tab_users);
 
             JSONObject eventMenu = new JSONObject();
             eventMenu.put("text", "EVENT");
             eventMenu.put("icon", R.drawable.ic_tab_events);
 
+            JSONObject statsMenu = new JSONObject();
+            statsMenu.put("text", "STATS");
+            statsMenu.put("icon", R.drawable.ic_tab_stats);
+
             tabs.put(0, tabMenu);
             tabs.put(1, friendMenu);
             tabs.put(2, eventMenu);
+            tabs.put(3, statsMenu);
 
             for(int i = 0; i < tabs.length(); i++) {
                 if(tabLayout.getTabAt(i) != null) {
@@ -107,7 +121,8 @@ public class TabsActivity extends AppCompatActivity {
         this.adapter.addFrag(new MenuFragment(), "Menu Today");
         this.adapter.addFrag(new FriendsFragment(), "Friends in Mensa");
         this.adapter.addFrag(new EventsFragment(), "Upcoming Events");
-        viewPager.setOffscreenPageLimit(2);
+        this.adapter.addFrag(new StatsFragment(), "Statistics");
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(this.adapter);
     }
 
@@ -140,14 +155,6 @@ public class TabsActivity extends AppCompatActivity {
             // return null to display only the icon
             return null;
         }
-    }
-
-    public void saveAndPublish(String reviewText) {
-        // Update the database
-        ReviewDBHelper review = new ReviewDBHelper(this);
-        review.insert(reviewText, 1);
-        ArrayList ar = review.getAll();
-        Log.d("CUSTOM INFO: REVIEWS", ar.toString());
     }
 
     @Override

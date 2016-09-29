@@ -20,7 +20,7 @@ public class NetworkHelper {
             NetworkInfo ni = cm.getNetworkInfo(net);
 
             try {
-                if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if ((ni != null) && ni.getTypeName().equalsIgnoreCase("WIFI"))
                     if (ni.isConnected() && ni.getExtraInfo().replace("\"", "").equals("Pi3-AP"))
                         isConnectedToWifi = 1;
             } catch (Exception e) {
@@ -33,5 +33,20 @@ public class NetworkHelper {
             return lastState;
         }
         return -1;
+    }
+
+    public static void onNetworkChange(Context context) {
+        switch(isConnected(context)) {
+            case 1:
+                DataHolder.getInstance().getNotificationHelper().notifyForWAP(1);
+                DataHolder.getInstance().getEddystoneHelper().startScan();
+                break;
+            case 0:
+                DataHolder.getInstance().getNotificationHelper().notifyForWAP(0);
+                DataHolder.getInstance().getEddystoneHelper().stopScan();
+                break;
+            default:
+                break;
+        }
     }
 }

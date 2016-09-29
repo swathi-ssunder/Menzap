@@ -123,7 +123,7 @@ public class NotificationHelper {
         Notification noti = new Notification.Builder(this.context)
                 .setContentTitle("Menzap")
                 .setContentText(contentText)
-                .setSmallIcon(R.drawable.ic_tab_contacts)
+                .setSmallIcon(R.drawable.ic_tab_users)
                 .setContentIntent(pIntent)
                 .build();
 
