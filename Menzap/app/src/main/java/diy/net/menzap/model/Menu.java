@@ -17,11 +17,13 @@ public class Menu implements Parcelable {
     private String servedOn;
     private long isLiked;
     private long isFavourite;
+    private long likeCount;
     private long ts;
     private long uniqueId;
 
 
-    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked, long isFavourite) {
+    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked,
+                long isFavourite, long likeCount) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
@@ -29,9 +31,11 @@ public class Menu implements Parcelable {
         this.setServedOn(servedOn);
         this.setIsLiked(isLiked);
         this.setIsFavourite(isFavourite);
+        this.setLikeCount(likeCount);
     }
 
-    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked, long isFavourite, long ts, long uniqueId) {
+    public Menu(String sender, String name, String description, long category, String servedOn, long isLiked, long isFavourite,
+                long likeCount,long ts, long uniqueId) {
         this.setSender(sender);
         this.setName(name);
         this.setDescription(description);
@@ -39,6 +43,7 @@ public class Menu implements Parcelable {
         this.setServedOn(servedOn);
         this.setIsLiked(isLiked);
         this.setIsFavourite(isFavourite);
+        this.setLikeCount(likeCount);
         this.setTs(ts);
         this.setUniqueId(uniqueId);
     }
@@ -55,6 +60,7 @@ public class Menu implements Parcelable {
         this.setServedOn(in.readString());
         this.setIsLiked(in.readLong());
         this.setIsFavourite(in.readLong());
+        this.setLikeCount(in.readLong());
     }
 
     public long getId() {
@@ -121,6 +127,14 @@ public class Menu implements Parcelable {
         this.isFavourite = isFavourite;
     }
 
+    public long getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
+
     public long getTs() {
         return ts;
     }
@@ -150,6 +164,7 @@ public class Menu implements Parcelable {
         dest.writeString(this.servedOn);
         dest.writeLong(this.isLiked);
         dest.writeLong(this.isFavourite);
+        dest.writeLong(this.likeCount);
     }
 
     public static final Parcelable.Creator<Menu> CREATOR = new Parcelable.Creator<Menu>() {

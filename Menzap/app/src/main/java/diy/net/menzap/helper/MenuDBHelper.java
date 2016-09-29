@@ -26,6 +26,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CATEGORY = "CATEGORY";
     private static final String COLUMN_IS_LIKED = "IS_LIKED";
     private static final String COLUMN_IS_FAVOURITE= "IS_FAVOURITE";
+    private static final String COLUMN_LIKE_COUNT= "LIKE_COUNT";
     private static final String COLUMN_SERVED_ON = "SERVED_ON";
     private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
     private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
@@ -46,6 +47,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         COLUMN_SERVED_ON + " TEXT, " +
                         COLUMN_IS_LIKED + " INTEGER, " +
                         COLUMN_IS_FAVOURITE + " INTEGER, " +
+                        COLUMN_LIKE_COUNT + " INTEGER, " +
                         COLUMN_TIME_STAMP + " TEXT, " +
                         COLUMN_UNIQUE_ID + " TEXT, " +
                         "UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
@@ -73,6 +75,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_SERVED_ON, menu.getServedOn());
         contentValues.put(COLUMN_IS_LIKED, menu.getIsLiked());
         contentValues.put(COLUMN_IS_FAVOURITE, menu.getIsFavourite());
+        contentValues.put(COLUMN_LIKE_COUNT, menu.getLikeCount());
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
@@ -102,6 +105,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_SERVED_ON, menu.getServedOn());
         contentValues.put(COLUMN_IS_LIKED, menu.getIsLiked());
         contentValues.put(COLUMN_IS_FAVOURITE, menu.getIsFavourite());
+        contentValues.put(COLUMN_LIKE_COUNT, menu.getLikeCount());
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
@@ -136,6 +140,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_SERVED_ON)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_LIKED)),
                     res.getInt(res.getColumnIndex(COLUMN_IS_FAVOURITE)),
+                    res.getInt(res.getColumnIndex(COLUMN_LIKE_COUNT)),
                     res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
                     res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
