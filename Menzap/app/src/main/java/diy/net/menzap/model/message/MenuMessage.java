@@ -14,6 +14,10 @@ public class MenuMessage extends Message{
     private String menuDescription;
     private long category;
     private String servedOn;
+    private long isLiked;
+    private long isDisliked;
+    private long isFavourite;
+
 
     public String getMenuName() {
         return menuName;
@@ -47,10 +51,32 @@ public class MenuMessage extends Message{
         this.servedOn = servedOn;
     }
 
+    public long getIsLiked() {
+        return isLiked;
+    }
 
+    public void setIsLiked(long isLiked) {
+        this.isLiked = isLiked;
+    }
+
+    public long getIsDisliked() {
+        return isDisliked;
+    }
+
+    public void setIsDisliked(long isDisliked) {
+        this.isDisliked = isDisliked;
+    }
+
+    public long getIsFavourite() {
+        return isFavourite;
+    }
+
+    public void setIsFavourite(long isFavourite) {
+        this.isFavourite = isFavourite;
+    }
 
     public MenuMessage(String sender, String menuName, String menuDescription, long category,
-                        String servedOn) {
+                        String servedOn, long isLiked, long isDisliked, long isFavourite) {
         super(sender);
         this.setType("MENU");
         this.setTtl(24*60);
@@ -59,6 +85,10 @@ public class MenuMessage extends Message{
         this.setMenuDescription(menuDescription);
         this.setCategory(category);
         this.setServedOn(servedOn);
+        this.setServedOn(servedOn);
+        this.setIsLiked(isLiked);
+        this.setIsDisliked(isDisliked);
+        this.setIsFavourite(isFavourite);
 
     }
 
@@ -68,6 +98,9 @@ public class MenuMessage extends Message{
         this.menuDescription = message.getString("MENU_DESCRIPTION");
         this.category = message.getInteger("CATEGORY");
         this.servedOn = message.getString("SERVED_ON");
+        this.isLiked = message.getInteger("IS_LIKED");
+        this.isDisliked = message.getInteger("IS_DISLIKED");
+        this.isFavourite = message.getInteger("IS_FAVOURITE");
 
     }
 
@@ -79,6 +112,9 @@ public class MenuMessage extends Message{
         this.setMenuDescription(menu.getDescription());
         this.setCategory(menu.getCategory());
         this.setServedOn(menu.getServedOn());
+        this.setIsLiked(menu.getIsLiked());
+        this.setIsDisliked(menu.getIsDisliked());
+        this.setIsFavourite(menu.getIsFavourite());
         this.setTimestamp(menu.getTs());
         this.setUniqueId(menu.getUniqueId());
     }
@@ -96,6 +132,9 @@ public class MenuMessage extends Message{
         msg.putString("MENU_DESCRIPTION", this.getMenuDescription());
         msg.putInteger("CATEGORY", this.getCategory());
         msg.putString("SERVED_ON", this.getServedOn());
+        msg.putInteger("IS_LIKED", this.getIsLiked());
+        msg.putInteger("IS_DISLIKED", this.getIsDisliked());
+        msg.putInteger("IS_FAVOURITE", this.getIsFavourite());
 
         return msg;
     }
