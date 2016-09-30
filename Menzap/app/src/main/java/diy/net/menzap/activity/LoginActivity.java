@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        DataHolder.getInstance().initHelper(this);
+
         Button registerButton = (Button) findViewById(R.id.btnRegister);
         Log.d("button", registerButton.toString());
 
@@ -92,7 +94,13 @@ public class LoginActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, TabsActivity.class);
             startActivity(intent);
+            DataHolder.getInstance().destroyHelper();
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DataHolder.getInstance().initHelper(this);
-
         UserDBHelper userDBHelper = new UserDBHelper(this);
         boolean isRegistered = userDBHelper.isRegistered();
 
@@ -29,12 +27,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, TabsActivity.class));
         else
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         finish();
-        DataHolder.getInstance().destroyHelper();
     }
 }
