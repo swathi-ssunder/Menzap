@@ -18,12 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import diy.net.menzap.R;
 import diy.net.menzap.activity.MenuCreateActivity;
 import diy.net.menzap.adapter.MenuAdapter;
+import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.model.Event;
 import diy.net.menzap.model.Menu;
 
 
@@ -77,6 +82,8 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         this.menus = menuDBHelper.getAll();
         MenuAdapter adapter = new MenuAdapter(getActivity(), R.layout.menu, menus);
 
+        this.handleNotification(this.menus);
+
         // Now we call setRefreshing(false) to signal refresh has finished
         swipeLayout.setRefreshing(false);
 
@@ -102,10 +109,10 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         //Fetch sender from user profile
         SharedPreferences pref = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-        int isAdmin = pref.getInt("isAdmin", 0);
+       /* int isAdmin = pref.getInt("isAdmin", 0);
         if(isAdmin == 0) {
             addButton.setVisibility(View.INVISIBLE);
-        }
+        }*/
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,5 +133,16 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
             this.refreshView();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleNotification(ArrayList<Menu> menus) {
+        DateFormat dateFormat = new SimpleDateFormat("d-M-yyyy");
+        Date dateObj = new Date();
+        String today = dateFormat.format(dateObj);
+        for(Menu menu: menus) {
+            if((menu.getIsFavourite() == 1) && (today.equals(menu.getServedOn()) )) {
+                DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
+            }
+        }
     }
 }
