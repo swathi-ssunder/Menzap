@@ -24,6 +24,9 @@ public class MenuDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_NAME = "NAME";
     private static final String COLUMN_DESCRIPTION = "DESCRIPTION";
     private static final String COLUMN_CATEGORY = "CATEGORY";
+    private static final String COLUMN_IS_LIKED = "IS_LIKED";
+    private static final String COLUMN_IS_FAVOURITE= "IS_FAVOURITE";
+    private static final String COLUMN_LIKE_COUNT= "LIKE_COUNT";
     private static final String COLUMN_SERVED_ON = "SERVED_ON";
     private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
     private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
@@ -42,6 +45,9 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_CATEGORY + " TEXT, " +
                         COLUMN_SERVED_ON + " TEXT, " +
+                        COLUMN_IS_LIKED + " INTEGER, " +
+                        COLUMN_IS_FAVOURITE + " INTEGER, " +
+                        COLUMN_LIKE_COUNT + " INTEGER, " +
                         COLUMN_TIME_STAMP + " TEXT, " +
                         COLUMN_UNIQUE_ID + " TEXT, " +
                         "UNIQUE (" + COLUMN_UNIQUE_ID + ", " +
@@ -50,6 +56,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                         ");"
         );
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -66,6 +73,9 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_DESCRIPTION, menu.getDescription());
         contentValues.put(COLUMN_CATEGORY, menu.getCategory());
         contentValues.put(COLUMN_SERVED_ON, menu.getServedOn());
+        contentValues.put(COLUMN_IS_LIKED, menu.getIsLiked());
+        contentValues.put(COLUMN_IS_FAVOURITE, menu.getIsFavourite());
+        contentValues.put(COLUMN_LIKE_COUNT, menu.getLikeCount());
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
@@ -84,7 +94,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         return ((int) DatabaseUtils.queryNumEntries(db, TABLE_NAME));
     }
 
-    public boolean update(int id, Menu menu) {
+    public boolean update(Menu menu) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -93,12 +103,18 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_DESCRIPTION, menu.getDescription());
         contentValues.put(COLUMN_CATEGORY, menu.getCategory());
         contentValues.put(COLUMN_SERVED_ON, menu.getServedOn());
+        contentValues.put(COLUMN_IS_LIKED, menu.getIsLiked());
+        contentValues.put(COLUMN_IS_FAVOURITE, menu.getIsFavourite());
+        contentValues.put(COLUMN_LIKE_COUNT, menu.getLikeCount());
         contentValues.put(COLUMN_TIME_STAMP, menu.getTs());
         contentValues.put(COLUMN_UNIQUE_ID, menu.getUniqueId());
 
-        db.update("MENU", contentValues, "ID = ? ", new String[]{Integer.toString(id)});
+        long result = db.update("MENU", contentValues, "SENDER = ? AND UNIQUE_ID = ? AND TIMESTAMP = ?",
+                new String[]{menu.getSender(), Long.toString(menu.getUniqueId()), Long.toString(menu.getTs())});
+        db.close();
 
-        return true;
+        return (result > 0);
+
     }
 
     public Integer delete(Integer id) {
@@ -122,6 +138,9 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                     res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
                     res.getInt(res.getColumnIndex(COLUMN_CATEGORY)),
                     res.getString(res.getColumnIndex(COLUMN_SERVED_ON)),
+                    res.getInt(res.getColumnIndex(COLUMN_IS_LIKED)),
+                    res.getInt(res.getColumnIndex(COLUMN_IS_FAVOURITE)),
+                    res.getInt(res.getColumnIndex(COLUMN_LIKE_COUNT)),
                     res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
                     res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
             );
@@ -131,5 +150,35 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         res.close();
 
         return array_list;
+    }
+
+    public int getCount(Menu review){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count =0;
+
+        Cursor res = db.rawQuery("SELECT COUNT(*) AS RECORDS FROM MENU WHERE NAME = '"+review.getName()+"'" +
+                " AND SENDER= '"+ review.getSender()
+                + "' AND TIMESTAMP=" + review.getTs() +" AND UNIQUE_ID=" +review.getUniqueId()+";", null);
+
+
+        res.moveToFirst();
+
+        count = res.getInt(0);
+        res.close();
+        if( count == 1 ){
+            db.close();
+            return -1;
+        }
+        else{
+           res = db.rawQuery("SELECT LIKE_COUNT AS RECORDS FROM MENU WHERE NAME = '"+review.getName()+"'" +
+                    " AND SENDER= '"+ review.getSender()
+                    + "' AND TIMESTAMP=" + review.getTs() +" AND UNIQUE_ID=" +review.getUniqueId()+";", null);
+            res.moveToFirst();
+
+            count = res.getInt(0);
+            res.close();
+            db.close();
+            return count;
+        }
     }
 }

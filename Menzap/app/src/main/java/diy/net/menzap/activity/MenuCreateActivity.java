@@ -96,11 +96,14 @@ public class MenuCreateActivity extends AppCompatActivity {
 
         String emailId = pref.getString("emailId", "");
         String sender = emailId;
+        int isLiked = 0;
+        int isFavourite = 0;
+        int likeCount = 0;
 
         long timestamp = System.currentTimeMillis();
         long uniqueId = RNG.nextLong();
 
-        Menu menu = new Menu(sender, menuName, menuDesc, category,servedOn, timestamp, uniqueId);
+        Menu menu = new Menu(sender, menuName, menuDesc, category,servedOn, isLiked, isFavourite, likeCount, timestamp, uniqueId);
 
         saveMenuAndPublish(menu);
     }
@@ -111,7 +114,7 @@ public class MenuCreateActivity extends AppCompatActivity {
         if (menuDBHelper.insert(menu)) {
             Log.d("added", menuDBHelper.getAll().toString());
 
-            MenuMessage msg = new MenuMessage(menu.getSender(), menu);
+            MenuMessage msg = new MenuMessage("MENU", menu.getSender(), menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
         }
         setResult(1);
