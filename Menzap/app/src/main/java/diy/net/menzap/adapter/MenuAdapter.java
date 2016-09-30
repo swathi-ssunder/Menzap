@@ -96,7 +96,7 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             MenuMessage msg = new MenuMessage("LIKE",menu.getSender(), menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
             this.menuDBHelper.update(menu);
-
+            this.notifyDataSetChanged();
         }
         else{
             menu.setIsFavourite(1);
@@ -120,6 +120,7 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             this.menuDBHelper.update(menu);
             MenuMessage msg = new MenuMessage("DISLIKE", menu.getSender(), menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
+            this.notifyDataSetChanged();
         }
         else{
             menu.setIsFavourite(0);
