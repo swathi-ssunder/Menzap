@@ -128,7 +128,8 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         ArrayList<Menu> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM MENU", null);
+        Cursor res = db.rawQuery("SELECT * FROM MENU ORDER BY " +
+                COLUMN_IS_FAVOURITE + " DESC, " + COLUMN_LIKE_COUNT + " DESC", null);
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
@@ -154,25 +155,24 @@ public class MenuDBHelper extends SQLiteOpenHelper {
 
     public int getCount(Menu review){
         SQLiteDatabase db = this.getReadableDatabase();
-        int count =0;
+        int count;
 
-        Cursor res = db.rawQuery("SELECT COUNT(*) AS RECORDS FROM MENU WHERE NAME = '"+review.getName()+"'" +
-                " AND SENDER= '"+ review.getSender()
-                + "' AND TIMESTAMP=" + review.getTs() +" AND UNIQUE_ID=" +review.getUniqueId()+";", null);
+        Cursor res = db.rawQuery("SELECT COUNT(*) AS RECORDS FROM MENU WHERE NAME = '" + review.getName() + "'" +
+                " AND SENDER= '" + review.getSender()
+                + "' AND TIMESTAMP=" + review.getTs() + " AND UNIQUE_ID=" + review.getUniqueId() + ";", null);
 
 
         res.moveToFirst();
 
         count = res.getInt(0);
         res.close();
-        if( count == 1 ){
+        if (count == 1) {
             db.close();
             return -1;
-        }
-        else{
-           res = db.rawQuery("SELECT LIKE_COUNT AS RECORDS FROM MENU WHERE NAME = '"+review.getName()+"'" +
-                    " AND SENDER= '"+ review.getSender()
-                    + "' AND TIMESTAMP=" + review.getTs() +" AND UNIQUE_ID=" +review.getUniqueId()+";", null);
+        } else {
+            res = db.rawQuery("SELECT LIKE_COUNT AS RECORDS FROM MENU WHERE NAME = '" + review.getName() + "'" +
+                    " AND SENDER= '" + review.getSender()
+                    + "' AND TIMESTAMP=" + review.getTs() + " AND UNIQUE_ID=" + review.getUniqueId() + ";", null);
             res.moveToFirst();
 
             count = res.getInt(0);
