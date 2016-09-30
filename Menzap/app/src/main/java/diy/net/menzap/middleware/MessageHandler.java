@@ -2,17 +2,22 @@ package diy.net.menzap.middleware;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.io.IOException;
 
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
+import diy.net.menzap.helper.ImageDBHelper;
 import diy.net.menzap.helper.MenuDBHelper;
 import diy.net.menzap.helper.TrackingDBHelper;
 import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.Event;
+import diy.net.menzap.model.Image;
 import diy.net.menzap.model.Menu;
 import diy.net.menzap.model.Tracking;
 import diy.net.menzap.model.User;
@@ -50,6 +55,8 @@ public class MessageHandler {
 
     public static final String MSG_USER_NAME = "USER_NAME";
     public static final String MSG_URL = "URL";
+
+    public static final String MSG_PIC = "PIC";
     //==========================================================================//
 
     private Context context;
@@ -162,6 +169,32 @@ public class MessageHandler {
                 // Insert into the database
                 ((TrackingDBHelper)db).insert(tracking);
                 db.close();
+                break;
+            case IMAGE :
+
+
+
+                Image image = new Image(msg.getString(MSG_SENDER), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
+
+                ImageDBHelper imageDBHelper = new ImageDBHelper(this.context);
+                SQLiteDatabase imageDb = imageDBHelper.getReadableDatabase();
+                imageDBHelper.onCreate(imageDb);
+                boolean result = imageDBHelper.insert(image);
+                imageDb.close();
+
+                if(result){
+                    //Create Folder
+                    File folder = new File(Environment.getExternalStorageDirectory().toString()+"/Menzap/Images");
+                    folder.mkdirs();
+
+                    //Save the path as a string value
+                    String extStorageDirectory = folder.toString();
+
+                    //Create New file and name it
+                    File destinationFile = new File(extStorageDirectory, "Mensa_"+System.currentTimeMillis()+".jpg");
+                    msg.moveBinary( MSG_PIC, destinationFile );
+                }
+
                 break;
         }
     }

@@ -31,8 +31,19 @@ public class PermissionActivity extends AppCompatActivity {
     private void getPermissions() {
 
         int hasAccessLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (hasAccessLocationPermission != PackageManager.PERMISSION_GRANTED) {
+        int hasExternalStoragePermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (hasAccessLocationPermission != PackageManager.PERMISSION_GRANTED && hasExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
+        else if (hasAccessLocationPermission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
+        else if( hasExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_CODE_ASK_PERMISSIONS);
             return;
         }
