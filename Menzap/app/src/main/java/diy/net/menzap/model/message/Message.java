@@ -25,7 +25,7 @@ public abstract class Message {
         this.uniqueId = uniqueId;
     }
 
-    public enum MessageType {REVIEW, MENU, ENTER, EXIT, EVENT, REGISTER, TRACKING, IMAGE};
+    public enum MessageType {MENU, ENTER, EXIT, EVENT, REGISTER, TRACKING, IMAGE, LIKE, DISLIKE};
 
     public long getTimestamp() {
         return timestamp;
