@@ -188,9 +188,9 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         for (int i = (int) start; i < end; i++) {
             try {
                 ArrayList dayData = (ArrayList)this.locationData.get(String.valueOf(i));
-                val1 = (int)((JSONObject) (dayData.get(0))).get("USER_COUNT");
-                val2 = (int)((JSONObject) (dayData.get(1))).get("USER_COUNT");
-                val3 = (int)((JSONObject) (dayData.get(2))).get("USER_COUNT");
+                val1 = (int)((JSONObject) (dayData.get(0))).opt("USER_COUNT");
+                val2 = (int)((JSONObject) (dayData.get(1))).opt("USER_COUNT");
+                val3 = (int)((JSONObject) (dayData.get(2))).opt("USER_COUNT");
             } catch (JSONException e) {
                 e.printStackTrace();
                 val1 = val2 = val3 = 0;

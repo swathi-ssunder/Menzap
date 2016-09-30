@@ -81,6 +81,11 @@ public class ImageFragment extends Fragment {
 
         if (file.isDirectory()) {
             listFile = file.listFiles();
+
+            if (listFile == null) {
+                return;
+            }
+
             // Create a String array for FilePathStrings
             FilePathStrings = new String[listFile.length];
             // Create a String array for FileNameStrings

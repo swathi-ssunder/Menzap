@@ -65,18 +65,17 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         LikeButton btnFavourite = (LikeButton)row.findViewById(R.id.btnFavourite);
         btnLike.setTag("like-"+position);
         btnFavourite.setTag("fav-"+ position);
+
         btnLike.setOnLikeListener(this);
         btnFavourite.setOnLikeListener(this);
 
-
-        if(this.menus.get(position).getIsLiked() == 1) {
+        if (this.menus.get(position).getIsLiked() == 1) {
             btnLike.setLiked(true);
         }
 
-        if(this.menus.get(position).getIsFavourite() == 1) {
+        if (this.menus.get(position).getIsFavourite() == 1) {
             btnFavourite.setLiked(true);
         }
-
 
         return row;
     }
@@ -88,17 +87,16 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
 
-        if(parts[0].equals("like")){
+        if (parts[0].equals("like")) {
             long likeCount = menu.getLikeCount();
             menu.setIsLiked(1);
-            likeCount ++;
+            likeCount++;
             menu.setLikeCount(likeCount);
-            MenuMessage msg = new MenuMessage("LIKE",menu.getSender(), menu);
+            MenuMessage msg = new MenuMessage("LIKE", menu.getSender(), menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
             this.menuDBHelper.update(menu);
             this.notifyDataSetChanged();
-        }
-        else{
+        } else {
             menu.setIsFavourite(1);
             this.menuDBHelper.update(menu);
         }
@@ -110,10 +108,10 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         String[] parts = tag.split("-");
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
-        if(parts[0].equals("like")){
+        if (parts[0].equals("like")) {
             long likeCount = menu.getLikeCount();
-            if( likeCount > 0 ) {
-                likeCount --;
+            if (likeCount > 0) {
+                likeCount--;
                 menu.setLikeCount(likeCount);
             }
             menu.setIsLiked(0);
@@ -121,11 +119,9 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             MenuMessage msg = new MenuMessage("DISLIKE", menu.getSender(), menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
             this.notifyDataSetChanged();
-        }
-        else{
+        } else {
             menu.setIsFavourite(0);
             this.menuDBHelper.update(menu);
         }
-
     }
 }
