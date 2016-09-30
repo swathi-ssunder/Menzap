@@ -28,7 +28,6 @@ import diy.net.menzap.activity.MenuCreateActivity;
 import diy.net.menzap.adapter.MenuAdapter;
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.MenuDBHelper;
-import diy.net.menzap.model.Event;
 import diy.net.menzap.model.Menu;
 
 
