@@ -102,7 +102,7 @@ public class TabsActivity extends AppCompatActivity {
 
             JSONObject imageMenu = new JSONObject();
             imageMenu.put("text", "IMAGE");
-            imageMenu.put("icon", R.drawable.ic_tab_events);
+            imageMenu.put("icon", R.drawable.ic_tab_gallery);
 
             tabs.put(0, tabMenu);
             tabs.put(1, friendMenu);
