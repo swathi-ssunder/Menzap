@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
         TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/JandaAppleCobbler.ttf");
 
-        DataHolder.getInstance().initHelper(this);
-
         UserDBHelper userDBHelper = new UserDBHelper(this);
         boolean isRegistered = userDBHelper.isRegistered();
 
