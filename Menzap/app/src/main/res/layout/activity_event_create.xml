@@ -24,7 +24,9 @@ android:layout_height="match_parent">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginLeft="@dimen/margin_left"
+    android:layout_marginRight="@dimen/margin_right">
 
     <EditText
         android:id="@+id/txtEventName"

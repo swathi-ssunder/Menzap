@@ -14,7 +14,8 @@
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="@dimen/font_size"/>
 
     <com.like.LikeButton
         android:id="@+id/btnLike"

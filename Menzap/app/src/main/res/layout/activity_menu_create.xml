@@ -24,30 +24,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/margin_left"
+        android:layout_marginRight="@dimen/margin_right">
 
         <EditText
             android:id="@+id/txtMenuName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
+            android:textSize="@dimen/font_size"
             android:textStyle="bold"
             android:hint="@string/hintMenuName" />
 
         <EditText
             android:id="@+id/txtMenuDesc"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="20sp"
+            android:textSize="@dimen/font_size"
             android:hint="@string/hintMenuDescription" />
 
         <EditText
             android:id="@+id/txtServedOn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="20sp"
+            android:textSize="@dimen/font_size"
             android:hint="@string/hintDateFormat" />
 
         <android.support.v7.widget.SwitchCompat
@@ -59,7 +61,8 @@
             android:background="@android:color/transparent"
             android:textOn=""
             android:button="@null"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:textSize="@dimen/font_size"/>
 
 
         <Button
@@ -67,7 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:textColor="#fff"
-            android:text="@string/btnCreate" />
+            android:text="@string/btnCreate"
+            android:background="?attr/colorPrimary"
+            />
 
     </LinearLayout>
 
