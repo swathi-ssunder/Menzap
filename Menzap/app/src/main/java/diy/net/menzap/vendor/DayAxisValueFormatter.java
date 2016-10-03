@@ -119,7 +119,7 @@ public class DayAxisValueFormatter implements IAxisValueFormatter
             count++;
         }
 
-        return dayOfYear - days - 1;
+        return dayOfYear - days;
     }
 
     private int determineYear(int days) {

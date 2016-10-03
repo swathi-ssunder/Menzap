@@ -25,7 +25,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 
 import diy.net.menzap.vendor.DayAxisValueFormatter;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -171,24 +170,24 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     private void setData(int count) {
 
         Calendar now = Calendar.getInstance();
-        int day = now.get(Calendar.DAY_OF_YEAR) - count - 1;
+        int day = now.get(Calendar.DAY_OF_YEAR) - count;
 
         float start = (float)day;
-        float end = (float)day + count + 1;
+        float end = (float)day + count;
         float groupSpace = 0.06f;
         float barSpace = 0.02f; // x3 dataset
         float barWidth = 0.3f; // x3 dataset
         int val1 = 0, val2 = 0, val3 = 0;
 
         mChart.getXAxis().setAxisMinimum(start);
-        mChart.getXAxis().setAxisMaximum(start + count + 2);
+        mChart.getXAxis().setAxisMaximum(end);
 
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
         ArrayList<BarEntry> yVals2 = new ArrayList<>();
         ArrayList<BarEntry> yVals3 = new ArrayList<>();
 
-        for (int i = (int) start; i < end; i++) {
-            ArrayList dayData = (ArrayList) this.locationData.opt(String.valueOf(i));
+        for (int i = (int) start; i <= end; i++) {
+            ArrayList dayData = (ArrayList) this.locationData.opt(String.valueOf(i + 1));
             if (dayData == null) {
                 val1 = val2 = val3 = 0;
             } else {
