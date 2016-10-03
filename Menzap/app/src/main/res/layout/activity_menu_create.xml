@@ -72,7 +72,7 @@
             android:textColor="#fff"
             android:text="@string/btnCreate"
             android:background="?attr/colorPrimary"
-            />
+            android:layout_marginTop="@dimen/button_marginTop"/>
 
     </LinearLayout>
 

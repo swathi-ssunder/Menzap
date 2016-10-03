@@ -30,42 +30,42 @@ android:layout_height="match_parent">
 
     <EditText
         android:id="@+id/txtEventName"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
+        android:textSize="@dimen/font_size"
         android:textStyle="bold"
         android:hint="@string/hintEventName" />
 
     <EditText
         android:id="@+id/txtEventDesc"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/font_size"
         android:hint="@string/hintDescription" />
 
     <EditText
         android:id="@+id/txtEventLocation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/font_size"
         android:hint="@string/hintLocation" />
 
     <EditText
         android:id="@+id/txtFrom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/font_size"
         android:hint="@string/hintDateFormat" />
 
     <EditText
         android:id="@+id/txtTo"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/font_size"
         android:hint="@string/hintDateFormat" />
 
     <Button
@@ -73,7 +73,9 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:textColor="#fff"
-        android:text="@string/btnCreate" />
+        android:text="@string/btnCreate"
+        android:background="?attr/colorPrimary"
+        android:layout_marginTop="@dimen/button_marginTop"/>
 
 </LinearLayout>
 
