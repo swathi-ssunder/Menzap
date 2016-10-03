@@ -42,8 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="@dimen/font_size"
-            android:hint="@string/hintMenuDescription"
-            android:inputType="textNoSuggestions"/>
+            android:hint="@string/hintMenuDescription" />
 
         <EditText
             android:id="@+id/txtServedOn"
@@ -51,8 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="@dimen/font_size"
-            android:hint="@string/hintDateFormat"
-            android:inputType="textNoSuggestions"/>
+            android:hint="@string/hintDateFormat" />
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/Switch"
