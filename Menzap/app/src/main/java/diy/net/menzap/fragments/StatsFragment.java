@@ -139,7 +139,7 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 
         this.locationData = this.trackingDBHelper.getByLocation(fromTs, toTs);
 
-        setData(days);
+        this.setData(days);
         mChart.invalidate();
 
         // Now we call setRefreshing(false) to signal refresh has finished

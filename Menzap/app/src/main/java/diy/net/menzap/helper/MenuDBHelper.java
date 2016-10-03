@@ -192,25 +192,25 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         Cursor res = db.rawQuery("SELECT" +
                 " NAME AS DISH_NAME," +
                 " LIKE_COUNT, " +
-                " strftime('%j', SERVED_ON / 1000, 'unixepoch') AS DAY FROM MENU" +
-                " WHERE SERVED_ON >= " + fromDate + " AND SERVED_ON <= " + toDate +
-                " GROUP BY NAME, SERVED_ON ORDER BY NAME" , null);
+                " strftime('%j', SERVED_ON) AS SERVED_DAY FROM MENU" +
+                " WHERE SERVED_ON >= '" + fromDate + "' AND SERVED_ON <= '" + toDate + "'" +
+                " ORDER BY NAME, SERVED_ON" , null);
 
         res.moveToFirst();
 
         while (!res.isAfterLast()) {
             JSONObject result = new JSONObject();
             try {
-                result.put("DAY", res.getString(res.getColumnIndex("DAY")));
-                result.put("LIKE_COUNT", res.getInt(res.getColumnIndex("LIKE_COUNT")));
 
                 String dishName = res.getString(res.getColumnIndex("DISH_NAME"));
                 if(dayData.has(dishName)) {
-                    ((ArrayList)dayData.get(dishName)).add(result);
+                    ((JSONObject)dayData.get(dishName)).put(res.getString(res.getColumnIndex("SERVED_DAY")),
+                            res.getInt(res.getColumnIndex("LIKE_COUNT")));
                 } else {
-                    ArrayList<JSONObject> arrayList = new ArrayList<>();
-                    arrayList.add(result);
-                    dayData.put(res.getString(res.getColumnIndex("DISH_NAME")), arrayList);
+                    result.put(res.getString(res.getColumnIndex("SERVED_DAY")),
+                            res.getInt(res.getColumnIndex("LIKE_COUNT")));
+
+                    dayData.put(res.getString(res.getColumnIndex("DISH_NAME")), result);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

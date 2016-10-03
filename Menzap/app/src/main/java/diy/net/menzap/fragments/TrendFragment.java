@@ -23,11 +23,13 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 
 import diy.net.menzap.R;
 import diy.net.menzap.helper.MenuDBHelper;
@@ -35,7 +37,7 @@ import diy.net.menzap.vendor.DayAxisValueFormatter;
 
 public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
-    private MenuDBHelper menuDBHelper;
+    private SwipeRefreshLayout swipeLayout;
     private JSONObject trendData;
     private LineChart mChart;
     private SeekBar mSeekBarX;
@@ -57,20 +59,18 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trends, container, false);
 
-        this.menuDBHelper = new MenuDBHelper(getActivity());
-        SQLiteDatabase db = this.menuDBHelper.getReadableDatabase();
-        this.menuDBHelper.onCreate(db);
+        MenuDBHelper menuDBHelper = new MenuDBHelper(getActivity());
+        SQLiteDatabase db = menuDBHelper.getReadableDatabase();
+        menuDBHelper.onCreate(db);
 
-        SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // onRefresh action here
-                TrendFragment.this.refreshView();
+                TrendFragment.this.refreshView(mSeekBarX.getProgress());
             }
         });
-
-        this.refreshView();
 
         tvX = (TextView) view.findViewById(R.id.tvXMax);
 
@@ -126,20 +126,26 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.refreshView();
+        this.refreshView(mSeekBarX.getProgress());
     }
 
-    private void refreshView() {
+    private void refreshView(int days) {
         Calendar cal = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String toDate = dateFormat.format(cal.getTime());
-        cal.add(Calendar.DATE, -5);
+        cal.add(Calendar.DATE, -days);
         String fromDate = dateFormat.format(cal.getTime());
 
         MenuDBHelper menuDBHelper = new MenuDBHelper(getActivity());
 
         this.trendData = menuDBHelper.getLikeCountOverTime(fromDate, toDate);
+
+        this.setData(days);
+        mChart.invalidate();
+
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeLayout.setRefreshing(false);
     }
 
     @Override
@@ -151,51 +157,60 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 1) {
-            this.refreshView();
+            this.refreshView(mSeekBarX.getProgress());
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
         tvX.setText("" + (mSeekBarX.getProgress()));
-
-        mChart.setData(this.getComplexity(mSeekBarX.getProgress()));
-        mChart.invalidate();
+        this.refreshView(mSeekBarX.getProgress());
     }
 
-    protected LineData getComplexity(int cnt) {
+    protected void setData(int count) {
 
-        ArrayList<Entry> e1 = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            e1.add(new Entry(i, (int) (Math.random() * 65) + 40));
-        }
-        LineDataSet ds1 = new LineDataSet(e1, "New DataSet " + cnt + ", (1)");
+        Calendar now = Calendar.getInstance();
+        int day = now.get(Calendar.DAY_OF_YEAR) - count;
 
-        ArrayList<Entry> e2 = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            e2.add(new Entry(i, e1.get(i).getY() - 30));
-        }
-        LineDataSet ds2 = new LineDataSet(e2, "New DataSet " + cnt + ", (2)");
+        float start = (float)day;
+        float end = (float)day + count;
+        int val;
 
-        ds1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-        ds2.setColor(ColorTemplate.VORDIPLOM_COLORS[1]);
-
-        ds1.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-        ds2.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[1]);
-
-        ds1.setLineWidth(2.5f);
-        ds1.setCircleRadius(3f);
-        ds2.setLineWidth(2.5f);
-        ds2.setCircleRadius(3f);
-
+        ArrayList<Entry> yVals1 = new ArrayList<>();
+        ArrayList<LineDataSet> lineDataSets = new ArrayList<>();
         ArrayList<ILineDataSet> sets = new ArrayList<>();
-        sets.add(ds1);
-        sets.add(ds2);
+
+        Iterator<String> keys = this.trendData.keys();
+        int dishIndex = 0;
+        while(keys.hasNext()) {
+            String dishName = keys.next();
+
+            JSONObject dishData = (JSONObject) this.trendData.opt(dishName);
+
+            for (int i = (int) start; i <= end; i++) {
+                if (dishData == null) {
+                    val = 0;
+                } else {
+                    try {
+                        val = (int)(dishData.get(String.valueOf(i)));
+                    } catch (JSONException e) {
+                        val = 0;
+                    }
+                }
+                yVals1.add(new Entry(i, val));
+            }
+            LineDataSet ds = new LineDataSet(yVals1, dishName);
+            ds.setColor(ColorTemplate.VORDIPLOM_COLORS[dishIndex % 5]);
+            ds.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[dishIndex % 5]);
+            ds.setLineWidth(2.5f);
+            ds.setCircleRadius(3f);
+            sets.add(ds);
+            dishIndex++;
+        }
 
         LineData d = new LineData(sets);
-        return d;
+        mChart.setData(d);
     }
 
     @Override
