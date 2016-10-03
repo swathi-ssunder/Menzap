@@ -22,5 +22,7 @@
     <string name="email_id">Email Id</string>
     <string name="btnRegister">Register</string>
     <string name="name">Name</string>
+    <string name="stats1">Crowd Density</string>
+    <string name="stats2">Popularity Trend</string>
 
 </resources>
