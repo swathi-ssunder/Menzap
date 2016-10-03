@@ -83,7 +83,7 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         mSeekBarY = (SeekBar) view.findViewById(R.id.seekBar2);
         mSeekBarY.setOnSeekBarChangeListener(this);
 
-        mChart = (BarChart) view.findViewById(R.id.chart1);
+        mChart = (BarChart) view.findViewById(R.id.barChart);
 
         // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
