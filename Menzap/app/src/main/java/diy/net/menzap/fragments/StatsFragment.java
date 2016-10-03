@@ -127,6 +127,8 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         leftAxis.setAxisMinimum(0f);
 
         mChart.getAxisRight().setEnabled(false);
+        // add a nice and smooth animation
+        mChart.animateY(2500);
 
         return view;
     }
