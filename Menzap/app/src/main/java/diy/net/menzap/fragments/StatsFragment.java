@@ -37,11 +37,12 @@ import diy.net.menzap.helper.TrackingDBHelper;
 
 public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
 
+    private SwipeRefreshLayout swipeLayout;
     private TrackingDBHelper trackingDBHelper;
     private JSONObject locationData;
     private BarChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
-    private TextView tvX,tvY;
+    private SeekBar mSeekBarX;
+    private TextView tvX;
     protected Typeface mTfLight;
 
     public StatsFragment() {
@@ -63,25 +64,19 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         SQLiteDatabase db = this.trackingDBHelper.getReadableDatabase();
         this.trackingDBHelper.onCreate(db);
 
-        SwipeRefreshLayout swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // onRefresh action here
-                StatsFragment.this.refreshView();
+                StatsFragment.this.refreshView(mSeekBarX.getProgress());
             }
         });
 
-        this.refreshView();
-
         tvX = (TextView) view.findViewById(R.id.tvXMax);
-        tvY = (TextView) view.findViewById(R.id.tvYMax);
 
         mSeekBarX = (SeekBar) view.findViewById(R.id.seekBar1);
         mSeekBarX.setOnSeekBarChangeListener(this);
-
-        mSeekBarY = (SeekBar) view.findViewById(R.id.seekBar2);
-        mSeekBarY.setOnSeekBarChangeListener(this);
 
         mChart = (BarChart) view.findViewById(R.id.barChart);
 
@@ -94,8 +89,7 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 
         mChart.setDrawGridBackground(false);
 
-        mSeekBarX.setProgress(10);
-        mSeekBarY.setProgress(100);
+        mSeekBarX.setProgress(5);
 
         Legend l = mChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -136,15 +130,21 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.refreshView();
+        this.refreshView(mSeekBarX.getProgress());
     }
 
-    private void refreshView() {
+    private void refreshView(int days) {
         Date date = new Date();
         long toTs = date.getTime();
-        long fromTs = toTs - 5 * 24 * 3600 * 1000;
+        long fromTs = toTs - days * 24 * 3600 * 1000;
 
         this.locationData = this.trackingDBHelper.getByLocation(fromTs, toTs);
+
+        setData(days);
+        mChart.invalidate();
+
+        // Now we call setRefreshing(false) to signal refresh has finished
+        swipeLayout.setRefreshing(false);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 1) {
-            this.refreshView();
+            this.refreshView(mSeekBarX.getProgress());
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -165,23 +165,23 @@ public class StatsFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
         tvX.setText("" + (mSeekBarX.getProgress()));
-        tvY.setText("" + (mSeekBarY.getProgress()));
-
-        setData(mSeekBarX.getProgress(), mSeekBarY.getProgress());
-        mChart.invalidate();
+        this.refreshView(mSeekBarX.getProgress());
     }
 
-    private void setData(int count, float range) {
+    private void setData(int count) {
 
         Calendar now = Calendar.getInstance();
-        int day = now.get(Calendar.DAY_OF_YEAR) - 4;
+        int day = now.get(Calendar.DAY_OF_YEAR) - count - 1;
 
         float start = (float)day;
-        float end = (float)day + 6;
+        float end = (float)day + count + 1;
         float groupSpace = 0.06f;
         float barSpace = 0.02f; // x3 dataset
         float barWidth = 0.3f; // x3 dataset
         int val1 = 0, val2 = 0, val3 = 0;
+
+        mChart.getXAxis().setAxisMinimum(start);
+        mChart.getXAxis().setAxisMaximum(start + count + 2);
 
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
         ArrayList<BarEntry> yVals2 = new ArrayList<>();

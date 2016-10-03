@@ -2,7 +2,6 @@ package diy.net.menzap.fragments;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,33 +12,25 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.FileUtils;
 
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import diy.net.menzap.R;
 import diy.net.menzap.helper.MenuDBHelper;
-import diy.net.menzap.helper.TrackingDBHelper;
 import diy.net.menzap.vendor.DayAxisValueFormatter;
 
 public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeListener {
@@ -47,8 +38,8 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     private MenuDBHelper menuDBHelper;
     private JSONObject trendData;
     private LineChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
-    private TextView tvX,tvY;
+    private SeekBar mSeekBarX;
+    private TextView tvX;
     protected Typeface mTfLight;
 
     public TrendFragment() {
@@ -82,13 +73,9 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         this.refreshView();
 
         tvX = (TextView) view.findViewById(R.id.tvXMax);
-        tvY = (TextView) view.findViewById(R.id.tvYMax);
 
         mSeekBarX = (SeekBar) view.findViewById(R.id.seekBar1);
         mSeekBarX.setOnSeekBarChangeListener(this);
-
-        mSeekBarY = (SeekBar) view.findViewById(R.id.seekBar2);
-        mSeekBarY.setOnSeekBarChangeListener(this);
 
         mChart = (LineChart) view.findViewById(R.id.lineChart);
 
@@ -98,8 +85,7 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
 
         mChart.setDrawGridBackground(false);
 
-        mSeekBarX.setProgress(10);
-        mSeekBarY.setProgress(100);
+        mSeekBarX.setProgress(5);
 
         Legend l = mChart.getLegend();
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
@@ -174,13 +160,12 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
         tvX.setText("" + (mSeekBarX.getProgress()));
-        tvY.setText("" + (mSeekBarY.getProgress()));
 
-        mChart.setData(this.getComplexity(mSeekBarX.getProgress(), mSeekBarY.getProgress()));
+        mChart.setData(this.getComplexity(mSeekBarX.getProgress()));
         mChart.invalidate();
     }
 
-    protected LineData getComplexity(int cnt, int range) {
+    protected LineData getComplexity(int cnt) {
 
         ArrayList<Entry> e1 = new ArrayList<>();
         for (int i = 0; i < 12; i++) {
