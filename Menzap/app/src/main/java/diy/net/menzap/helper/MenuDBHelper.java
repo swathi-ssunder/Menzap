@@ -11,6 +11,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import diy.net.menzap.model.Menu;
@@ -25,8 +28,8 @@ public class MenuDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DESCRIPTION = "DESCRIPTION";
     private static final String COLUMN_CATEGORY = "CATEGORY";
     private static final String COLUMN_IS_LIKED = "IS_LIKED";
-    private static final String COLUMN_IS_FAVOURITE= "IS_FAVOURITE";
-    private static final String COLUMN_LIKE_COUNT= "LIKE_COUNT";
+    private static final String COLUMN_IS_FAVOURITE = "IS_FAVOURITE";
+    private static final String COLUMN_LIKE_COUNT = "LIKE_COUNT";
     private static final String COLUMN_SERVED_ON = "SERVED_ON";
     private static final String COLUMN_TIME_STAMP = "TIMESTAMP";
     private static final String COLUMN_UNIQUE_ID = "UNIQUE_ID";
@@ -153,7 +156,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         return array_list;
     }
 
-    public int getCount(Menu review){
+    public int getCount(Menu review) {
         SQLiteDatabase db = this.getReadableDatabase();
         int count;
 
@@ -180,5 +183,44 @@ public class MenuDBHelper extends SQLiteOpenHelper {
             db.close();
             return count;
         }
+    }
+
+    public JSONObject getLikeCountOverTime(String fromDate, String toDate) {
+        JSONObject dayData = new JSONObject();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor res = db.rawQuery("SELECT" +
+                " NAME AS DISH_NAME," +
+                " LIKE_COUNT, " +
+                " strftime('%j', SERVED_ON / 1000, 'unixepoch') AS DAY FROM MENU" +
+                " WHERE SERVED_ON >= " + fromDate + " AND SERVED_ON <= " + toDate +
+                " GROUP BY NAME, SERVED_ON ORDER BY NAME" , null);
+
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            JSONObject result = new JSONObject();
+            try {
+                result.put("DAY", res.getString(res.getColumnIndex("DAY")));
+                result.put("LIKE_COUNT", res.getInt(res.getColumnIndex("LIKE_COUNT")));
+
+                String dishName = res.getString(res.getColumnIndex("DISH_NAME"));
+                if(dayData.has(dishName)) {
+                    ((ArrayList)dayData.get(dishName)).add(result);
+                } else {
+                    ArrayList<JSONObject> arrayList = new ArrayList<>();
+                    arrayList.add(result);
+                    dayData.put(res.getString(res.getColumnIndex("DISH_NAME")), arrayList);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            res.moveToNext();
+        }
+        res.close();
+        db.close();
+
+        return dayData;
     }
 }
