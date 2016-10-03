@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_size"
             android:textStyle="bold"
-            android:hint="@string/hintMenuName" />
+            android:hint="@string/hintMenuName"
+            android:inputType="textNoSuggestions"/>
 
         <EditText
             android:id="@+id/txtMenuDesc"
@@ -42,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="@dimen/font_size"
-            android:hint="@string/hintMenuDescription" />
+            android:hint="@string/hintMenuDescription"
+            android:inputType="textNoSuggestions"/>
 
         <EditText
             android:id="@+id/txtServedOn"
@@ -50,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="@dimen/font_size"
-            android:hint="@string/hintDateFormat" />
+            android:hint="@string/hintDateFormat"
+            android:inputType="textNoSuggestions"/>
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/Switch"
@@ -72,7 +75,7 @@
             android:textColor="#fff"
             android:text="@string/btnCreate"
             android:background="?attr/colorPrimary"
-            />
+            android:layout_marginTop="@dimen/button_marginTop"/>
 
     </LinearLayout>
 
