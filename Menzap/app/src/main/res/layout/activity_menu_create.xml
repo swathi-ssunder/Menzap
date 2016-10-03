@@ -34,8 +34,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_size"
             android:textStyle="bold"
-            android:hint="@string/hintMenuName"
-            android:inputType="textNoSuggestions"/>
+            android:hint="@string/hintMenuName" />
 
         <EditText
             android:id="@+id/txtMenuDesc"
