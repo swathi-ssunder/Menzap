@@ -30,7 +30,18 @@ public class DateDialog extends DialogFragment implements DatePickerDialog.OnDat
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         //show to the selected date in the text box
-        String date=day+"-"+(month+1)+"-"+year;
+        String date=year + "-";
+        if (month < 9) {
+            date = date + "0" + (month + 1);
+        } else {
+            date = date + (month + 1);
+        }
+
+        if (day < 10) {
+            date = date + "-0" + day;
+        } else {
+            date = date + "-" + day;
+        }
         txtdate.setText(date);
     }
 }
