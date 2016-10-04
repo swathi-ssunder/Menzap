@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import diy.net.menzap.R;
-import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.service.TypefaceUtil;
 
