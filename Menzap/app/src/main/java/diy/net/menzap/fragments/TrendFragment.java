@@ -177,13 +177,12 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
         float end = (float)day + count;
         int val;
 
-        ArrayList<Entry> yVals1 = new ArrayList<>();
-        ArrayList<LineDataSet> lineDataSets = new ArrayList<>();
         ArrayList<ILineDataSet> sets = new ArrayList<>();
 
         Iterator<String> keys = this.trendData.keys();
         int dishIndex = 0;
         while(keys.hasNext()) {
+            ArrayList<Entry> yVals = new ArrayList<>();
             String dishName = keys.next();
 
             JSONObject dishData = (JSONObject) this.trendData.opt(dishName);
@@ -198,9 +197,9 @@ public class TrendFragment extends Fragment implements SeekBar.OnSeekBarChangeLi
                         val = 0;
                     }
                 }
-                yVals1.add(new Entry(i, val));
+                yVals.add(new Entry(i, val));
             }
-            LineDataSet ds = new LineDataSet(yVals1, dishName);
+            LineDataSet ds = new LineDataSet(yVals, dishName);
             ds.setColor(ColorTemplate.VORDIPLOM_COLORS[dishIndex % 5]);
             ds.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[dishIndex % 5]);
             ds.setLineWidth(2.5f);
