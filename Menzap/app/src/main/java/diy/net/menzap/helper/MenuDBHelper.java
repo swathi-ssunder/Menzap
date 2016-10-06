@@ -127,11 +127,12 @@ public class MenuDBHelper extends SQLiteOpenHelper {
                 new String[]{Integer.toString(id)});
     }
 
-    public ArrayList<Menu> getAll() {
+    public ArrayList<Menu> getAll(String servedOn) {
         ArrayList<Menu> array_list = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery("SELECT * FROM MENU ORDER BY " +
+        Cursor res = db.rawQuery("SELECT * FROM MENU WHERE " + COLUMN_SERVED_ON +
+                "=" + servedOn + " ORDER BY " +
                 COLUMN_IS_FAVOURITE + " DESC, " + COLUMN_LIKE_COUNT + " DESC", null);
         res.moveToFirst();
 

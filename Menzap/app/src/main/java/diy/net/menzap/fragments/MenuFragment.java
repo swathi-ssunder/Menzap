@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import diy.net.menzap.R;
@@ -76,9 +77,14 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
 
     private void refreshView() {
         MenuDBHelper menuDBHelper = new MenuDBHelper(getActivity());
-        Log.d("allmenus", menuDBHelper.getAll().toString());
 
-        this.menus = menuDBHelper.getAll();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String today = dateFormat.format(cal.getTime());
+
+        Log.d("allmenus", menuDBHelper.getAll(today).toString());
+        this.menus = menuDBHelper.getAll(today);
         MenuAdapter adapter = new MenuAdapter(getActivity(), R.layout.menu, menus);
 
         this.handleNotification(this.menus);
