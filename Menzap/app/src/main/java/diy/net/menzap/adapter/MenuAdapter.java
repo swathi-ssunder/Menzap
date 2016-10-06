@@ -6,6 +6,7 @@ package diy.net.menzap.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,9 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         }
         TextView menuName = (TextView)row.findViewById(R.id.menuName);
         menuName.setText(this.menus.get(position).getName());
+        if (this.menus.get(position).getCategory() == 1) {
+            menuName.setTextColor(Color.parseColor("#239957"));
+        }
 
         EditText editText = (EditText) row.findViewById(R.id.count);
         long count = this.menus.get(position).getLikeCount();
