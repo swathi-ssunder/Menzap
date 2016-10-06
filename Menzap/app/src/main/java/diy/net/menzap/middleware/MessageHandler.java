@@ -123,8 +123,6 @@ public class MessageHandler {
                 db = new MenuDBHelper(this.context);
                 // Insert into the database
                 if (((MenuDBHelper)db).insert(menu)) {
-                    Log.d("MENU added", ((MenuDBHelper)db).getAll().toString());
-
                     // notifying only when the difference of time with current time is 5 seconds
                     if( System.currentTimeMillis() - msg.getInteger(MSG_TIMESTAMP) < 300000)
                         DataHolder.getInstance().getNotificationHelper().notifyForMenu(menu);
@@ -152,9 +150,7 @@ public class MessageHandler {
                     review.setLikeCount(count);
 
                     // update into the database
-                    if (menuDBHelper.update(review)) {
-                        Log.d("MENU review", ((MenuDBHelper)db).getAll().toString());
-                    }
+                    menuDBHelper.update(review);
                     db.close();
                     break;
                 }
@@ -178,9 +174,7 @@ public class MessageHandler {
                     review.setLikeCount(count);
 
                     // update into the database
-                    if (menuDBHelper.update(review)) {
-                        Log.d("MENU review", ((MenuDBHelper)db).getAll().toString());
-                    }
+                    menuDBHelper.update(review);
                     db.close();
                     break;
                 }

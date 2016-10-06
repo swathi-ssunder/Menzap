@@ -132,7 +132,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM MENU WHERE " + COLUMN_SERVED_ON +
-                "=" + servedOn + " ORDER BY " +
+                "= '" + servedOn + "' ORDER BY " +
                 COLUMN_IS_FAVOURITE + " DESC, " + COLUMN_LIKE_COUNT + " DESC", null);
         res.moveToFirst();
 
@@ -223,5 +223,34 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         db.close();
 
         return dayData;
+    }
+
+    public Menu getTopItem(String servedOn) {
+
+        Menu menuItem = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("SELECT * FROM MENU WHERE " + COLUMN_SERVED_ON +
+                "=" + servedOn + " ORDER BY " +
+                COLUMN_LIKE_COUNT + " DESC LIMIT 1", null);
+        res.moveToFirst();
+
+        while (!res.isAfterLast()) {
+            menuItem = new Menu(
+                    res.getString(res.getColumnIndex(COLUMN_SENDER)),
+                    res.getString(res.getColumnIndex(COLUMN_NAME)),
+                    res.getString(res.getColumnIndex(COLUMN_DESCRIPTION)),
+                    res.getInt(res.getColumnIndex(COLUMN_CATEGORY)),
+                    res.getString(res.getColumnIndex(COLUMN_SERVED_ON)),
+                    res.getInt(res.getColumnIndex(COLUMN_IS_LIKED)),
+                    res.getInt(res.getColumnIndex(COLUMN_IS_FAVOURITE)),
+                    res.getInt(res.getColumnIndex(COLUMN_LIKE_COUNT)),
+                    res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)),
+                    res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID))
+            );
+            res.moveToNext();
+        }
+        res.close();
+
+        return menuItem;
     }
 }
