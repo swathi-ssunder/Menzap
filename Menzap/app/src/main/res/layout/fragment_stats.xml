@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,9 +23,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="63dp"
             android:layout_marginTop="72dp"
-            android:height="200dp"
-            android:width="250dp"
-            android:background="@drawable/ic_tab_stats" />
+            android:height="100dp"
+            android:width="250dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -32,11 +32,37 @@
             android:text="@string/stats2"
             android:id="@+id/stats2"
             android:layout_marginTop="45dp"
-            android:height="200dp"
+            android:height="100dp"
             android:width="250dp"
-            android:background="@drawable/ic_trend"
             android:layout_below="@+id/stats1"
             android:layout_alignStart="@+id/stats1" />
+
+
+        <com.like.LikeButton
+            android:id="@+id/btnLike"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            app:icon_size="40dp"
+            app:icon_type="star"
+            android:layout_below="@+id/stats2"
+            android:layout_alignStart="@+id/stats2"
+            android:layout_marginTop="30dp"
+            app:liked="true"
+            app:is_enabled="false"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/popularDish"
+            android:paddingTop="40dp"
+            android:paddingLeft="15dp"
+            android:textSize="@dimen/font_size"
+            android:layout_alignTop="@+id/btnLike"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"/>
 
 
     </RelativeLayout>
