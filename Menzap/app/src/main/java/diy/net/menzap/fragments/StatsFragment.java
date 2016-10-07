@@ -10,8 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import diy.net.menzap.R;
+import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.model.Menu;
 
 public class StatsFragment extends Fragment {
 
@@ -29,6 +35,18 @@ public class StatsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
+
+        MenuDBHelper menuDBHelper = new MenuDBHelper(getContext());
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        String today = dateFormat.format(cal.getTime());
+
+        Menu menu = menuDBHelper.getTopItem(today);
+
+        TextView textView = (TextView) view.findViewById(R.id.popularDish);
+        textView.setText(menu.getName());
 
         return view;
     }
