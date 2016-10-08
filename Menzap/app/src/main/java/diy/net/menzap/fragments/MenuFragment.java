@@ -123,9 +123,9 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         SharedPreferences pref = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         int isAdmin = pref.getInt("isAdmin", 0);
-        /*if(isAdmin == 0) {
+        if(isAdmin == 0) {
             addButton.setVisibility(View.INVISIBLE);
-        }*/
+        }
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
