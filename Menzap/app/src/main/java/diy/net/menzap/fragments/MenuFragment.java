@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import java.util.Date;
 
 import diy.net.menzap.R;
 import diy.net.menzap.activity.MenuCreateActivity;
+import diy.net.menzap.activity.ViewMenuImage;
 import diy.net.menzap.adapter.MenuAdapter;
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.MenuDBHelper;
@@ -36,6 +39,7 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
 
     ArrayList<Menu> menus;
     private SwipeRefreshLayout swipeLayout;
+    private String path = Environment.getExternalStorageDirectory() + File.separator + "Menzap/Images";
 
 
     public MenuFragment() {
@@ -93,16 +97,20 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         swipeLayout.setRefreshing(false);
 
         setListAdapter(adapter);
-        // TODO : Implement card for menus, no drill down
-        //getListView().setOnItemClickListener(this);
+
+        getListView().setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //        Toast.makeText(getActivity(), "Item: " + position, Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(getActivity(), MenuDetailActivity.class);
-//        intent.putExtra("MENU", this.menus.get(position));
-//        startActivity(intent);
+        Intent intent = new Intent(getActivity(), ViewMenuImage.class);
+        // Pass String arrays FilePathStrings
+        intent.putExtra("filepath", path+"/"+menus.get(position).getName()+".jpg");
+        // Pass String arrays FileNameStrings
+        intent.putExtra("filename", menus.get(position).getName());
+
+        startActivity(intent);
     }
 
     @Override
@@ -115,9 +123,9 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         SharedPreferences pref = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         int isAdmin = pref.getInt("isAdmin", 0);
-        if(isAdmin == 0) {
+        /*if(isAdmin == 0) {
             addButton.setVisibility(View.INVISIBLE);
-        }
+        }*/
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override

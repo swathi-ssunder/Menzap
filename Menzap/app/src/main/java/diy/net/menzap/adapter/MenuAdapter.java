@@ -6,18 +6,23 @@ package diy.net.menzap.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import diy.net.menzap.R;
@@ -57,6 +62,8 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         }
         TextView menuName = (TextView)row.findViewById(R.id.menuName);
         menuName.setText(this.menus.get(position).getName());
+
+        // if vegetarian
         if (this.menus.get(position).getCategory() == 1) {
             menuName.setTextColor(Color.parseColor("#239957"));
         }
@@ -64,6 +71,17 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         EditText editText = (EditText) row.findViewById(R.id.count);
         long count = this.menus.get(position).getLikeCount();
         editText.setText(String.valueOf(count));
+
+        String menu = this.menus.get(position).getName();
+
+        File imgFile = new File(Environment.getExternalStorageDirectory()
+                + File.separator + "Menzap/Images/"+menu+".jpg");
+
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            ImageView myImage = (ImageView) row.findViewById(R.id.imageView);
+            myImage.setImageBitmap(myBitmap);
+        }
 
         LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
         LikeButton btnFavourite = (LikeButton)row.findViewById(R.id.btnFavourite);
