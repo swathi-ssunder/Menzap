@@ -19,6 +19,8 @@ import diy.net.menzap.R;
 import diy.net.menzap.helper.MenuDBHelper;
 import diy.net.menzap.model.Menu;
 
+import com.like.LikeButton;
+
 public class StatsFragment extends Fragment {
 
     public StatsFragment() {
@@ -46,7 +48,17 @@ public class StatsFragment extends Fragment {
         Menu menu = menuDBHelper.getTopItem(today);
 
         TextView textView = (TextView) view.findViewById(R.id.popularDish);
-        textView.setText(menu.getName());
+        LikeButton btnLike = (LikeButton) view.findViewById(R.id.btnLike);
+
+
+        if (menu != null) {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(menu.getName());
+            btnLike.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+            btnLike.setVisibility(View.GONE);
+        }
 
         return view;
     }
