@@ -142,6 +142,10 @@ public class EddystoneHelper {
     }
 
     public void stopScan() {
+        /*If no scan is curently in progress, return*/
+        if (this.eddystoneService.getState().equals("IDLE")) {
+            return;
+        }
         // Stop the scan
         if (this.eddystoneService != null) {
             this.eddystoneService.stopScan();
