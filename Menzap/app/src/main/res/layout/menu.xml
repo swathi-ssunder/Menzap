@@ -25,7 +25,8 @@
         android:textSize="@dimen/font_size"
         android:layout_toRightOf="@id/imageView"
         android:paddingLeft="10dp"
-        android:paddingTop="10dp"/>
+        android:paddingTop="10dp"
+        android:layout_toLeftOf="@id/btnLike"/>
 
     <com.like.LikeButton
         android:id="@+id/btnLike"

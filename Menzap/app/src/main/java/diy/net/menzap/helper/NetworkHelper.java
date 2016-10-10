@@ -21,7 +21,7 @@ public class NetworkHelper {
 
             try {
                 if ((ni != null) && ni.getTypeName().equalsIgnoreCase("WIFI"))
-                    if (ni.isConnected() && ni.getExtraInfo().replace("\"", "").equals("Pi3-AP"))
+                    if (ni.isConnected() && ni.getExtraInfo().replace("\"", "").equals("Mensa-AP"))
                         isConnectedToWifi = 1;
             } catch (Exception e) {
                 e.printStackTrace();
