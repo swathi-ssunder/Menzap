@@ -87,7 +87,15 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
         LikeButton btnFavourite = (LikeButton)row.findViewById(R.id.btnFavourite);
 
-        if( count >0 )
+        SharedPreferences pref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        int isAdmin = pref.getInt("isAdmin", 0);
+
+        if(isAdmin == 1) {
+            btnLike.setEnabled(false);
+            btnFavourite.setVisibility(View.GONE);
+        }
+
+        if(count > 0)
             btnLike.setLiked(true);
 
         btnLike.setTag("like-"+position);

@@ -233,7 +233,7 @@ public class MenuDBHelper extends SQLiteOpenHelper {
         Menu menuItem = null;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res = db.rawQuery("SELECT * FROM MENU WHERE " + COLUMN_SERVED_ON +
-                "='" + servedOn + "' ORDER BY " +
+                "='" + servedOn + "' AND "+ COLUMN_LIKE_COUNT+" >0 " +" ORDER BY " +
                 COLUMN_LIKE_COUNT + " DESC LIMIT 1", null);
         res.moveToFirst();
 

@@ -121,7 +121,7 @@ public class EddystoneHelper {
     public void startScan() {
 
         /*If the scan is already in progress, return*/
-        if (this.eddystoneService.getState().equals("SCANNING")) {
+        if (this.eddystoneService.getState().toString().equals("SCANNING")) {
             return;
         }
 
@@ -143,7 +143,7 @@ public class EddystoneHelper {
 
     public void stopScan() {
         /*If no scan is curently in progress, return*/
-        if (this.eddystoneService.getState().equals("IDLE")) {
+        if (this.eddystoneService.getState().toString().equals("IDLE")) {
             return;
         }
         // Stop the scan
