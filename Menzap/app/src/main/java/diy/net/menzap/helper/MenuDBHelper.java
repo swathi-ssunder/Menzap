@@ -174,15 +174,18 @@ public class MenuDBHelper extends SQLiteOpenHelper {
             db.close();
             return -1;
         } else {
-            res = db.rawQuery("SELECT LIKE_COUNT AS RECORDS FROM MENU WHERE NAME = '" + review.getName() + "'" +
-                    " AND SENDER= '" + review.getSender()
-                    + "' AND TIMESTAMP=" + review.getTs() + " AND UNIQUE_ID=" + review.getUniqueId() + ";", null);
+            res = db.rawQuery("SELECT * FROM MENU WHERE NAME = '" + review.getName() + "';" , null);
             res.moveToFirst();
 
-            count = res.getInt(0);
+            review.setSender(res.getString(res.getColumnIndex(COLUMN_SENDER)));
+            review.setLikeCount(res.getLong(res.getColumnIndex(COLUMN_LIKE_COUNT)));
+            review.setIsLiked(res.getLong(res.getColumnIndex(COLUMN_IS_LIKED)));
+            review.setIsFavourite(res.getLong(res.getColumnIndex(COLUMN_IS_FAVOURITE)));
+            review.setTs(res.getLong(res.getColumnIndex(COLUMN_TIME_STAMP)));
+            review.setUniqueId(res.getLong(res.getColumnIndex(COLUMN_UNIQUE_ID)));
             res.close();
             db.close();
-            return count;
+            return 1;
         }
     }
 

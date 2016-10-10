@@ -6,6 +6,7 @@ package diy.net.menzap.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -85,6 +86,10 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
 
         LikeButton btnLike = (LikeButton)row.findViewById(R.id.btnLike);
         LikeButton btnFavourite = (LikeButton)row.findViewById(R.id.btnFavourite);
+
+        if( count >0 )
+            btnLike.setLiked(true);
+
         btnLike.setTag("like-"+position);
         btnFavourite.setTag("fav-"+ position);
 
@@ -109,12 +114,18 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
 
+        //Fetching sender details from preferences
+        SharedPreferences pref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String emailId = pref.getString("emailId", "");
+        String sender = emailId;
+
         if (parts[0].equals("like")) {
             long likeCount = menu.getLikeCount();
             menu.setIsLiked(1);
             likeCount++;
             menu.setLikeCount(likeCount);
-            MenuMessage msg = new MenuMessage("LIKE", menu.getSender(), menu);
+
+            MenuMessage msg = new MenuMessage("LIKE", sender, menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
             this.menuDBHelper.update(menu);
             this.notifyDataSetChanged();
@@ -130,6 +141,12 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         String[] parts = tag.split("-");
 
         Menu menu = this.menus.get(Integer.parseInt(parts[1]));
+
+        //Fetching sender details from preferences
+        SharedPreferences pref = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        String emailId = pref.getString("emailId", "");
+        String sender = emailId;
+
         if (parts[0].equals("like")) {
             long likeCount = menu.getLikeCount();
             if (likeCount > 0) {
@@ -138,7 +155,7 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             }
             menu.setIsLiked(0);
             this.menuDBHelper.update(menu);
-            MenuMessage msg = new MenuMessage("DISLIKE", menu.getSender(), menu);
+            MenuMessage msg = new MenuMessage("DISLIKE", sender, menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
             this.notifyDataSetChanged();
         } else {

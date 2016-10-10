@@ -146,6 +146,7 @@ public class MessageHandler {
                     break;
                 }
                 else{
+                    count = (int) review.getLikeCount();
                     count++;
                     review.setLikeCount(count);
 
@@ -170,6 +171,7 @@ public class MessageHandler {
                     break;
                 }
                 else{
+                    count = (int) review.getLikeCount();
                     count--;
                     review.setLikeCount(count);
 
