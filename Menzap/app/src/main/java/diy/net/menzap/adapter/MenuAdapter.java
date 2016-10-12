@@ -25,10 +25,12 @@ import com.like.OnLikeListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 import diy.net.menzap.R;
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.helper.MenuLikeCountDBHelper;
 import diy.net.menzap.model.Menu;
 import diy.net.menzap.model.message.MenuMessage;
 
@@ -38,6 +40,7 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
     private ArrayList<Menu> menus;
     private int resource;
     private MenuDBHelper menuDBHelper;
+    private static final Random RNG = new Random();
 
 
     public MenuAdapter(Context context, int resource, ArrayList<Menu> menus) {
@@ -95,9 +98,6 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             btnFavourite.setVisibility(View.GONE);
         }
 
-        if(count > 0)
-            btnLike.setLiked(true);
-
         btnLike.setTag("like-"+position);
         btnFavourite.setTag("fav-"+ position);
 
@@ -105,7 +105,7 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
         btnFavourite.setOnLikeListener(this);
 
         if (this.menus.get(position).getIsLiked() == 1) {
-            btnLike.setLiked(true);
+             btnLike.setLiked(true);
         }
 
         if (this.menus.get(position).getIsFavourite() == 1) {
@@ -132,10 +132,22 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             menu.setIsLiked(1);
             likeCount++;
             menu.setLikeCount(likeCount);
+            this.menuDBHelper.update(menu);
+
+            long timestamp = System.currentTimeMillis();
+            long uniqueId = RNG.nextLong();
+
+            menu.setTs(timestamp);
+            menu.setUniqueId(uniqueId);
+            menu.setSender(sender);
 
             MenuMessage msg = new MenuMessage("LIKE", sender, menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
-            this.menuDBHelper.update(menu);
+
+
+            MenuLikeCountDBHelper menuLikeCountDBHelper = new MenuLikeCountDBHelper(getContext());
+            menuLikeCountDBHelper.insert(menu);
+
             this.notifyDataSetChanged();
         } else {
             menu.setIsFavourite(1);
@@ -163,8 +175,20 @@ public class MenuAdapter extends ArrayAdapter implements OnLikeListener {
             }
             menu.setIsLiked(0);
             this.menuDBHelper.update(menu);
+
+            long timestamp = System.currentTimeMillis();
+            long uniqueId = RNG.nextLong();
+
+            menu.setTs(timestamp);
+            menu.setUniqueId(uniqueId);
+            menu.setSender(sender);
+
             MenuMessage msg = new MenuMessage("DISLIKE", sender, menu);
             DataHolder.getInstance().getHelper().saveAndPublish(msg.getScampiMsgObj());
+
+            MenuLikeCountDBHelper menuLikeCountDBHelper = new MenuLikeCountDBHelper(getContext());
+            menuLikeCountDBHelper.insert(menu);
+
             this.notifyDataSetChanged();
         } else {
             menu.setIsFavourite(0);

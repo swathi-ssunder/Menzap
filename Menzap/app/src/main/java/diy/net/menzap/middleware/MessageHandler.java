@@ -14,6 +14,7 @@ import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.EventDBHelper;
 import diy.net.menzap.helper.ImageDBHelper;
 import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.helper.MenuLikeCountDBHelper;
 import diy.net.menzap.helper.TrackingDBHelper;
 import diy.net.menzap.helper.UserDBHelper;
 import diy.net.menzap.model.Event;
@@ -102,7 +103,7 @@ public class MessageHandler {
                 break;
 
             case EXIT:
-                db = new UserDBHelper(this.context);
+                /*db = new UserDBHelper(this.context);
                 person = ((UserDBHelper)db).getByEmailId(msg.getString(MSG_EMAIL_ID));
 
                 if (person != null && person.getIsFriend() == 1) {
@@ -111,7 +112,7 @@ public class MessageHandler {
                             person.getIsFriend(), person.getTs(), person.getUniqueId());
 
                     DataHolder.getInstance().getNotificationHelper().notifyForFriend(user, false);
-                }
+                }*/
                 break;
 
             case MENU:
@@ -137,24 +138,27 @@ public class MessageHandler {
                         msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON), msg.getInteger(MSG_IS_LIKED), msg.getInteger(MSG_IS_FAVOURITE),
                         msg.getInteger(MSG_LIKE_COUNT), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
-                db = new MenuDBHelper(this.context);
-                MenuDBHelper menuDBHelper = new MenuDBHelper(this.context);
+                db = new MenuLikeCountDBHelper(this.context);
+                MenuLikeCountDBHelper menuLikeCountDBHelper = new MenuLikeCountDBHelper(this.context);
 
-                int count =menuDBHelper.getCount(review);
-                if( count == -1) {
-                    db.close();
-                    break;
-                }
-                else{
-                    count = (int) review.getLikeCount();
-                    count++;
-                    review.setLikeCount(count);
+                if( menuLikeCountDBHelper.insert(review) ){
+                    db = new MenuDBHelper(this.context);
+                    MenuDBHelper menuDBHelper = new MenuDBHelper(this.context);
+                    int count = menuDBHelper.getCount(review);
+                    if( count == -1) {
+                        db.close();
+                    }
+                    else{
+                        count = (int) review.getLikeCount();
+                        count++;
+                        review.setLikeCount(count);
 
-                    // update into the database
-                    menuDBHelper.update(review);
-                    db.close();
-                    break;
+                        // update into the database
+                        menuDBHelper.update(review);
+                        db.close();
+                    }
                 }
+                break;
 
             case DISLIKE:
 
@@ -162,24 +166,28 @@ public class MessageHandler {
                         msg.getInteger(MSG_CATEGORY), msg.getString(MSG_SERVED_ON), msg.getInteger(MSG_IS_LIKED), msg.getInteger(MSG_IS_FAVOURITE),
                         msg.getInteger(MSG_LIKE_COUNT), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
-                db = new MenuDBHelper(this.context);
-                menuDBHelper = new MenuDBHelper(this.context);
+                db = new MenuLikeCountDBHelper(this.context);
+                menuLikeCountDBHelper = new MenuLikeCountDBHelper(this.context);
 
-                count =menuDBHelper.getCount(review);
-                if( count == -1) {
-                    db.close();
-                    break;
-                }
-                else{
-                    count = (int) review.getLikeCount();
-                    count--;
-                    review.setLikeCount(count);
+                if( menuLikeCountDBHelper.insert(review)){
+                    db = new MenuDBHelper(this.context);
+                    MenuDBHelper menuDBHelper = new MenuDBHelper(this.context);
 
-                    // update into the database
-                    menuDBHelper.update(review);
-                    db.close();
-                    break;
+                    int count =menuDBHelper.getCount(review);
+                    if( count == -1) {
+                        db.close();
+                    }
+                    else{
+                        count = (int) review.getLikeCount();
+                        count--;
+                        review.setLikeCount(count);
+
+                        // update into the database
+                        menuDBHelper.update(review);
+                        db.close();
+                    }
                 }
+                break;
 
             case EVENT:
 
@@ -220,9 +228,6 @@ public class MessageHandler {
                 db.close();
                 break;
             case IMAGE :
-
-
-
                 Image image = new Image(msg.getString(MSG_SENDER), msg.getInteger(MSG_TIMESTAMP), msg.getInteger(MSG_UNIQUE_ID));
 
                 ImageDBHelper imageDBHelper = new ImageDBHelper(this.context);
