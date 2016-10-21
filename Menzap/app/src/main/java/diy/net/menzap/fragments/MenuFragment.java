@@ -32,6 +32,7 @@ import diy.net.menzap.activity.ViewMenuImage;
 import diy.net.menzap.adapter.MenuAdapter;
 import diy.net.menzap.helper.DataHolder;
 import diy.net.menzap.helper.MenuDBHelper;
+import diy.net.menzap.helper.MenuLikeCountDBHelper;
 import diy.net.menzap.model.Menu;
 
 
@@ -53,6 +54,10 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         MenuDBHelper menuDBHelper = new MenuDBHelper(getActivity());
         SQLiteDatabase db = menuDBHelper.getReadableDatabase();
         menuDBHelper.onCreate(db);
+
+        MenuLikeCountDBHelper menuLikeCountDBHelper= new MenuLikeCountDBHelper((getActivity()));
+        db = menuLikeCountDBHelper.getReadableDatabase();
+        menuLikeCountDBHelper.onCreate(db);
     }
 
     @Override
@@ -86,6 +91,105 @@ public class MenuFragment extends ListFragment implements AdapterView.OnItemClic
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String today = dateFormat.format(cal.getTime());
+
+        /*Menu menu = new Menu("admin@tum.de", "Kartoffelcurry", "", 1,"2016-10-13", 0, 0, 15, 1344267896, 321527896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Dampfnudel mit Vanillesauce", "", 0,"2016-10-13", 0, 0, 10, 1314367896, 121568896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Bauerneintopf", "", 1,"2016-10-13", 0, 0, 3, 1314267296, 122563896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Gemüsegulasch", "", 1,"2016-10-13", 0, 0, 5, 1211767896, 123167896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Currywurst", "", 0,"2016-10-13", 0, 0, 9, 1212467896, 121554896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Schnitzel", "", 0,"2016-10-13", 0, 0, 6, 1422367896, 1924454896);
+        menuDBHelper.insert(menu);
+
+
+
+        menu = new Menu("admin@tum.de", "Kartoffelcurry", "", 1,"2016-10-12", 0, 0, 11, 1344267897, 321527896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Dampfnudel mit Vanillesauce", "", 0,"2016-10-12", 0, 0, 8, 1314367897, 121568896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Bauerneintopf", "", 1,"2016-10-12", 0, 0, 7, 1314267297, 122563896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Gemüsegulasch", "", 1,"2016-10-12", 0, 0, 4, 1211767897, 123167896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Currywurst", "", 0,"2016-10-12", 0, 0, 9, 1212467897, 121554896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Schnitzel", "", 0,"2016-10-12", 0, 0, 4, 1422367897, 1924454896);
+        menuDBHelper.insert(menu);
+
+
+
+        menu = new Menu("admin@tum.de", "Kartoffelcurry", "", 1,"2016-10-11", 0, 0, 9, 1344267892, 321527896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Dampfnudel mit Vanillesauce", "", 0,"2016-10-11", 0, 0, 5, 1314367892, 121568896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Bauerneintopf", "", 1,"2016-10-11", 0, 0, 10, 1314267292, 122563896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Gemüsegulasch", "", 1,"2016-10-11", 0, 0, 4, 1211767892, 123167896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Currywurst", "", 0,"2016-10-11", 0, 0, 10, 1212467892, 121554896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Schnitzel", "", 0,"2016-10-11", 0, 0, 5, 1422367892, 1924454896);
+        menuDBHelper.insert(menu);
+
+
+
+        menu = new Menu("admin@tum.de", "Kartoffelcurry", "", 1,"2016-10-10", 0, 0, 7, 1344267898, 321527896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Dampfnudel mit Vanillesauce", "", 0,"2016-10-10", 0, 0, 5, 1314367898, 121568896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Bauerneintopf", "", 1,"2016-10-10", 0, 0, 11, 1314267298, 122563896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Gemüsegulasch", "", 1,"2016-10-10", 0, 0, 3, 1211767898, 123167896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Currywurst", "", 0,"2016-10-10", 0, 0, 8, 1212467898, 121554896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Schnitzel", "", 0,"2016-10-10", 0, 0, 3, 1422367898, 1924454896);
+        menuDBHelper.insert(menu);
+
+
+
+
+        menu = new Menu("admin@tum.de", "Kartoffelcurry", "", 1,"2016-10-09", 0, 0, 3, 1344267818, 321527896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Dampfnudel mit Vanillesauce", "", 0,"2016-10-09", 0, 0, 4, 1314367818, 121568896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Bauerneintopf", "", 1,"2016-10-09", 0, 0, 14, 1314267218, 122563896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Gemüsegulasch", "", 1,"2016-10-09", 0, 0, 5, 1211767818, 123167896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Currywurst", "", 0,"2016-10-09", 0, 0, 11, 1212467818, 121554896);
+        menuDBHelper.insert(menu);
+
+        menu = new Menu("admin@tum.de", "Schnitzel", "", 0,"2016-10-09", 0, 0, 6, 1422367818, 1924454896);
+        menuDBHelper.insert(menu);*/
 
         Log.d("allmenus", menuDBHelper.getAll(today).toString());
         this.menus = menuDBHelper.getAll(today);

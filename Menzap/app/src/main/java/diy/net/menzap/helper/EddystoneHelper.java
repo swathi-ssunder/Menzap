@@ -104,6 +104,46 @@ public class EddystoneHelper {
 
                 // Insert the tracking details into the database table
                 TrackingDBHelper trackingDBHelper = new TrackingDBHelper(EddystoneHelper.this.context);
+                /*long timestamp1 = timestamp- (24*60*60*1000);
+                long timestamp2 = timestamp- (2*24*60*60*1000);
+                long timestamp3 = timestamp- (3*24*60*60*1000);
+                long timestamp4 = timestamp- (4*24*60*60*1000);
+
+                int i;
+                for( i= 0; i< 5; i++){
+                    String track_sender = sender+i;
+                    userName = userName+i;
+                    tracking = new Tracking(track_sender, userName,"https://p11.cm.in.tum.de" , timestamp, uniqueId);
+                    trackingDBHelper.insert(tracking);
+                    tracking = new Tracking(track_sender, userName,"https://p12.cm.in.tum.de" , timestamp-(i*10000), uniqueId);
+                    trackingDBHelper.insert(tracking);
+
+
+                    tracking = new Tracking(track_sender, userName,"https://p11.cm.in.tum.de" , timestamp1, uniqueId);
+                    trackingDBHelper.insert(tracking);
+                    tracking = new Tracking(track_sender, userName,"https://p12.cm.in.tum.de" , timestamp1 -(i*10000), uniqueId);
+                    trackingDBHelper.insert(tracking);
+                    tracking = new Tracking(track_sender, userName,"https://p13.cm.in.tum.de" , timestamp1 -(i*20000), uniqueId);
+                    trackingDBHelper.insert(tracking);
+
+                    tracking = new Tracking(track_sender, userName,"https://p11.cm.in.tum.de" , timestamp2, uniqueId);
+                    trackingDBHelper.insert(tracking);
+
+                    tracking = new Tracking(track_sender, userName,"https://p11.cm.in.tum.de" , timestamp3, uniqueId);
+                    trackingDBHelper.insert(tracking);
+                    tracking = new Tracking(track_sender, userName,"https://p12.cm.in.tum.de" , timestamp3 -(i*10000), uniqueId);
+                    trackingDBHelper.insert(tracking);
+                    tracking = new Tracking(track_sender, userName,"https://p13.cm.in.tum.de" , timestamp3 -(i*20000), uniqueId);
+                    trackingDBHelper.insert(tracking);
+
+                    tracking = new Tracking(track_sender, userName,"https://p11.cm.in.tum.de" , timestamp4, uniqueId);
+                    trackingDBHelper.insert(tracking);
+                    tracking = new Tracking(track_sender, userName,"https://p13.cm.in.tum.de" , timestamp4 -(i*20000), uniqueId);
+                    trackingDBHelper.insert(tracking);
+                }*/
+
+
+
                 if (trackingDBHelper.insert(tracking)) {
                     Log.d("added", trackingDBHelper.getAll().toString());
 
@@ -121,7 +161,7 @@ public class EddystoneHelper {
     public void startScan() {
 
         /*If the scan is already in progress, return*/
-        if (this.eddystoneService.getState().equals("SCANNING")) {
+        if (this.eddystoneService.getState().toString().equals("SCANNING")) {
             return;
         }
 
@@ -142,6 +182,10 @@ public class EddystoneHelper {
     }
 
     public void stopScan() {
+        /*If no scan is curently in progress, return*/
+        if (this.eddystoneService.getState().toString().equals("IDLE")) {
+            return;
+        }
         // Stop the scan
         if (this.eddystoneService != null) {
             this.eddystoneService.stopScan();
